@@ -47,15 +47,6 @@ async function main() {
   await write('-- Load with: wrangler d1 execute allcarsdb --remote --file=allcars.sql\n\n');
   await write('PRAGMA foreign_keys = OFF;\n\n');
 
-  // Schema comes from the migrations rather than sqlite_master, so the dump
-  // keeps its comments -- they are a large part of what makes this schema
-  // legible to someone encountering it cold.
-  for (const f of (await readdir(MIGRATIONS)).filter((f) => f.endsWith('.sql')).sort()) {
-    await write(`-- ===== ${f} =====\n`);
-    await write(await readFile(join(MIGRATIONS, f), 'utf8'));
-    await write('\n');
-  }
-
   const tables = (
     db.prepare(
       `SELECT name FROM sqlite_master
@@ -64,6 +55,29 @@ async function main() {
         ORDER BY name`,
     ).all() as { name: string }[]
   ).map((t) => t.name);
+
+  // Idempotency: this file is applied with `wrangler d1 execute` against
+  // whatever the live database currently looks like, not necessarily an empty
+  // one -- a hand-provisioned schema, a partial prior deploy, a table added
+  // out of band. Dropping everything first (FKs are off, so order doesn't
+  // matter) means every deploy is a clean reload regardless of what state the
+  // target database started in, rather than a "table already exists" failure
+  // that only reproduces if you happen to know the database's history.
+  await write('-- Drop everything first so this script is safe to run against a\n');
+  await write('-- database that already has some or all of this schema.\n');
+  for (const table of tables) {
+    await write(`DROP TABLE IF EXISTS ${table};\n`);
+  }
+  await write('DROP TABLE IF EXISTS variant_fts;\n\n');
+
+  // Schema comes from the migrations rather than sqlite_master, so the dump
+  // keeps its comments -- they are a large part of what makes this schema
+  // legible to someone encountering it cold.
+  for (const f of (await readdir(MIGRATIONS)).filter((f) => f.endsWith('.sql')).sort()) {
+    await write(`-- ===== ${f} =====\n`);
+    await write(await readFile(join(MIGRATIONS, f), 'utf8'));
+    await write('\n');
+  }
 
   let totalRows = 0;
 
