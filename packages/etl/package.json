@@ -1,0 +1,20 @@
+{
+  "name": "@allcarsdb/etl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "validate": "tsx src/build.ts --validate-only",
+    "verify": "tsx src/verify.ts",
+    "dump": "tsx src/dump.ts"
+  },
+  "dependencies": {
+    "@allcarsdb/schema": "*",
+    "@allcarsdb/query": "*",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

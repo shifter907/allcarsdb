@@ -1,0 +1,15 @@
+{
+  "name": "@allcarsdb/query",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./compiler": "./src/compiler.ts",
+    "./fields": "./src/fields.ts",
+    "./units": "./src/units.ts"
+  },
+  "dependencies": {
+    "@allcarsdb/schema": "*"
+  }
+}

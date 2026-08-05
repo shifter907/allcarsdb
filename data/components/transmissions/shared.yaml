@@ -1,0 +1,19 @@
+# Transmissions supplied to several makes. Aisin and ZF units end up in cars
+# from a dozen different manufacturers, which is exactly the case the shared
+# component catalog exists for.
+
+- slug: aisin-8spd-awf8
+  code: AWF8F45
+  name: Aisin 8-Speed Automatic
+  type: automatic
+  forward_gears: 8
+  clutch_type: torque converter
+  paddle_shifters: true
+
+- slug: zf-8hp
+  code: 8HP
+  name: ZF 8-Speed Automatic
+  type: automatic
+  forward_gears: 8
+  clutch_type: torque converter
+  paddle_shifters: true

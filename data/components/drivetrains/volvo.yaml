@@ -1,0 +1,19 @@
+- slug: volvo-awd-haldex
+  name: Volvo AWD (Clutch-Pack)
+  type: fwd_biased_awd
+  center_diff_type: electronically controlled multi-plate clutch
+  default_front_torque_pct: 100
+  max_rear_torque_pct: 50
+  disconnect_capable: true
+
+- slug: volvo-awd-through-road
+  name: Volvo T8 Through-the-Road AWD
+  type: through_road_awd
+  default_front_torque_pct: 100
+  max_rear_torque_pct: 100
+  disconnect_capable: true
+  notes: >-
+    No propshaft. The engine drives the front axle, an electric motor drives
+    the rear. AWD is unavailable once the drive battery is depleted below its
+    reserve, which a buyer comparing this against a mechanical AWD system
+    should know.

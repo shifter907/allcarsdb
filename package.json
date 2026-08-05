@@ -1,0 +1,30 @@
+{
+  "name": "allcarsdb",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The ultimate open vehicle specification database",
+  "license": "CC-BY-SA-4.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "validate": "npm run validate -w @allcarsdb/etl",
+    "build:db": "npm run build -w @allcarsdb/etl",
+    "dump": "npm run dump -w @allcarsdb/etl",
+    "verify": "npm run verify -w @allcarsdb/etl",
+    "typecheck": "tsc --noEmit -p packages/schema && tsc --noEmit -p packages/query && tsc --noEmit -p packages/etl && tsc --noEmit -p apps/api && tsc --noEmit -p apps/web",
+    "dev:api": "npm run dev -w @allcarsdb/api",
+    "dev:web": "npm run dev -w @allcarsdb/web",
+    "test": "node --import tsx --test packages/query/test/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.23.8",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

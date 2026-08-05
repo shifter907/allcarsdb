@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.wrangler/
+*.sqlite
+*.sqlite-journal
+*.log
+.DS_Store
+.env
+.env.local
+*.tsbuildinfo
+.vscode/
+.idea/
+
+# Local Claude Code permission grants -- machine-specific, not project config
+.claude/settings.local.json

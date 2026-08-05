@@ -1,0 +1,93 @@
+# Shared Porsche engines.
+#
+# Defining an engine here rather than inline pays off the moment a second car
+# uses it: one row, one place to fix a typo, and "every car that used this
+# engine" becomes a single join. Bore, stroke and valve count belong here
+# because they are properties of the casting. Power does NOT -- the same
+# engine is calibrated differently per car, so output lives on the powertrain.
+#
+# SEED DATA -- figures approximate and uncited. See the note in
+# data/vehicles/porsche/911/2026.yaml.
+
+- slug: porsche-9a2-30-twin-turbo
+  code: 9A2 Evo
+  name: 3.0L Twin-Turbo Flat-6
+  family: Porsche 9A2
+  cylinders: 6
+  layout: flat
+  displacement: 2981 cc
+  valves_per_cylinder: 4
+  cam_config: dohc
+  cam_count: 4
+  bore: 91 mm
+  stroke: 76.4 mm
+  compression_ratio: 10.5
+  aspiration: twin_turbocharged
+  forced_induction_count: 2
+  intercooled: true
+  charge_cooling: air-to-air
+  fuel_type: gasoline
+  fuel_delivery: direct_injection
+  min_octane_ron: 98
+  block_material: aluminium
+  head_material: aluminium
+  redline_rpm: 7500
+  variable_valve_timing: true
+  variable_valve_lift: true
+  dry_sump: true
+  start_stop: true
+  production_start_year: 2019
+
+- slug: porsche-9a3-36-thybrid
+  code: 9A3
+  name: 3.6L T-Hybrid Flat-6
+  family: Porsche 9A3
+  cylinders: 6
+  layout: flat
+  displacement: 3591 cc
+  valves_per_cylinder: 4
+  cam_config: dohc
+  cam_count: 4
+  compression_ratio: 10.5
+  aspiration: turbocharged
+  forced_induction_count: 1
+  intercooled: true
+  fuel_type: gasoline
+  fuel_delivery: direct_injection
+  min_octane_ron: 98
+  block_material: aluminium
+  head_material: aluminium
+  redline_rpm: 7500
+  variable_valve_timing: true
+  dry_sump: true
+  production_start_year: 2024
+  notes: Single electrically-assisted turbocharger paired with a 48V motor-generator.
+
+- slug: porsche-9a1-40-gt3
+  code: 9A1 Evo
+  name: 4.0L Naturally Aspirated Flat-6
+  family: Porsche 9A1
+  cylinders: 6
+  layout: flat
+  displacement: 3996 cc
+  valves_per_cylinder: 4
+  cam_config: dohc
+  cam_count: 4
+  bore: 102 mm
+  stroke: 81.5 mm
+  compression_ratio: 13.3
+  aspiration: naturally_aspirated
+  fuel_type: gasoline
+  fuel_delivery: direct_injection
+  min_octane_ron: 98
+  block_material: aluminium
+  head_material: aluminium
+  redline_rpm: 9000
+  variable_valve_timing: true
+  dry_sump: true
+  individual_throttle_bodies: true
+  production_start_year: 2021
+  notes: >-
+    Motorsport-derived. Rigid rocker arms rather than hydraulic lifters, and
+    six individual throttle bodies. valves_total is derived by the loader as
+    6 cylinders x 4 = 24.

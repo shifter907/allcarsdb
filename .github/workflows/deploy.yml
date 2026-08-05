@@ -1,0 +1,92 @@
+name: Deploy
+
+# Rebuilds the database from the YAML and ships it. Runs only on main, only
+# after CI has passed.
+#
+# The import goes into a NEW D1 database and the binding is switched at the
+# end, rather than importing over the live one. That keeps the cutover atomic:
+# there is no window where the site serves a half-loaded database, and rolling
+# back is a matter of pointing the binding at the previous one.
+#
+# The R2 publish step is not optional and has no continue-on-error. A build
+# that produces a database the site can query but that nobody can download in
+# bulk is a build that quietly stopped being open -- if the dump upload fails,
+# the deploy should fail with it, not ship silently degraded.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  R2_BUCKET: allcarsdb-public
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build database
+        run: |
+          npm run build:db
+          npm run dump -w @allcarsdb/etl
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+
+      # Public bulk downloads. An open database that is hard to download in
+      # full is only nominally open -- and it's the thing that makes forking
+      # this project credible, which is what makes contributing to it instead
+      # of forking it the more attractive option.
+      #
+      # Two copies of each file: a stable "latest" name for anyone who just
+      # wants current data, and a commit-pinned name so a link posted today
+      # still resolves to the same bytes next year.
+      - name: Publish dumps to R2
+        run: |
+          set -eu
+          SHORT_SHA="${GITHUB_SHA::12}"
+
+          npx wrangler r2 object put "$R2_BUCKET/allcars.sqlite" \
+            --file=dist/allcars.sqlite --remote
+          npx wrangler r2 object put "$R2_BUCKET/allcars.sql" \
+            --file=dist/allcars.sql --remote
+          npx wrangler r2 object put "$R2_BUCKET/history/allcars-${SHORT_SHA}.sqlite" \
+            --file=dist/allcars.sqlite --remote
+          npx wrangler r2 object put "$R2_BUCKET/history/allcars-${SHORT_SHA}.sql" \
+            --file=dist/allcars.sql --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Import into D1
+        run: |
+          npx wrangler d1 execute allcarsdb --remote --file=dist/allcars.sql --yes
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Deploy API
+        run: npm run deploy -w @allcarsdb/api
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Build and deploy UI
+        run: |
+          npm run build -w @allcarsdb/web
+          npx wrangler pages deploy apps/web/dist --project-name=allcarsdb --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

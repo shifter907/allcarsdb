@@ -1,0 +1,30 @@
+name = "allcarsdb-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Served at api.allcarsdb.com rather than under the Pages apex. That makes the
+# API a first-class, independently addressable thing a script, a mobile app,
+# or a third-party tool can call without caring that a website also exists --
+# at the cost of the browser making a genuinely cross-origin request, which is
+# why CORS in src/index.ts is not left wide open.
+[[routes]]
+pattern = "api.allcarsdb.com"
+custom_domain = true
+
+# The database is a build artifact, imported wholesale on every deploy.
+# Create it once with:
+#   npx wrangler d1 create allcarsdb
+# then paste the returned id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "allcarsdb"
+database_id = "59496c09-ccaf-4155-85b3-7c4cbb2cea2a"
+
+[observability]
+enabled = true
+
+# Free plan gives 100k requests/day. Every data response is cacheable for a
+# day at the edge, so real origin traffic is a small fraction of page views.
+[limits]
+cpu_ms = 50

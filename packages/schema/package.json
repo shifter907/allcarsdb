@@ -1,0 +1,15 @@
+{
+  "name": "@allcarsdb/schema",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./enums": "./src/enums.ts",
+    "./units": "./src/units.ts",
+    "./vehicle": "./src/vehicle.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}

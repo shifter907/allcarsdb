@@ -1,0 +1,7 @@
+- slug: porsche-pdk-8spd
+  code: PDK ML2
+  name: 8-Speed PDK Dual-Clutch
+  type: dct
+  forward_gears: 8
+  clutch_type: twin wet
+  paddle_shifters: true

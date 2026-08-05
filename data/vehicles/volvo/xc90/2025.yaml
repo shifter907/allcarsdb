@@ -1,0 +1,258 @@
+# SEED DATA -- illustrative, uncited. See data/vehicles/porsche/911/2026.yaml.
+#
+# This file is the worked example for the plug-in hybrid / AWD / three-row /
+# massage-seat class of search. Note `through_road_awd` on the T8: the engine
+# drives the front axle and an electric motor drives the rear, with no
+# propshaft between them. Calling that plain "AWD" would be true but would
+# lose the distinction someone cross-shopping actually cares about.
+
+version: 1
+make: volvo
+model: xc90
+model_name: XC90
+year: 2025
+market: us
+
+generation:
+  slug: mk2-facelift-2
+  code: SPA1
+  name: 2nd generation (2023 facelift)
+  ordinal: 2
+  start_year: 2023
+  platform: Volvo SPA
+
+trims:
+  # ===========================================================================
+  - slug: core-b5-awd
+    name: Core B5 AWD
+    ordinal: 1
+
+    defaults:
+      exterior:
+        length: 4953 mm
+        width: 1958 mm
+        height: 1776 mm
+        wheelbase: 2984 mm
+        ground_clearance: 221 mm
+        drag_coefficient: 0.33
+      interior:
+        seating_capacity: 7
+        seating_capacity_max: 7
+        seat_rows: 3
+        seating_config: "2+3+2"
+        headroom_front: 38.9 in
+        headroom_second: 38.5 in
+        headroom_third: 36.3 in
+        legroom_front: 40.9 in
+        legroom_second: 37.0 in
+        legroom_third: 31.9 in
+        shoulder_room_front: 57.7 in
+        cargo_behind_third: 15.8 cuft
+        cargo_behind_second: 41.8 cuft
+        cargo_behind_first: 85.7 cuft
+      chassis:
+        suspension_front: double_wishbone
+        suspension_rear: multilink
+        spring_type_rear: transverse leaf
+        steering_type: rack_pinion_electric
+        brake_front: disc_vented
+        brake_rear: disc_vented
+        chassis_construction: unibody
+      capacity:
+        towing_braked: 5000 lb
+        roof_load: 220 lb
+      features:
+        heated-seats-front: standard
+        power-seat-driver:
+          availability: standard
+          value: 8
+        memory-seat-driver: standard
+        panoramic-sunroof: standard
+        power-liftgate: standard
+        hands-free-liftgate: optional
+        digital-instrument-cluster: standard
+        apple-carplay-wireless: standard
+        android-auto-wireless: standard
+        wireless-phone-charging: standard
+        adaptive-cruise-control: standard
+        lane-centering: standard
+        blind-spot-monitoring: standard
+        automatic-emergency-braking: standard
+        surround-view-camera: optional
+        roof-rails: standard
+        tow-package: optional
+        infotainment-screen-size:
+          availability: standard
+          value: 9
+
+    variants:
+      # No `name` -- the trim already says "Core B5 AWD" and there is only one
+      # buildable combination under it. A variant name should carry only what
+      # distinguishes it from its siblings.
+      - slug: b5-awd
+        body: suv-5dr-3row
+        confidence: unverified
+        msrp: 58450
+        powertrain:
+          slug: volvo-b5-20t-mhev-247-awd
+          name: 2.0L turbo I4 48V mild hybrid, 8-speed automatic, AWD
+          hybrid_type: mhev_48v
+          placement: front_transverse
+          horsepower: 247 hp
+          torque: 258 lbft
+          power_peak_rpm: 5400
+          torque_peak_rpm: 1800
+          torque_peak_rpm_high: 4800
+          power_standard: sae_net
+          engine: volvo-b4204-20-turbo
+          transmission: aisin-8spd-awf8
+          drivetrain: volvo-awd-haldex
+        exterior:
+          curb_weight: 4627 lb
+        performance:
+          zero_to_60_mph: 7.0
+          top_speed: 112 mph
+        efficiency:
+          - cycle: epa
+            mpg_city: 21
+            mpg_highway: 28
+            mpg_combined: 24
+            fuel_tank: 71 l
+
+  # ===========================================================================
+  # Ultra T8 -- plug-in hybrid, through-the-road AWD, massage seats available
+  # ===========================================================================
+  - slug: ultra-t8-awd
+    name: Ultra T8 AWD
+    ordinal: 3
+
+    defaults:
+      exterior:
+        length: 4953 mm
+        width: 1958 mm
+        height: 1776 mm
+        wheelbase: 2984 mm
+        ground_clearance: 221 mm
+        drag_coefficient: 0.33
+      interior:
+        seating_capacity: 7
+        seat_rows: 3
+        seating_config: "2+3+2"
+        headroom_front: 38.9 in
+        headroom_second: 38.5 in
+        headroom_third: 36.3 in
+        legroom_front: 40.9 in
+        legroom_second: 37.0 in
+        legroom_third: 31.9 in
+        cargo_behind_third: 15.8 cuft
+        cargo_behind_second: 41.8 cuft
+        cargo_behind_first: 85.7 cuft
+      chassis:
+        suspension_front: double_wishbone
+        suspension_rear: multilink
+        spring_type_front: air
+        spring_type_rear: air
+        ride_height_adjustable: true
+        adaptive_dampers: true
+        steering_type: rack_pinion_electric
+        brake_front: disc_vented
+        brake_rear: disc_vented
+        wheel_front_dia_in: 21
+      capacity:
+        towing_braked: 5000 lb
+      features:
+        heated-seats-front: standard
+        heated-seats-rear: standard
+        ventilated-seats-front: standard
+        massage-seats: optional
+        massage-seats-front:
+          availability: package
+          package: lounge-package
+          price: 1200
+          notes: Front seats only. Not offered on the second row in this market.
+        seat-heating-steering-wheel: standard
+        memory-seat-driver: standard
+        power-seat-driver:
+          availability: standard
+          value: 10
+        air-suspension: standard
+        adaptive-dampers: standard
+        panoramic-sunroof: standard
+        power-liftgate: standard
+        hands-free-liftgate: standard
+        head-up-display: standard
+        digital-instrument-cluster: standard
+        apple-carplay-wireless: standard
+        android-auto-wireless: standard
+        wireless-phone-charging: standard
+        adaptive-cruise-control: standard
+        adaptive-cruise-stop-go: standard
+        lane-centering: standard
+        blind-spot-monitoring: standard
+        surround-view-camera: standard
+        automatic-emergency-braking: standard
+        roof-rails: standard
+        tow-package: optional
+        premium-audio:
+          availability: standard
+          value: Bowers & Wilkins
+        audio-speaker-count:
+          availability: standard
+          value: 19
+        infotainment-screen-size:
+          availability: standard
+          value: 11.2
+        heat-pump: standard
+
+    packages:
+      - slug: lounge-package
+        code: LNG
+        name: Lounge Package
+        price: 1200
+        description: Front massage seats with cushion extension.
+
+    variants:
+      - slug: t8-awd
+        body: suv-5dr-3row
+        confidence: unverified
+        msrp: 74695
+        powertrain:
+          slug: volvo-t8-20t-phev-455-awd
+          name: 2.0L turbo I4 PHEV, 8-speed automatic, through-road AWD
+          hybrid_type: phev
+          placement: front_transverse
+          horsepower: 455 hp
+          torque: 523 lbft
+          engine_horsepower: 312 hp
+          electric_horsepower: 143 hp
+          power_standard: sae_net
+          engine: volvo-b4204-20-turbo-t8
+          transmission: aisin-8spd-awf8
+          drivetrain: volvo-awd-through-road
+          rear_motor:
+            slug: volvo-t8-rear-pmsm
+            name: Rear axle permanent magnet motor
+            type: pmsm
+            peak_power_kw: 107
+            peak_torque_nm: 309
+          battery:
+            slug: volvo-t8-188kwh
+            name: T8 Recharge pack
+            chemistry: nmc
+            capacity_gross_kwh: 18.8
+            capacity_net_kwh: 14.7
+            architecture_volts: 400
+            max_ac_charge_kw: 11
+        exterior:
+          curb_weight: 5194 lb
+        performance:
+          zero_to_60_mph: 5.3
+          top_speed: 112 mph
+        efficiency:
+          - cycle: epa
+            mpg_combined: 27
+            mpge_combined: 63
+            electric_range: 32 mi
+            total_range: 530 mi
+            fuel_tank: 71 l
+            ac_onboard_kw: 11

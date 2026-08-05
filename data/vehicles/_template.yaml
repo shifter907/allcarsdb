@@ -1,0 +1,181 @@
+# =============================================================================
+# TEMPLATE -- copy this to data/vehicles/<make>/<model>/<year>.yaml
+# =============================================================================
+#
+# Fill in what you know. DELETE what you don't.
+#
+# An omitted field is honest and harmless -- it simply excludes this car from
+# filters on that spec. A guessed field is worse than nothing, because it looks
+# authoritative and nobody will ever re-check it.
+#
+# Write measurements exactly as your source printed them, with the unit
+# attached. Do not pre-convert. A reviewer needs to be able to hold the
+# brochure next to the diff and check it digit for digit.
+#
+#   length: 177.9 in        length: 4519 mm
+#   curb_weight: 3164 lb    curb_weight: 1435 kg
+#   displacement: 3996 cc   displacement: 4.0 l
+#
+# Validate before opening a pull request:   npm run validate
+# =============================================================================
+
+version: 1
+
+make: example-make          # must match a file in data/makes/
+model: example-model
+model_name: Example Model   # display name, if different from the slug
+year: 2025
+market: us                  # us ca mx eu uk jp au cn kr in br za me row
+
+generation:
+  slug: mk1
+  code: XY100               # factory code, if there is one
+  name: 1st generation
+  ordinal: 1
+  start_year: 2023
+  # end_year: 2028          # omit while still in production
+  platform: Example Platform
+
+trims:
+  - slug: base
+    name: Base
+    ordinal: 1
+
+    # ---------------------------------------------------------------------
+    # Anything here applies to every variant below, unless the variant
+    # overrides it. Use this for everything the variants share -- it is less
+    # typing, and it stops sibling variants drifting apart when someone later
+    # corrects only one of them.
+    # ---------------------------------------------------------------------
+    defaults:
+      exterior:
+        length: 0 in
+        width: 0 in
+        height: 0 in
+        wheelbase: 0 in
+        ground_clearance: 0 in
+        drag_coefficient: 0.00
+
+      interior:
+        seating_capacity: 5
+        seat_rows: 2
+        seating_config: "2+3"
+        headroom_front: 0 in
+        legroom_front: 0 in
+        legroom_second: 0 in
+        # H-point height above ground: how far you drop into, or climb up to,
+        # the driver's seat. Rarely published; extremely often wanted.
+        seat_height_front: 0 in
+        cargo_behind_second: 0 cuft
+        cargo_behind_first: 0 cuft
+
+      chassis:
+        suspension_front: macpherson_strut
+        suspension_rear: multilink
+        steering_type: rack_pinion_electric
+        brake_front: disc_vented
+        brake_rear: disc_solid
+        chassis_construction: unibody
+
+      capacity:
+        towing_braked: 0 lb
+        payload: 0 lb
+
+      # Every slug must already exist in data/features.yaml.
+      # standard | optional | package | dealer_installed | late_availability | unavailable
+      features:
+        heated-seats-front: standard
+        adaptive-cruise-control: optional
+        panoramic-sunroof: package
+
+    # Option packages this trim offers, if any.
+    # packages:
+    #   - slug: premium-package
+    #     code: PRM
+    #     name: Premium Package
+    #     price: 2500
+
+    # ---------------------------------------------------------------------
+    # One variant per distinct buildable combination that has its own specs.
+    #
+    # Split when the body, engine, transmission or drivetrain differs --
+    # those change weight, EPA figures and acceleration.
+    # Do NOT split for paint, wheels, or option packages.
+    # ---------------------------------------------------------------------
+    variants:
+      - slug: fwd-auto
+        name: FWD Automatic       # omit if the trim name already says it all
+        body: sedan-4dr           # from data/body-styles.yaml
+        msrp: 30000
+        confidence: unverified    # raise once you have cited a source
+
+        powertrain:
+          # Give it a slug so a sibling variant can reference it by name.
+          slug: example-20t-8at-fwd
+          hybrid_type: none       # none mhev_48v hev phev erev bev fcev
+          placement: front_transverse
+          horsepower: 200 hp
+          torque: 200 lbft
+          power_peak_rpm: 6000
+          torque_peak_rpm: 1600
+          power_standard: sae_net
+
+          # Reference a shared engine by slug, or define one inline and the
+          # build will hoist it into the shared catalog automatically.
+          engine:
+            slug: example-engine-20t
+            code: XY20T
+            name: 2.0L Turbocharged I4
+            cylinders: 4
+            layout: inline        # inline v flat w rotary vr single
+            displacement: 1998 cc
+            valves_per_cylinder: 4   # valves_total is derived (4 x 4 = 16)
+            cam_config: dohc
+            bore: 82 mm
+            stroke: 94.6 mm
+            compression_ratio: 10.5
+            aspiration: turbocharged  # naturally_aspirated turbocharged twin_turbocharged supercharged
+            fuel_type: gasoline
+            fuel_delivery: direct_injection
+            redline_rpm: 6500
+
+          transmission:
+            name: 8-speed automatic
+            type: automatic       # manual automatic dct cvt amt single_speed ecvt
+            forward_gears: 8
+
+          drivetrain:
+            name: Front-Wheel Drive
+            type: fwd             # fwd rwd awd 4wd_part_time 4wd_full_time through_road_awd
+
+        exterior:
+          curb_weight: 3400 lb
+
+        performance:
+          zero_to_60_mph: 7.0
+          top_speed: 130 mph
+          measured: false         # true only for an instrumented test
+
+        # One entry per test cycle. Never mix EPA and WLTP figures -- they
+        # differ by 15-25% and are not comparable.
+        efficiency:
+          - cycle: epa            # epa wltp nedc jc08 cltc nrcan
+            mpg_city: 25
+            mpg_highway: 34
+            mpg_combined: 28
+            fuel_tank: 55 l
+
+        # Variant-specific equipment, merged over the trim defaults above.
+        features:
+          wireless-phone-charging: standard
+
+# Where the numbers came from. Strongly encouraged -- a spec database that
+# cannot answer "says who?" is a rumour mill.
+sources:
+  - url: https://example.com/press-kit
+    title: 2025 Example Model press kit
+    publisher: Example Motor Company
+    document_type: press kit
+    published_date: 2024-09-01
+    retrieved_date: 2025-01-15
+    confidence: manufacturer
