@@ -24,7 +24,10 @@ database_id = "59496c09-ccaf-4155-85b3-7c4cbb2cea2a"
 [observability]
 enabled = true
 
-# Free plan gives 100k requests/day. Every data response is cacheable for a
-# day at the edge, so real origin traffic is a small fraction of page views.
-[limits]
-cpu_ms = 50
+# Free plan gives 100k requests/day, 10ms CPU time per request, no way to
+# raise either. Setting [limits] is itself a paid-plan-only feature -- Free
+# accounts get a fixed cap and Wrangler rejects the config outright if you try
+# to declare one. Every data response is cacheable for a day at the edge, so
+# real origin traffic (the requests that actually spend CPU) is a small
+# fraction of page views; revisit this once/if the project moves to a paid
+# plan and wants to raise the per-request ceiling explicitly.
