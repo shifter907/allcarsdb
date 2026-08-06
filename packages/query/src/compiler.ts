@@ -71,6 +71,12 @@ export class QueryError extends Error {}
 
 const MAX_LIMIT = 200;
 const MAX_FILTERS = 60;
+// The UI now requests a facet for every field on every search, to drive
+// cascading dropdowns -- so this is sized to comfortably exceed the field
+// registry, not to allow arbitrary growth. Each facet is its own prepared
+// statement in the D1 batch, so an unbounded array here is an unbounded
+// batch size at someone else's request.
+const MAX_FACETS = 40;
 
 /** Columns returned for every result row. Fixed list, never user-controlled. */
 const RESULT_COLUMNS = [
@@ -96,6 +102,9 @@ export function compile(req: SearchRequest): CompiledQuery {
 
   if (filters.length > MAX_FILTERS) {
     throw new QueryError(`Too many filters (max ${MAX_FILTERS})`);
+  }
+  if ((req.facets?.length ?? 0) > MAX_FACETS) {
+    throw new QueryError(`Too many facets (max ${MAX_FACETS})`);
   }
 
   const predicates: Predicate[] = filters.map(compileFieldFilter);
@@ -131,11 +140,15 @@ LIMIT ? OFFSET ?`.trim();
       facet: name,
       // Rows with no recorded value are grouped out rather than shown as a
       // nameless bucket -- "(null) 412" is not a filter anyone can click.
+      // Ordered by value rather than count: this result drives a <select>
+      // now as well as the "narrow it down" panel, and years or displacements
+      // in chronological/numeric order are usable in a dropdown in a way that
+      // popularity order is not.
       sql: `SELECT \`${field.column}\` AS value, COUNT(*) AS n
             FROM Search_View ${facetWhere}
             GROUP BY \`${field.column}\`
             HAVING \`${field.column}\` IS NOT NULL
-            ORDER BY n DESC
+            ORDER BY \`${field.column}\` ASC
             LIMIT 100`,
       params: others.flatMap((p) => p.params),
     };

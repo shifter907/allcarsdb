@@ -122,10 +122,24 @@ export function paramsToState(p: URLSearchParams): SearchState {
 // Requests
 // ---------------------------------------------------------------------------
 
-export async function search(state: SearchState, signal?: AbortSignal): Promise<SearchResponse> {
+/**
+ * `facetFields` should be every field the filter panel renders, not a curated
+ * subset. Facets are what drives the dropdowns themselves now: a facet's own
+ * filter is excluded from its own count (the server already does this, for
+ * the "narrow it down" panel this reused), so asking for a facet on every
+ * field is what makes each dropdown reflect every *other* active filter --
+ * Model narrows to Ford's models once Make=Ford is picked, rather than
+ * offering Corvette next to Escape and letting the two combine into a car
+ * that doesn't exist.
+ */
+export async function search(
+  state: SearchState,
+  facetFields: string[],
+  signal?: AbortSignal,
+): Promise<SearchResponse> {
   const p = stateToParams(state);
   p.set('limit', '50');
-  p.set('facets', 'make,layout,aspiration,fuel_type');
+  if (facetFields.length) p.set('facets', facetFields.join(','));
 
   const res = await fetch(`${BASE}/v1/search?${p}`, { signal });
   if (!res.ok) {
@@ -137,6 +151,15 @@ export async function search(state: SearchState, signal?: AbortSignal): Promise<
 
 let metadataCache: Promise<{ fields: FieldDef[]; choices: Record<string, Choice[]> }> | null = null;
 
+/**
+ * `choices` here is the *unfiltered* set -- every value that exists anywhere
+ * in the data, with no other selections narrowing it. It is only ever used to
+ * paint the dropdowns before the first search response arrives; every search
+ * after that carries its own facets (see `search()`), computed with whatever
+ * else is currently selected, and those supersede this snapshot. Without this
+ * initial fetch the dropdowns would sit empty for one round trip while the
+ * first search is in flight.
+ */
 export function loadMetadata() {
   metadataCache ??= (async () => {
     // `no-cache` means revalidate, not "do not cache" -- the response is still
@@ -154,7 +177,8 @@ export function loadMetadata() {
     if (!fieldsRes.ok) throw new Error('Could not load field definitions');
     const { fields } = (await fieldsRes.json()) as { fields: FieldDef[] };
     // Choices are a convenience, not a requirement -- a failure here should
-    // degrade the dropdowns to free-text inputs, not break the whole page.
+    // degrade the dropdowns to empty rather than break the whole page; the
+    // first search response fills them in regardless.
     const choices = choicesRes.ok
       ? ((await choicesRes.json()) as { choices: Record<string, Choice[]> }).choices
       : {};

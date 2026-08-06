@@ -202,6 +202,14 @@ describe('query shape', () => {
     }));
     assert.throws(() => compile({ filters }), QueryError);
   });
+
+  test('too many facets is rejected', () => {
+    // Every field is requested as a facet on every search now, to drive
+    // cascading dropdowns -- this caps how far a caller can push that past
+    // the size of the actual field registry.
+    const facets = Array.from({ length: 41 }, () => 'year');
+    assert.throws(() => compile({ facets }), QueryError);
+  });
 });
 
 describe('field registry', () => {

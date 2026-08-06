@@ -68,6 +68,10 @@ export default function App() {
   }, []);
 
   const knownFields = useMemo(() => new Set(fields.map((f) => f.name)), [fields]);
+  // Every field is requested as a facet, not a curated subset -- this is what
+  // makes each dropdown reflect every *other* active filter. See search() in
+  // api.ts for why that specific combination narrows the options.
+  const facetFields = useMemo(() => fields.map((f) => f.name), [fields]);
 
   useEffect(() => {
     const params = stateToParams(state);
@@ -92,8 +96,30 @@ export default function App() {
 
     setLoading(true);
     setError(null);
-    search(req, ctrl.signal)
-      .then((d) => { setData(d); setLoading(false); })
+    search(req, facetFields, ctrl.signal)
+      .then((d) => {
+        setData(d);
+        setLoading(false);
+
+        const newChoices: Record<string, Choice[]> = {};
+        for (const f of d.facets) newChoices[f.field] = f.values;
+        setChoices(newChoices);
+
+        // A filter can be invalidated by a *different* filter changing --
+        // picking Make=Ford after Model=Corvette was already selected leaves
+        // a combination that does not exist. Rather than let it sit selected
+        // and silently return zero results, drop whatever is no longer among
+        // its field's current choices. Each pass can only remove filters, so
+        // this always terminates rather than looping.
+        const stillValid = (f: ActiveFilter) => {
+          const opts = newChoices[f.field];
+          return !opts || opts.some((c) => String(c.value) === f.value);
+        };
+        const survivors = req.filters.filter(stillValid);
+        if (survivors.length !== req.filters.length) {
+          setState((s) => ({ ...s, offset: 0, filters: survivors }));
+        }
+      })
       .catch((e) => {
         if (e.name === 'AbortError') return;
         setError(e.message);
@@ -101,7 +127,7 @@ export default function App() {
       });
 
     return () => ctrl.abort();
-  }, [state, fields, knownFields]);
+  }, [state, fields, knownFields, facetFields]);
 
   const update = useCallback((next: Partial<SearchState>) => {
     // Any change to the query resets paging: staying on page 4 of a result set
@@ -269,30 +295,12 @@ export default function App() {
         ))}
       </div>
 
-      {data && data.facets.some((f) => f.values.length > 0) && (
-        <section className="facets">
-          <h4>Narrow it down</h4>
-          <div className="facet-grid">
-            {data.facets
-              .filter((f) => f.values.length > 0)
-              .map((f) => (
-                <div className="facet" key={f.field}>
-                  <h5>{fields.find((x) => x.name === f.field)?.label ?? f.field}</h5>
-                  {f.values.slice(0, 8).map((v) => (
-                    <button
-                      key={String(v.value)}
-                      className="row"
-                      onClick={() => setFilter(f.field, 'eq', String(v.value))}
-                    >
-                      <span>{String(v.value)}</span>
-                      <span className="muted">{v.n}</span>
-                    </button>
-                  ))}
-                </div>
-              ))}
-          </div>
-        </section>
-      )}
+      {/* There used to be a "narrow it down" panel here, listing the top
+          values of a curated few fields as clickable buttons. It is gone now
+          because every dropdown above does the same job for every field, not
+          a curated four -- and does it better: it stays in sync with what is
+          still actually choosable given the rest of the filters, instead of
+          offering a value that would zero out the results. */}
 
       {data && data.total > data.limit && (
         <div className="pager">
