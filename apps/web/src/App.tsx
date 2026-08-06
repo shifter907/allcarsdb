@@ -166,7 +166,7 @@ export default function App() {
         <div className="header-inner">
           <div className="brand">
             <strong>AllCarsDB</strong>{' '}
-            <span className="muted">every car, every engine</span>
+            <span className="muted">The most comprehensive vehicle spec database ever created. Free Forever.</span>
           </div>
           <div className="header-actions">
             <div className="unit-toggle">
