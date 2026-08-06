@@ -136,9 +136,17 @@ let metadataCache: Promise<{ fields: FieldDef[]; choices: Record<string, Choice[
 
 export function loadMetadata() {
   metadataCache ??= (async () => {
+    // `no-cache` means revalidate, not "do not cache" -- the response is still
+    // stored and a 304 still costs no bandwidth. It is worth the one round trip
+    // because these two responses define the filter panel: a stale copy renders
+    // controls for fields the data no longer has, and the page then contradicts
+    // its own results with no way for the user to fix it but waiting out the
+    // TTL. Search results are left on normal caching, where being a minute
+    // behind is invisible rather than broken.
+    const opts: RequestInit = { cache: 'no-cache' };
     const [fieldsRes, choicesRes] = await Promise.all([
-      fetch(`${BASE}/v1/fields`),
-      fetch(`${BASE}/v1/choices`),
+      fetch(`${BASE}/v1/fields`, opts),
+      fetch(`${BASE}/v1/choices`, opts),
     ]);
     if (!fieldsRes.ok) throw new Error('Could not load field definitions');
     const { fields } = (await fieldsRes.json()) as { fields: FieldDef[] };
