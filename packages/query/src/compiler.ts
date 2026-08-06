@@ -9,28 +9,26 @@
  *
  *   2. PREDICATES ARE EMITTED CHEAPEST-FIRST. SQLite evaluates a WHERE clause
  *      left to right within a scan, so equality on a small integer goes before
- *      a range, which goes before a bitmask test, which goes before a
- *      subquery. On a wide scan this ordering alone is worth several-fold.
+ *      a range, which goes before a LIKE. On a wide scan this ordering alone is
+ *      worth several-fold.
  *
- *   3. FEATURES TAKE THE CHEAPEST AVAILABLE ROUTE. A feature that owns a bit
- *      in the search index is tested with an AND-mask inside the scan. Anything
- *      else falls back to an EXISTS against variant_feature's covering index.
+ *   3. NULL IS NOT ZERO. A car with no recorded displacement must not appear in
+ *      "under 2000cc". Every range predicate carries an implicit IS NOT NULL,
+ *      because silently treating unknown as zero is how users lose trust.
  *
- *   4. NULL IS NOT ZERO. A car with no recorded 0-60 time must not appear in
- *      "0-60 under 5 seconds". Every range predicate carries an implicit
- *      IS NOT NULL, and the response reports how many rows were excluded for
- *      missing data -- silently dropping them is how users lose trust.
+ * Queries run against `Search_View`, the flattened join of Year_Make_Model,
+ * Engine_Specs and YMM_Engines. One row is one vehicle-year-plus-engine.
  */
 
-import { getField, resolveEnumValue, type FieldDef } from './fields.js';
+import { getField, type FieldDef } from './fields.js';
 import { toCanonical } from './units.js';
-import { Availability } from '@allcarsdb/schema/enums';
 
 // ---------------------------------------------------------------------------
 // Request shape
 // ---------------------------------------------------------------------------
 
-export type ComparisonOp = 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'in' | 'exists';
+export type ComparisonOp =
+  | 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'in' | 'exists' | 'contains';
 
 export interface FieldFilter {
   field: string;
@@ -38,21 +36,9 @@ export interface FieldFilter {
   value?: number | string | boolean | (number | string)[];
   /** Unit the value is expressed in; converted to canonical storage units. */
   unit?: string;
-  /** Tolerance for `eq` on a measured quantity. "28 in seat height" almost
-   *  never means exactly 711.2 mm -- it means "about 28 inches". */
+  /** Tolerance for `eq` on a measured quantity. "3.0 litres" almost never means
+   *  exactly 3000cc -- it means "about three litres". */
   tolerance?: number;
-}
-
-export interface FeatureFilter {
-  feature: string;
-  /** Which availability levels count as a match. Defaults to anything the
-   *  buyer could actually get: standard, standalone option, or in a package. */
-  availability?: string[];
-  /** Set true to find cars that explicitly do NOT offer it. */
-  absent?: boolean;
-  /** For numeric-valued features, e.g. screen size >= 12. */
-  op?: ComparisonOp;
-  value?: number;
 }
 
 export interface SortSpec {
@@ -64,16 +50,13 @@ export interface SortSpec {
 
 export interface SearchRequest {
   filters?: FieldFilter[];
-  features?: FeatureFilter[];
-  /** Free-text query against the FTS index. */
+  /** Free-text query across year, make and model. */
   q?: string;
   sort?: SortSpec[];
   limit?: number;
   offset?: number;
   /** Field names to compute facet counts for over the filtered set. */
   facets?: string[];
-  /** Collapse to one row per trim rather than one per variant. */
-  groupByTrim?: boolean;
 }
 
 export interface CompiledQuery {
@@ -89,13 +72,13 @@ export class QueryError extends Error {}
 const MAX_LIMIT = 200;
 const MAX_FILTERS = 60;
 
-/**
- * Features that own a bit in variant_search.feat_lo / feat_hi.
- * Populated by the ETL and injected here so the compiler can decide between
- * the bitmask path and the join path. Keys are feature slugs, values are bit
- * positions 0-127.
- */
-export type FeatureBitMap = ReadonlyMap<string, number>;
+/** Columns returned for every result row. Fixed list, never user-controlled. */
+const RESULT_COLUMNS = [
+  'combo_index', 'ymm_index', 'engine_index',
+  'Make', 'Model', 'Year',
+  'Layout', 'Cylinders', 'CC_Displacement',
+  'Aspiration', 'Fuel_Type', 'Compression_ratio', 'Fuel_delivery',
+].map((c) => `\`${c}\``).join(', ');
 
 interface Predicate {
   sql: string;
@@ -108,19 +91,14 @@ interface Predicate {
 // Compilation
 // ---------------------------------------------------------------------------
 
-export function compile(req: SearchRequest, featureBits: FeatureBitMap = new Map()): CompiledQuery {
+export function compile(req: SearchRequest): CompiledQuery {
   const filters = req.filters ?? [];
-  const features = req.features ?? [];
 
-  if (filters.length + features.length > MAX_FILTERS) {
+  if (filters.length > MAX_FILTERS) {
     throw new QueryError(`Too many filters (max ${MAX_FILTERS})`);
   }
 
-  const predicates: Predicate[] = [];
-
-  for (const f of filters) predicates.push(compileFieldFilter(f));
-  for (const f of features) predicates.push(compileFeatureFilter(f, featureBits));
-
+  const predicates: Predicate[] = filters.map(compileFieldFilter);
   if (req.q) predicates.push(compileTextSearch(req.q));
 
   // Cheapest predicates first -- see rule 2.
@@ -133,41 +111,30 @@ export function compile(req: SearchRequest, featureBits: FeatureBitMap = new Map
   const limit = Math.min(Math.max(req.limit ?? 50, 1), MAX_LIMIT);
   const offset = Math.max(req.offset ?? 0, 0);
 
-  // The display join happens after LIMIT so it only touches rows on the page.
   const sql = `
-SELECT
-  d.variant_id, d.full_name, d.make_name, d.make_slug, d.model_name, d.model_slug,
-  d.year, d.trim_name, d.variant_name, d.body_name, d.engine_summary,
-  d.drivetrain_summary, d.url_path,
-  s.combined_hp, s.combined_torque_lbft, s.curb_weight_kg, s.zero_to_60_mph_s,
-  s.cargo_behind_second_l, s.seat_height_front_mm, s.mpg_combined, s.mpge_combined,
-  s.electric_range_mi, s.towing_max_kg, s.msrp_minor, s.msrp_currency,
-  s.completeness, s.confidence_code
-FROM (
-  SELECT variant_id${orderBy.selectExtras}
-  FROM variant_search
-  ${where}
-  ${orderBy.sql}
-  LIMIT ? OFFSET ?
-) AS page
-JOIN variant_search  s ON s.variant_id = page.variant_id
-JOIN variant_display d ON d.variant_id = page.variant_id
-${orderBy.outerSql}`.trim();
+SELECT ${RESULT_COLUMNS}
+FROM Search_View
+${where}
+${orderBy}
+LIMIT ? OFFSET ?`.trim();
 
-  const countSql = `SELECT COUNT(*) AS n FROM variant_search ${where}`;
+  const countSql = `SELECT COUNT(*) AS n FROM Search_View ${where}`;
 
   const facetQueries = (req.facets ?? []).map((name) => {
     const field = getField(name);
     // A facet's own filter is excluded from its count -- otherwise selecting
-    // "SUV" makes every other body style read zero, which is useless for
-    // "what else could I pick".
+    // "Turbocharged" makes every other aspiration read zero, which is useless
+    // for answering "what else could I pick".
     const others = predicates.filter((p) => !p.sql.includes(`\`${field.column}\``));
     const facetWhere = others.length ? `WHERE ${others.map((p) => p.sql).join(' AND ')}` : '';
     return {
       facet: name,
+      // Rows with no recorded value are grouped out rather than shown as a
+      // nameless bucket -- "(null) 412" is not a filter anyone can click.
       sql: `SELECT \`${field.column}\` AS value, COUNT(*) AS n
-            FROM variant_search ${facetWhere}
+            FROM Search_View ${facetWhere}
             GROUP BY \`${field.column}\`
+            HAVING \`${field.column}\` IS NOT NULL
             ORDER BY n DESC
             LIMIT 100`,
       params: others.flatMap((p) => p.params),
@@ -195,31 +162,54 @@ function compileFieldFilter(f: FieldFilter): Predicate {
     return { sql: `${col} IS NOT NULL`, params: [], cost: 10 };
   }
 
-  if (field.kind === 'enum') {
-    return compileEnumFilter(f, field, col);
-  }
-
-  if (field.kind === 'bool') {
-    const want = f.value === true || f.value === 1 || f.value === 'true' ? 1 : 0;
-    return { sql: `${col} = ?`, params: [want], cost: 12 };
-  }
-
-  return compileNumericFilter(f, field, col);
+  return field.kind === 'text'
+    ? compileTextFilter(f, field, col)
+    : compileNumericFilter(f, field, col);
 }
 
-function compileEnumFilter(f: FieldFilter, field: FieldDef, col: string): Predicate {
-  const raw = Array.isArray(f.value) ? f.value : [f.value as string | number];
-  const codes = raw.map((v) => resolveEnumValue(field, v as string | number));
+/**
+ * LIKE metacharacters in a user's value are escaped rather than honoured.
+ *
+ * Someone searching for a model literally named "100%" means the string, not
+ * "anything at all" -- and a bare `_` matching any single character turns a
+ * precise search into a vague one without the user ever being told.
+ */
+function escapeLike(v: string): string {
+  return v.replace(/[\\%_]/g, (c) => `\\${c}`);
+}
 
-  if (f.op === 'ne') {
-    const holes = codes.map(() => '?').join(',');
-    // NULL must not match a negation silently.
-    return { sql: `(${col} IS NULL OR ${col} NOT IN (${holes}))`, params: codes, cost: 20 };
+function compileTextFilter(f: FieldFilter, field: FieldDef, col: string): Predicate {
+  const asText = (v: unknown): string => {
+    if (v === null || v === undefined) throw new QueryError(`${field.name}: missing value`);
+    if (typeof v === 'object') throw new QueryError(`${field.name}: expected a single value`);
+    return String(v);
+  };
+
+  switch (f.op) {
+    case 'contains': {
+      const v = escapeLike(asText(f.value));
+      return { sql: `${col} LIKE ? ESCAPE '\\'`, params: [`%${v}%`], cost: 60 };
+    }
+    case 'in': {
+      const arr = (Array.isArray(f.value) ? f.value : [f.value]).map(asText);
+      if (arr.length === 0) throw new QueryError(`${field.name}: "in" needs at least one value`);
+      return { sql: `${col} IN (${arr.map(() => '?').join(',')})`, params: arr, cost: 15 };
+    }
+    case 'ne': {
+      // NULL must not match a negation silently.
+      return { sql: `(${col} IS NULL OR ${col} <> ?)`, params: [asText(f.value)], cost: 20 };
+    }
+    case 'eq': {
+      // The columns are declared COLLATE NOCASE, so this is already
+      // case-insensitive at the storage layer -- "flat" finds "Flat".
+      return { sql: `${col} = ?`, params: [asText(f.value)], cost: 5 };
+    }
+    default:
+      throw new QueryError(
+        `Operator "${f.op}" does not apply to ${field.name}, which is text. ` +
+          `Use eq, ne, in or contains.`,
+      );
   }
-  if (codes.length === 1) {
-    return { sql: `${col} = ?`, params: codes, cost: 5 };
-  }
-  return { sql: `${col} IN (${codes.map(() => '?').join(',')})`, params: codes, cost: 15 };
 }
 
 function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): Predicate {
@@ -228,7 +218,7 @@ function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): Pre
     if (!Number.isFinite(n)) throw new QueryError(`${field.name}: "${v}" is not a number`);
     const canonical = field.quantity ? toCanonical(field.quantity, n, f.unit) : n;
     // Bounds are a sanity check on input, not on stored data -- catching
-    // "length = 4.5" when the user meant metres and forgot the unit.
+    // "displacement = 3" when the user meant litres and forgot the unit.
     if (field.min !== undefined && canonical < field.min - 1e-9) {
       throw new QueryError(
         `${field.name}: ${n}${f.unit ?? ''} is below the plausible minimum. Did you mean to specify a unit?`,
@@ -261,8 +251,8 @@ function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): Pre
     }
     case 'eq': {
       const v = conv(f.value);
-      // Tolerance turns "28 inch seat height" into a usable query. Without it
-      // a floating-point equality against a converted value matches nothing.
+      // Tolerance turns "3.0 litres" into a usable query. Without it, a
+      // floating-point equality against a converted value matches nothing.
       const tol = f.tolerance ?? defaultTolerance(field, v);
       if (tol > 0) {
         return { sql: `${col} BETWEEN ? AND ?`, params: [v - tol, v + tol], cost: 30 };
@@ -287,13 +277,17 @@ function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): Pre
 /**
  * Half-width of the match window for an `eq` on a measured quantity.
  *
- * Published specs are rounded, and rounded differently in each market -- the
- * same seat sits at "28.0 in" in a US brochure and "711 mm" in a European one,
- * and those are not the same number. Matching to the precision the user
- * implied (roughly half a display unit) is the behaviour people expect.
+ * Published displacements are rounded and rounded inconsistently -- the same
+ * engine is "3.0 litre" in the brochure and 2981cc on the spec sheet, and those
+ * are not the same number. Matching to the precision the user implied is the
+ * behaviour people expect.
  */
 function defaultTolerance(field: FieldDef, value: number): number {
   switch (field.quantity) {
+    case 'displacement':
+      // 2% covers the gap between a marketed round number and the real
+      // swept volume without letting a 3.0 match a 3.5.
+      return Math.max(value * 0.02, 5);
     case 'length':
       return 12.7; // half an inch, in mm
     case 'volume':
@@ -313,97 +307,31 @@ function defaultTolerance(field: FieldDef, value: number): number {
 }
 
 // ---------------------------------------------------------------------------
-// Feature filters
-// ---------------------------------------------------------------------------
-
-const DEFAULT_AVAILABILITY = ['standard', 'optional', 'package', 'late_availability'];
-
-function compileFeatureFilter(f: FeatureFilter, bits: FeatureBitMap): Predicate {
-  const availSlugs = f.availability ?? DEFAULT_AVAILABILITY;
-  const availCodes = availSlugs.map((s) => {
-    const c = Availability.code(s);
-    if (c === null) throw new QueryError(`Unknown availability "${s}"`);
-    return c;
-  });
-
-  const bit = bits.get(f.feature);
-  const standardOnly =
-    availSlugs.length === 1 && availSlugs[0] === 'standard';
-
-  // Fast path: the feature has a reserved bit and the query does not need a
-  // value comparison. Tested inside the scan, no join.
-  if (bit !== undefined && f.op === undefined) {
-    const hi = bit >= 64;
-    const col = standardOnly
-      ? hi ? '`feat_std_hi`' : '`feat_std_lo`'
-      : hi ? '`feat_hi`' : '`feat_lo`';
-
-    // The mask is emitted as a SQL LITERAL rather than a bound parameter, on
-    // purpose. Bits above 52 exceed Number.MAX_SAFE_INTEGER, and the only
-    // exact JS representation is a BigInt -- which Cloudflare D1 will not
-    // bind. Interpolating is safe here because `bit` comes from the server's
-    // own feature catalog, never from the request; the branch is unreachable
-    // unless the slug matched a catalog entry.
-    //
-    // SQLite integers are signed 64-bit, so bit 63 lands on the sign bit.
-    // asIntN gives the correct negative literal, and `col & mask = mask`
-    // is sign-agnostic, so the comparison stays correct there.
-    const mask = BigInt.asIntN(64, 1n << BigInt(hi ? bit - 64 : bit)).toString();
-
-    return f.absent
-      ? { sql: `(${col} & ${mask}) = 0`, params: [], cost: 8 }
-      : { sql: `(${col} & ${mask}) = ${mask}`, params: [], cost: 8 };
-  }
-
-  // General path: covering-index lookup on variant_feature.
-  const holes = availCodes.map(() => '?').join(',');
-  let valueClause = '';
-  const params: unknown[] = [f.feature, ...availCodes];
-
-  if (f.op !== undefined && f.value !== undefined) {
-    const opSql = { eq: '=', ne: '<>', lt: '<', lte: '<=', gt: '>', gte: '>=' }[
-      f.op as 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte'
-    ];
-    if (!opSql) throw new QueryError(`Unsupported operator "${f.op}" on feature ${f.feature}`);
-    valueClause = ` AND vf.value_num ${opSql} ?`;
-    params.push(f.value);
-  }
-
-  const exists = `EXISTS (
-      SELECT 1 FROM variant_feature vf
-      JOIN feature ft ON ft.id = vf.feature_id
-      WHERE vf.variant_id = variant_search.variant_id
-        AND ft.slug = ?
-        AND vf.availability_code IN (${holes})${valueClause}
-    )`;
-
-  return {
-    sql: f.absent ? `NOT ${exists}` : exists,
-    params,
-    cost: f.absent ? 90 : 70,
-  };
-}
-
-// ---------------------------------------------------------------------------
 // Text search
 // ---------------------------------------------------------------------------
 
+/**
+ * Free text across year, make and model.
+ *
+ * Every token must match, so "2026 porsche" narrows rather than widens. This is
+ * a LIKE rather than a full-text index: at this shape the whole searchable set
+ * is one small view, and an FTS table would be a second copy of the data that
+ * can fall out of step with the source tables it was built from.
+ */
 function compileTextSearch(q: string): Predicate {
-  // FTS5 treats a lot of punctuation as syntax. Quoting each token keeps a
-  // stray '-' or '"' from turning into an operator or a parse error.
   const tokens = q
     .trim()
     .split(/\s+/)
     .filter(Boolean)
-    .slice(0, 12)
-    .map((t) => `"${t.replace(/"/g, '""')}"`);
+    .slice(0, 8)
+    .map((t) => `%${escapeLike(t)}%`);
 
   if (tokens.length === 0) return { sql: '1=1', params: [], cost: 0 };
 
   return {
-    sql: `variant_search.variant_id IN (SELECT rowid FROM variant_fts WHERE variant_fts MATCH ?)`,
-    params: [tokens.join(' ')],
-    cost: 40,
+    sql: tokens.map(() => `\`Search_Text\` LIKE ? ESCAPE '\\'`).join(' AND '),
+    params: tokens,
+    cost: 65,
   };
 }
 
@@ -411,48 +339,26 @@ function compileTextSearch(q: string): Predicate {
 // Sorting
 // ---------------------------------------------------------------------------
 
-function compileSort(sorts: SortSpec[] | undefined): {
-  sql: string;
-  outerSql: string;
-  selectExtras: string;
-} {
+function compileSort(sorts: SortSpec[] | undefined): string {
+  const terms: string[] = [];
+
   if (!sorts || sorts.length === 0) {
-    return {
-      sql: 'ORDER BY year DESC, combined_hp DESC, variant_id',
-      outerSql: 'ORDER BY s.year DESC, s.combined_hp DESC, s.variant_id',
-      selectExtras: ', year, combined_hp',
-    };
-  }
+    terms.push('`Year` DESC', '`Make` ASC', '`Model` ASC');
+  } else {
+    for (const s of sorts.slice(0, 4)) {
+      const field = getField(s.field);
+      const dir = s.dir === 'asc' ? 'ASC' : 'DESC';
+      const nulls = s.nulls ?? 'last';
+      const col = `\`${field.column}\``;
 
-  const inner: string[] = [];
-  const outer: string[] = [];
-  const extras = new Set<string>();
-
-  for (const s of sorts.slice(0, 4)) {
-    const field = getField(s.field);
-    const dir = s.dir === 'asc' ? 'ASC' : 'DESC';
-    const nulls = s.nulls ?? 'last';
-    const col = `\`${field.column}\``;
-
-    // SQLite has NULLS LAST from 3.30, but D1 and older builds are safer with
-    // an explicit sort key. `x IS NULL` is 0/1, so this sorts NULLs to the end.
-    if (nulls === 'last') {
-      inner.push(`(${col} IS NULL) ASC`, `${col} ${dir}`);
-      outer.push(`(s.${col} IS NULL) ASC`, `s.${col} ${dir}`);
-    } else {
-      inner.push(`(${col} IS NOT NULL) ASC`, `${col} ${dir}`);
-      outer.push(`(s.${col} IS NOT NULL) ASC`, `s.${col} ${dir}`);
+      // SQLite has NULLS LAST from 3.30, but D1 and older builds are safer with
+      // an explicit sort key. `x IS NULL` is 0/1, so this sorts NULLs to the end.
+      terms.push(nulls === 'last' ? `(${col} IS NULL) ASC` : `(${col} IS NOT NULL) ASC`);
+      terms.push(`${col} ${dir}`);
     }
-    extras.add(field.column);
   }
 
   // Stable tiebreak, so pagination cannot repeat or skip a row.
-  inner.push('variant_id');
-  outer.push('s.variant_id');
-
-  return {
-    sql: `ORDER BY ${inner.join(', ')}`,
-    outerSql: `ORDER BY ${outer.join(', ')}`,
-    selectExtras: extras.size ? `, ${[...extras].map((c) => `\`${c}\``).join(', ')}` : '',
-  };
+  terms.push('`combo_index`');
+  return `ORDER BY ${terms.join(', ')}`;
 }

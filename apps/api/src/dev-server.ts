@@ -83,13 +83,13 @@ const shim = {
 const port = Number(process.env.PORT ?? 8787);
 
 serve({ fetch: (req: Request) => app.fetch(req, { DB: shim as never }), port }, (info) => {
-  const { variants } = sqlite
-    .prepare('SELECT COUNT(*) AS variants FROM variant_search')
-    .get() as { variants: number };
+  const { rows } = sqlite
+    .prepare('SELECT COUNT(*) AS rows FROM Search_View')
+    .get() as { rows: number };
   console.log(`\n  AllCarsDB API  http://localhost:${info.port}`);
-  console.log(`  ${variants} variants loaded from dist/allcars.sqlite\n`);
+  console.log(`  ${rows} searchable rows loaded from dist/allcars.sqlite\n`);
   console.log('  Try:');
-  console.log(`    http://localhost:${info.port}/v1/search?engine_layout=flat&cylinders=6&aspiration=naturally_aspirated`);
-  console.log(`    http://localhost:${info.port}/v1/search?hybrid_type=hev,phev&has=massage-seats-front`);
+  console.log(`    http://localhost:${info.port}/v1/search?layout=Flat&cylinders=6`);
+  console.log(`    http://localhost:${info.port}/v1/search?displacement=lt:2l`);
   console.log(`    http://localhost:${info.port}/v1/fields\n`);
 });

@@ -10,9 +10,7 @@
     "dump": "tsx src/dump.ts"
   },
   "dependencies": {
-    "@allcarsdb/schema": "*",
-    "@allcarsdb/query": "*",
-    "yaml": "^2.6.1"
+    "@allcarsdb/query": "*"
   },
   "devDependencies": {
     "tsx": "^4.19.2"

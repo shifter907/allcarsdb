@@ -51,10 +51,14 @@ async function main() {
     db.prepare(
       `SELECT name FROM sqlite_master
         WHERE type = 'table' AND name NOT LIKE 'sqlite_%'
-          AND name NOT LIKE 'variant_fts%'
         ORDER BY name`,
     ).all() as { name: string }[]
   ).map((t) => t.name);
+
+  const views = (
+    db.prepare(`SELECT name FROM sqlite_master WHERE type = 'view' ORDER BY name`).all() as
+      { name: string }[]
+  ).map((v) => v.name);
 
   // Idempotency: this file is applied with `wrangler d1 execute` against
   // whatever the live database currently looks like, not necessarily an empty
@@ -63,12 +67,37 @@ async function main() {
   // matter) means every deploy is a clean reload regardless of what state the
   // target database started in, rather than a "table already exists" failure
   // that only reproduces if you happen to know the database's history.
+  //
+  // The drop list is taken from the database being dumped, so it only covers
+  // objects this schema knows about. Tables left behind by an *older* schema
+  // are listed separately below, because nothing in the current build has any
+  // record that they ever existed.
   await write('-- Drop everything first so this script is safe to run against a\n');
   await write('-- database that already has some or all of this schema.\n');
+  for (const view of views) {
+    await write(`DROP VIEW IF EXISTS ${view};\n`);
+  }
   for (const table of tables) {
     await write(`DROP TABLE IF EXISTS ${table};\n`);
   }
-  await write('DROP TABLE IF EXISTS variant_fts;\n\n');
+
+  // Superseded by the CSV-sourced schema. Left here so a database provisioned
+  // under the old YAML model converges to the current one instead of keeping
+  // 39 orphaned tables that no code reads and no build maintains.
+  const RETIRED = [
+    'variant_fts', 'variant_display', 'variant_search', 'facet_count', 'data_gap',
+    'fact_source', 'source', 'contributor', 'variant_feature', 'feature',
+    'spec_chassis', 'spec_capacity', 'spec_efficiency', 'spec_performance',
+    'spec_interior', 'spec_exterior', 'powertrain', 'drivetrain', 'transmission',
+    'battery_pack', 'electric_motor', 'engine', 'variant', 'trim', 'model_year',
+    'generation', 'model', 'make', 'manufacturer', 'body_style', 'enum_label',
+    'data_file',
+  ];
+  await write('\n-- Retired by the CSV schema; dropped so old databases converge.\n');
+  for (const t of RETIRED) {
+    if (!tables.includes(t)) await write(`DROP TABLE IF EXISTS ${t};\n`);
+  }
+  await write('\n');
 
   // Schema comes from the migrations rather than sqlite_master, so the dump
   // keeps its comments -- they are a large part of what makes this schema
@@ -99,15 +128,9 @@ async function main() {
     totalRows += rows.length;
   }
 
-  // FTS is derived, so rebuild it on the far side rather than shipping its
-  // internal b-tree tables as literal rows.
-  await write(`\n-- Rebuild the full-text index from variant_display\n`);
-  await write(
-    `INSERT INTO variant_fts(rowid, full_name, make_name, model_name, trim_name, engine_summary)\n` +
-      `  SELECT variant_id, full_name, make_name, model_name,\n` +
-      `         COALESCE(trim_name,''), COALESCE(engine_summary,'')\n` +
-      `  FROM variant_display;\n`,
-  );
+  // Search_View is a view, so it needs no rows dumped -- the CREATE VIEW in the
+  // migration above is the whole of it, and it recomputes from the three
+  // source tables the moment they are populated.
   await write('\nPRAGMA foreign_keys = ON;\n');
 
   db.close();

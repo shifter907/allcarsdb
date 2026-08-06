@@ -1,24 +1,24 @@
 /**
- * AllCarsDB read API -- Cloudflare Worker over D1.
+ * The AllCarsDB read API.
  *
- * Read-only by design. There is no write path, no authentication and no
- * session state, because data changes happen as pull requests against the
- * YAML in this repository and reach production through a rebuild. That single
- * decision removes the entire class of problems a community database usually
- * spends its life fighting: spam, vandalism, account management, moderation
- * queues, and an admin UI nobody wants to maintain.
+ * Read-only by design. There is no write path, no authentication and no session
+ * state: data changes by merging a pull request against the CSVs and rebuilding,
+ * which means the API has no privileged operation to protect and no way for a
+ * request to corrupt anything.
  *
- * Consequences worth knowing:
- *   - Every response is cacheable. The data only changes when a build ships.
- *   - The Worker can run at the edge with no origin.
- *   - Rolling back bad data is `git revert`.
+ * Runs on Cloudflare Workers against a D1 database that is replaced wholesale on
+ * every deploy.
  */
 
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { compile, QueryError, type SearchRequest, type FeatureBitMap } from '@allcarsdb/query/compiler';
-import { FIELDS, getField } from '@allcarsdb/query/fields';
-import { ENUM_REGISTRY } from '@allcarsdb/schema/enums';
+import {
+  compile,
+  QueryError,
+  getField,
+  FIELDS,
+  type SearchRequest,
+} from '@allcarsdb/query';
 
 type Bindings = { DB: D1Database };
 
@@ -62,38 +62,20 @@ app.use(
 );
 
 /**
- * Cache-Control for data endpoints. The database is immutable between builds,
- * so a long browser TTL plus a longer edge TTL is correct rather than merely
- * convenient -- and stale-while-revalidate means a deploy never causes a
- * latency spike.
+ * Cache-Control for data endpoints.
+ *
+ * The edge TTL is long because the database is immutable between builds, and
+ * that is where the load is actually absorbed -- a day of edge caching plus
+ * stale-while-revalidate means a deploy never causes a latency spike.
+ *
+ * The *browser* TTL is deliberately short. A long one was the obvious choice
+ * and was wrong: the UI builds its filter panel from /v1/fields, so a visitor
+ * holding an hour-old copy of that after a schema change renders the old
+ * filters against the new data and the page looks broken in a way no amount of
+ * reloading fixes. Sixty seconds costs one conditional request and bounds how
+ * long a client can disagree with the server about what the data looks like.
  */
-const CACHE = 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800';
-
-// ---------------------------------------------------------------------------
-// Feature bit map, loaded once per isolate
-// ---------------------------------------------------------------------------
-// Needed by the compiler to choose the bitmask path over the join path. It
-// changes only at build time, so caching it for the life of the isolate is
-// safe; a deploy creates new isolates.
-
-let featureBitsCache: FeatureBitMap | null = null;
-
-async function getFeatureBits(db: D1Database): Promise<FeatureBitMap> {
-  if (featureBitsCache) return featureBitsCache;
-  // search_bit lives in the feature catalog YAML, and the build mirrors it
-  // into build_info so the Worker does not need the repository.
-  const row = await db
-    .prepare(`SELECT value FROM build_info WHERE key = 'feature_bits'`)
-    .first<{ value: string }>();
-  const map = new Map<string, number>();
-  if (row?.value) {
-    for (const [slug, bit] of Object.entries(JSON.parse(row.value) as Record<string, number>)) {
-      map.set(slug, bit);
-    }
-  }
-  featureBitsCache = map;
-  return map;
-}
+const CACHE = 'public, max-age=60, s-maxage=86400, stale-while-revalidate=604800';
 
 // ---------------------------------------------------------------------------
 // Search
@@ -109,17 +91,8 @@ app.post('/v1/search', async (c) => {
   return runSearch(c.env.DB, req, c);
 });
 
-/**
- * GET form, so a search is a shareable URL.
- *
- *   /v1/search?engine_layout=flat&cylinders=6&aspiration=naturally_aspirated
- *             &valves_total=gte:24&has=massage-seats-front&sort=-horsepower
- *
- * Operators are a `op:value` prefix; bare values mean equality. Ranges use
- * `between:lo..hi`. Units attach to the value: `cargo_behind_second=gte:65cuft`.
- */
 app.get('/v1/search', async (c) => {
-  const req: SearchRequest = { filters: [], features: [] };
+  const req: SearchRequest = { filters: [] };
   const url = new URL(c.req.url);
 
   for (const [key, raw] of url.searchParams.entries()) {
@@ -135,19 +108,6 @@ app.get('/v1/search', async (c) => {
             : { field: s, dir: 'asc' as const },
         );
         continue;
-      case 'has':
-        for (const slug of raw.split(',').filter(Boolean)) req.features!.push({ feature: slug });
-        continue;
-      case 'has_standard':
-        for (const slug of raw.split(',').filter(Boolean)) {
-          req.features!.push({ feature: slug, availability: ['standard'] });
-        }
-        continue;
-      case 'without':
-        for (const slug of raw.split(',').filter(Boolean)) {
-          req.features!.push({ feature: slug, absent: true });
-        }
-        continue;
     }
 
     try {
@@ -160,7 +120,7 @@ app.get('/v1/search', async (c) => {
   return runSearch(c.env.DB, req, c);
 });
 
-const OPS = new Set(['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'between', 'exists']);
+const OPS = new Set(['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'between', 'exists', 'contains']);
 
 function parseFilterParam(field: string, raw: string) {
   getField(field); // throws on an unknown field, before anything else happens
@@ -182,6 +142,8 @@ function parseFilterParam(field: string, raw: string) {
     return { field, op: 'between' as const, value: [a.value, b.value], unit: a.unit ?? b.unit };
   }
 
+  if (op === 'contains') return { field, op: 'contains' as const, value: rest };
+
   if (op === 'in' || rest.includes(',')) {
     const parts = rest.split(',').filter(Boolean);
     const parsed = parts.map(splitUnit);
@@ -197,97 +159,111 @@ function parseFilterParam(field: string, raw: string) {
   return { field, op: op as 'eq', value, unit };
 }
 
-/** "65cuft" -> { value: 65, unit: 'cuft' }; "flat" -> { value: 'flat' }. */
+/** "3.0l" -> { value: 3, unit: 'l' }; "Flat" -> { value: 'Flat' }. */
 function splitUnit(s: string): { value: string | number; unit?: string } {
   const m = /^(-?\d+(?:\.\d+)?)\s*([a-zA-Z/%0-9]*)$/.exec(s.trim());
   if (!m) return { value: s.trim() };
   return { value: Number(m[1]), unit: m[2] || undefined };
 }
 
-// ---------------------------------------------------------------------------
-
 async function runSearch(db: D1Database, req: SearchRequest, c: { json: Function }) {
   let q;
   try {
-    q = compile(req, await getFeatureBits(db));
+    q = compile(req);
   } catch (e) {
     if (e instanceof QueryError || e instanceof Error) {
-      return c.json({ error: e.message }, 400);
+      return c.json({ error: (e as Error).message }, 400);
     }
     throw e;
   }
 
-  // D1 runs these in one round trip rather than three.
-  const statements = [
-    db.prepare(q.sql).bind(...(q.params as never[])),
-    db.prepare(q.countSql).bind(...(q.countParams as never[])),
-    ...q.facetQueries.map((f) => db.prepare(f.sql).bind(...(f.params as never[]))),
-  ];
+  try {
+    const batch = await db.batch<Record<string, unknown>>([
+      db.prepare(q.countSql).bind(...(q.countParams as never[])),
+      db.prepare(q.sql).bind(...(q.params as never[])),
+      ...q.facetQueries.map((f) => db.prepare(f.sql).bind(...(f.params as never[]))),
+    ]);
 
-  const results = await db.batch(statements);
-  const rows = (results[0]?.results ?? []) as Record<string, unknown>[];
-  const total = ((results[1]?.results?.[0] as { n: number } | undefined)?.n) ?? 0;
+    const countRow = batch[0]?.results?.[0] as { n: number } | undefined;
+    const rows = batch[1]?.results ?? [];
 
-  const facets: Record<string, { value: unknown; label: string | null; count: number }[]> = {};
-  q.facetQueries.forEach((fq, i) => {
-    const field = getField(fq.facet);
-    const raw = (results[2 + i]?.results ?? []) as { value: number; n: number }[];
-    facets[fq.facet] = raw.map((r) => ({
-      value: field.enumName ? ENUM_REGISTRY[field.enumName].fromCode(r.value)?.slug ?? r.value : r.value,
-      label: field.enumName ? ENUM_REGISTRY[field.enumName].fromCode(r.value)?.label ?? null : null,
-      count: r.n,
+    const facets = q.facetQueries.map((f, i) => ({
+      field: f.facet,
+      // +2 skips the count and page queries, which lead the batch.
+      values: (batch[i + 2]?.results ?? []) as unknown as { value: unknown; n: number }[],
     }));
-  });
 
-  return c.json(
-    {
-      total,
-      limit: Math.min(req.limit ?? 50, 200),
-      offset: req.offset ?? 0,
-      results: rows.map(shapeResult),
-      facets: Object.keys(facets).length ? facets : undefined,
-    },
-    200,
-    { 'Cache-Control': CACHE },
-  );
+    return c.json(
+      {
+        total: countRow?.n ?? 0,
+        limit: q.params[q.params.length - 2],
+        offset: q.params[q.params.length - 1],
+        results: rows.map(shapeResult),
+        facets,
+      },
+      200,
+      { 'Cache-Control': CACHE },
+    );
+  } catch (e) {
+    return c.json({ error: `Query failed: ${(e as Error).message}` }, 500);
+  }
 }
 
+/**
+ * Reshape a flat row into vehicle/engine halves.
+ *
+ * The view returns them side by side because that is what makes the query one
+ * scan, but a consumer thinks in terms of "a car, and the engine in it" -- and
+ * a flat bag of thirteen keys makes the caller re-derive that structure every
+ * time.
+ */
 function shapeResult(r: Record<string, unknown>) {
   return {
-    id: r.variant_id,
-    name: r.full_name,
-    make: r.make_name,
-    model: r.model_name,
-    year: r.year,
-    trim: r.trim_name,
-    variant: r.variant_name,
-    body: r.body_name,
-    engine: r.engine_summary,
-    drivetrain: r.drivetrain_summary,
-    url: r.url_path,
-    specs: {
-      horsepower: r.combined_hp,
-      torque_lbft: r.combined_torque_lbft,
-      curb_weight_kg: r.curb_weight_kg,
-      zero_to_60_s: r.zero_to_60_mph_s,
-      cargo_behind_second_l: r.cargo_behind_second_l,
-      seat_height_mm: r.seat_height_front_mm,
-      mpg_combined: r.mpg_combined,
-      mpge_combined: r.mpge_combined,
-      electric_range_mi: r.electric_range_mi,
-      towing_max_kg: r.towing_max_kg,
-      msrp: r.msrp_minor != null ? (r.msrp_minor as number) / 100 : null,
-      currency: r.msrp_currency,
+    index: r.combo_index,
+    vehicle: {
+      index: r.ymm_index,
+      make: r.Make,
+      model: r.Model,
+      year: r.Year,
+      name: `${r.Year} ${r.Make} ${r.Model}`,
     },
-    quality: { completeness: r.completeness, confidence: r.confidence_code },
+    engine: {
+      index: r.engine_index,
+      layout: r.Layout,
+      cylinders: r.Cylinders,
+      displacement_cc: r.CC_Displacement,
+      aspiration: r.Aspiration,
+      fuel_type: r.Fuel_Type,
+      compression_ratio: r.Compression_ratio,
+      fuel_delivery: r.Fuel_delivery,
+      summary: engineSummary(r),
+    },
   };
 }
 
+/** "3.0L twin-turbocharged flat-6" from the parts that are actually present. */
+function engineSummary(r: Record<string, unknown>): string | null {
+  const parts: string[] = [];
+  if (typeof r.CC_Displacement === 'number') {
+    parts.push(`${(r.CC_Displacement / 1000).toFixed(1)}L`);
+  }
+  if (r.Aspiration) parts.push(String(r.Aspiration).toLowerCase());
+  if (r.Layout && typeof r.Cylinders === 'number') {
+    parts.push(`${String(r.Layout).toLowerCase()}-${r.Cylinders}`);
+  } else if (r.Layout) {
+    parts.push(String(r.Layout).toLowerCase());
+  } else if (typeof r.Cylinders === 'number') {
+    parts.push(`${r.Cylinders}-cylinder`);
+  }
+  return parts.length ? parts.join(' ') : null;
+}
+
 // ---------------------------------------------------------------------------
-// Metadata -- the UI builds its filter panel from these, so the client can
-// never drift from the server's idea of what is searchable.
+// Metadata
 // ---------------------------------------------------------------------------
 
+// The UI builds its filter panel from this rather than a hand-kept copy, so a
+// field added to the registry appears in the interface without a UI change.
 app.get('/v1/fields', (c) =>
   c.json(
     {
@@ -296,12 +272,12 @@ app.get('/v1/fields', (c) =>
         label: f.label,
         kind: f.kind,
         group: f.group,
-        quantity: f.quantity ?? null,
-        enum: f.enumName ?? null,
-        common: !!f.common,
-        min: f.min ?? null,
-        max: f.max ?? null,
-        description: f.description ?? null,
+        common: f.common ?? false,
+        choices: f.choices ?? false,
+        quantity: f.quantity,
+        min: f.min,
+        max: f.max,
+        description: f.description,
       })),
     },
     200,
@@ -309,41 +285,46 @@ app.get('/v1/fields', (c) =>
   ),
 );
 
-app.get('/v1/enums', (c) =>
-  c.json(
-    Object.fromEntries(
-      Object.entries(ENUM_REGISTRY).map(([name, def]) => [
-        name,
-        def.members
-          .filter((m) => !m.deprecated)
-          .map((m) => ({ slug: m.slug, label: m.label, note: m.note ?? null })),
-      ]),
+/**
+ * Distinct values for the free-text columns.
+ *
+ * These have no controlled vocabulary -- the data decides what exists. Serving
+ * the actual distinct values gives the UI real dropdowns without anyone having
+ * to predict every aspiration or fuel type that will ever be entered.
+ */
+app.get('/v1/choices', async (c) => {
+  const wanted = FIELDS.filter((f) => f.choices);
+  const rows = await c.env.DB.batch(
+    wanted.map((f) =>
+      c.env.DB.prepare(
+        `SELECT \`${f.column}\` AS value, COUNT(*) AS n
+           FROM Search_View
+          WHERE \`${f.column}\` IS NOT NULL
+          GROUP BY \`${f.column}\`
+          ORDER BY n DESC, value ASC
+          LIMIT 500`,
+      ),
     ),
-    200,
-    { 'Cache-Control': CACHE },
-  ),
-);
+  );
 
-app.get('/v1/features', async (c) => {
-  const { results } = await c.env.DB.prepare(
-    `SELECT f.slug, f.name, f.value_type, f.value_unit, f.is_common,
-            e.slug AS category, p.slug AS parent,
-            (SELECT COUNT(*) FROM variant_feature vf WHERE vf.feature_id = f.id) AS usage_count
-       FROM feature f
-       LEFT JOIN feature p    ON p.id = f.parent_id
-       LEFT JOIN enum_label e ON e.enum_name = 'feature_category' AND e.code = f.category_code
-      ORDER BY f.category_code, f.name`,
-  ).all();
-  return c.json({ features: results }, 200, { 'Cache-Control': CACHE });
+  const choices: Record<string, { value: string; n: number }[]> = {};
+  wanted.forEach((f, i) => {
+    choices[f.name] = (rows[i]?.results ?? []) as { value: string; n: number }[];
+  });
+
+  return c.json({ choices }, 200, { 'Cache-Control': CACHE });
 });
 
 app.get('/v1/makes', async (c) => {
   const { results } = await c.env.DB.prepare(
-    `SELECT mk.id, mk.slug, mk.name, mk.country_code,
-            COUNT(DISTINCT vs.model_id) AS model_count,
-            COUNT(*) AS variant_count
-       FROM variant_search vs JOIN make mk ON mk.id = vs.make_id
-      GROUP BY mk.id ORDER BY mk.name`,
+    `SELECT Make AS make,
+            COUNT(DISTINCT Model) AS models,
+            COUNT(DISTINCT ymm_index) AS vehicle_years,
+            MIN(Year) AS earliest,
+            MAX(Year) AS latest
+       FROM Search_View
+      GROUP BY Make
+      ORDER BY Make`,
   ).all();
   return c.json({ makes: results }, 200, { 'Cache-Control': CACHE });
 });
@@ -352,111 +333,82 @@ app.get('/v1/makes', async (c) => {
 // Detail
 // ---------------------------------------------------------------------------
 
-app.get('/v1/variant/:id', async (c) => {
-  const id = Number(c.req.param('id'));
-  if (!Number.isInteger(id)) return c.json({ error: 'Invalid id' }, 400);
+app.get('/v1/vehicle/:index', async (c) => {
+  const index = Number(c.req.param('index'));
+  if (!Number.isInteger(index)) return c.json({ error: 'index must be an integer' }, 400);
 
-  const batch = await c.env.DB.batch([
-    c.env.DB.prepare(
-      `SELECT d.*, s.*,
-              se.*, si.*, sp.*, sc.*, ch.*
-         FROM variant_display d
-         JOIN variant_search s        ON s.variant_id = d.variant_id
-         LEFT JOIN spec_exterior se   ON se.variant_id = d.variant_id
-         LEFT JOIN spec_interior si   ON si.variant_id = d.variant_id
-         LEFT JOIN spec_performance sp ON sp.variant_id = d.variant_id
-         LEFT JOIN spec_capacity sc   ON sc.variant_id = d.variant_id
-         LEFT JOIN spec_chassis ch    ON ch.variant_id = d.variant_id
-        WHERE d.variant_id = ?`,
-    ).bind(id),
-    c.env.DB.prepare(
-      `SELECT f.slug, f.name, f.value_type, vf.value_num, vf.value_text,
-              a.slug AS availability, a.label AS availability_label,
-              cat.slug AS category, op.name AS package_name,
-              vf.price_minor
-         FROM variant_feature vf
-         JOIN feature f          ON f.id = vf.feature_id
-         LEFT JOIN enum_label a  ON a.enum_name = 'availability' AND a.code = vf.availability_code
-         LEFT JOIN enum_label cat ON cat.enum_name = 'feature_category' AND cat.code = f.category_code
-         LEFT JOIN option_package op ON op.id = vf.package_id
-        WHERE vf.variant_id = ?
-        ORDER BY f.category_code, f.name`,
-    ).bind(id),
-    c.env.DB.prepare(
-      `SELECT ef.*, c.slug AS cycle, c.label AS cycle_label
-         FROM spec_efficiency ef
-         LEFT JOIN enum_label c ON c.enum_name = 'test_cycle' AND c.code = ef.cycle_code
-        WHERE ef.variant_id = ?`,
-    ).bind(id),
-    c.env.DB.prepare(
-      `SELECT DISTINCT s.title, s.publisher, s.url, s.archive_url, s.document_type,
-              s.published_date, fs.column_name
-         FROM fact_source fs JOIN source s ON s.id = fs.source_id
-        WHERE fs.table_name IN ('variant','spec_exterior','spec_interior','spec_performance')
-          AND fs.row_id = ?`,
-    ).bind(id),
-  ]);
+  const vehicle = await c.env.DB.prepare(
+    `SELECT "Index" AS "index", Make AS make, Model AS model, Year AS year
+       FROM Year_Make_Model WHERE "Index" = ?`,
+  ).bind(index).first();
 
-  const rowsAt = (i: number) => batch[i]?.results ?? [];
-  const row = rowsAt(0)[0];
-  if (!row) return c.json({ error: 'Not found' }, 404);
+  if (!vehicle) return c.json({ error: 'Not found' }, 404);
 
-  return c.json(
-    {
-      variant: row,
-      features: rowsAt(1),
-      efficiency: rowsAt(2),
-      sources: rowsAt(3),
-    },
-    200,
-    { 'Cache-Control': CACHE },
-  );
+  const { results: engines } = await c.env.DB.prepare(
+    `SELECT e."Index" AS "index", e.Layout AS layout, e.Cylinders AS cylinders,
+            e.CC_Displacement AS displacement_cc, e.Aspiration AS aspiration,
+            e.Fuel_Type AS fuel_type, e.Compression_ratio AS compression_ratio,
+            e.Fuel_delivery AS fuel_delivery
+       FROM YMM_Engines ye
+       JOIN Engine_Specs e ON e."Index" = ye.Engine_Index
+      WHERE ye.YMM_Index = ?
+      ORDER BY e.CC_Displacement`,
+  ).bind(index).all();
+
+  return c.json({ vehicle, engines }, 200, { 'Cache-Control': CACHE });
+});
+
+app.get('/v1/engine/:index', async (c) => {
+  const index = Number(c.req.param('index'));
+  if (!Number.isInteger(index)) return c.json({ error: 'index must be an integer' }, 400);
+
+  const engine = await c.env.DB.prepare(
+    `SELECT "Index" AS "index", Layout AS layout, Cylinders AS cylinders,
+            CC_Displacement AS displacement_cc, Aspiration AS aspiration,
+            Fuel_Type AS fuel_type, Compression_ratio AS compression_ratio,
+            Fuel_delivery AS fuel_delivery
+       FROM Engine_Specs WHERE "Index" = ?`,
+  ).bind(index).first();
+
+  if (!engine) return c.json({ error: 'Not found' }, 404);
+
+  // "What else used this engine" is the question the junction table exists to
+  // answer, and the one a normalised engine catalog can answer that a
+  // per-car spec sheet cannot.
+  const { results: vehicles } = await c.env.DB.prepare(
+    `SELECT v."Index" AS "index", v.Make AS make, v.Model AS model, v.Year AS year
+       FROM YMM_Engines ye
+       JOIN Year_Make_Model v ON v."Index" = ye.YMM_Index
+      WHERE ye.Engine_Index = ?
+      ORDER BY v.Make, v.Model, v.Year`,
+  ).bind(index).all();
+
+  return c.json({ engine, vehicles }, 200, { 'Cache-Control': CACHE });
 });
 
 // ---------------------------------------------------------------------------
-// Contribution funnel
+// Status
 // ---------------------------------------------------------------------------
-// The most effective way to turn a visitor into a contributor is to show them
-// a specific, small, obviously-fillable gap rather than an invitation to
-// "help out". This endpoint backs that page.
-
-app.get('/v1/gaps', async (c) => {
-  const limit = Math.min(Number(c.req.query('limit') ?? 50), 200);
-  const { results } = await c.env.DB.prepare(
-    `SELECT d.full_name, d.url_path, g.column_name, g.priority, d.variant_id
-       FROM data_gap g JOIN variant_display d ON d.variant_id = g.variant_id
-      ORDER BY g.priority DESC, g.variant_id
-      LIMIT ?`,
-  ).bind(limit).all();
-  return c.json({ gaps: results }, 200, { 'Cache-Control': 'public, max-age=600' });
-});
 
 app.get('/v1/stats', async (c) => {
-  const batch = await c.env.DB.batch([
-    c.env.DB.prepare(
-      `SELECT COUNT(*) AS variants, ROUND(AVG(completeness)) AS avg_completeness,
-              COUNT(DISTINCT make_id) AS makes, COUNT(DISTINCT model_id) AS models,
-              MIN(year) AS earliest_year, MAX(year) AS latest_year
-         FROM variant_search`,
-    ),
-    c.env.DB.prepare(`SELECT key, value FROM build_info WHERE key <> 'feature_bits'`),
-  ]);
+  const summary = await c.env.DB.prepare(
+    `SELECT
+       (SELECT COUNT(*) FROM Year_Make_Model)          AS vehicle_years,
+       (SELECT COUNT(DISTINCT Make) FROM Year_Make_Model) AS makes,
+       (SELECT COUNT(*) FROM Engine_Specs)             AS engines,
+       (SELECT COUNT(*) FROM YMM_Engines)              AS pairings,
+       (SELECT MIN(Year) FROM Year_Make_Model)         AS earliest_year,
+       (SELECT MAX(Year) FROM Year_Make_Model)         AS latest_year`,
+  ).first();
 
-  const summary = (batch[0]?.results?.[0] ?? {}) as Record<string, unknown>;
-  const build = Object.fromEntries(
-    ((batch[1]?.results ?? []) as { key: string; value: string }[]).map((r) => [r.key, r.value]),
-  );
+  const { results } = await c.env.DB.prepare('SELECT key, value FROM build_info').all<{
+    key: string; value: string;
+  }>();
+  const build = Object.fromEntries((results ?? []).map((r) => [r.key, r.value]));
 
   return c.json({ ...summary, build }, 200, { 'Cache-Control': CACHE });
 });
 
 app.get('/health', (c) => c.json({ ok: true }));
-
-app.notFound((c) => c.json({ error: 'Not found' }, 404));
-
-app.onError((e, c) => {
-  console.error(e);
-  return c.json({ error: 'Internal error' }, 500);
-});
 
 export default app;

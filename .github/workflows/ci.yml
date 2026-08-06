@@ -25,8 +25,14 @@ jobs:
 
       - run: npm ci
 
-      - name: Validate all data files
+      - name: Validate the data files
         run: npm run validate
+
+      # Runs the loader over fixtures as well as the compiler unit tests. The
+      # fixtures matter: the production CSVs are nearly empty, so validating
+      # only those would pass even if the loader silently accepted nothing.
+      - name: Test
+        run: npm test
 
       - name: Build the database
         run: npm run build:db
@@ -45,11 +51,10 @@ jobs:
             const { DatabaseSync } = require('node:sqlite');
             const db = new DatabaseSync('dist/allcars.sqlite', { readOnly: true });
             const q = (s) => db.prepare(s).get();
-            const r = q('SELECT COUNT(*) n, ROUND(AVG(completeness)) c FROM variant_search');
-            console.log('variants:      ' + r.n);
-            console.log('completeness:  ' + r.c + '%');
-            console.log('makes:         ' + q('SELECT COUNT(*) n FROM make').n);
-            console.log('engines:       ' + q('SELECT COUNT(*) n FROM engine').n);
-            console.log('features:      ' + q('SELECT COUNT(*) n FROM feature').n);
+            console.log('vehicle-years: ' + q('SELECT COUNT(*) n FROM Year_Make_Model').n);
+            console.log('makes:         ' + q('SELECT COUNT(DISTINCT Make) n FROM Year_Make_Model').n);
+            console.log('engines:       ' + q('SELECT COUNT(*) n FROM Engine_Specs').n);
+            console.log('pairings:      ' + q('SELECT COUNT(*) n FROM YMM_Engines').n);
+            console.log('searchable:    ' + q('SELECT COUNT(*) n FROM Search_View').n);
           " >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

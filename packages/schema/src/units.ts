@@ -15,6 +15,7 @@
 export type Quantity =
   | 'length'
   | 'volume'
+  | 'displacement'
   | 'mass'
   | 'speed'
   | 'power'
@@ -60,6 +61,24 @@ export const QUANTITIES: Record<Quantity, UnitDef> = {
       galus: 3.785411784,
       galuk: 4.54609,
       cc: 0.001,
+    },
+  },
+  // Engine displacement is its own quantity rather than a use of `volume`,
+  // because it is stored in cubic centimetres while `volume` is canonically
+  // litres. Sharing the one quantity would silently compare a "3.0 l" filter
+  // against a column holding 2981 and match nothing -- the kind of wrong
+  // answer that looks like missing data rather than a bug.
+  displacement: {
+    canonical: 'cc',
+    factors: {
+      cc: 1,
+      ccm: 1,
+      ml: 1,
+      l: 1000,
+      liter: 1000,
+      litre: 1000,
+      cuin: 16.387064,
+      ci: 16.387064,
     },
   },
   mass: {

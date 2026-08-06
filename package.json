@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit -p packages/schema && tsc --noEmit -p packages/query && tsc --noEmit -p packages/etl && tsc --noEmit -p apps/api && tsc --noEmit -p apps/web",
     "dev:api": "npm run dev -w @allcarsdb/api",
     "dev:web": "npm run dev -w @allcarsdb/web",
-    "test": "node --import tsx --test packages/query/test/*.test.ts"
+    "test": "node --import tsx --test packages/*/test/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

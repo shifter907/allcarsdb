@@ -125,19 +125,19 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 
 /* ---------- Layout ---------- */
 
+/*
+ * A single column, not the sidebar this once was. With ten filters the whole
+ * panel is a couple of rows deep, so putting it across the top keeps the
+ * controls and the results they produce on the same axis -- a 320px rail would
+ * be mostly empty space next to results that want the width.
+ */
 .layout {
   max-width: 1400px;
   margin: 0 auto;
   padding: 16px 20px 60px;
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .panel { position: static !important; max-height: none !important; }
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 /* ---------- Filter panel ---------- */
@@ -146,11 +146,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 14px;
-  position: sticky;
-  top: 84px;
-  max-height: calc(100vh - 104px);
-  overflow-y: auto;
+  padding: 14px 16px;
 }
 
 .panel-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
@@ -387,3 +383,89 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   text-align: center;
 }
 .footer p { margin: 0; font-size: 12.5px; color: var(--text-dim); max-width: 70ch; margin-inline: auto; }
+
+/* --------------------------------------------------------------------------
+   CSV-schema UI
+   Filters are laid out in a responsive grid rather than a single column: with
+   ten fields the whole panel fits above the fold on a laptop, so the results
+   stay visible while you narrow them.
+   -------------------------------------------------------------------------- */
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px 14px;
+  margin: 14px 0;
+}
+
+/* `.filter` is itself the <label>, so the caption is the first child span. */
+.filter { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0; }
+.filter > span { font-size: 13px; font-weight: 500; }
+.filter > select,
+.filter > input {
+  padding: 6px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  color: inherit;
+  width: 100%;
+  min-width: 0;
+}
+
+.examples { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+
+.text-search { display: flex; gap: 8px; align-items: center; }
+.text-search input {
+  flex: 1;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: inherit;
+  font-size: 15px;
+}
+
+/* Specs render as a definition list: label above value, wrapping in columns. */
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px 14px;
+  margin-top: 10px;
+}
+.specs .spec { min-width: 0; }
+.specs dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+.specs dd { margin: 0; font-size: 13.5px; font-family: var(--mono); }
+
+.facet h5 { font-size: 13px; margin-bottom: 6px; }
+.facet .row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  background: none;
+  border: 0;
+  padding: 3px 0;
+  color: inherit;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+.facet .row:hover { color: var(--accent); }
+
+.pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.results-head select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  color: inherit;
+}
+
+.footer { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; }

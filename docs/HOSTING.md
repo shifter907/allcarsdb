@@ -16,7 +16,7 @@ Two properties of this design keep the bill flat:
 1. **Every response is cacheable.** The data changes only when a build ships, so responses carry `s-maxage=86400`. At the edge, most page views never reach the Worker at all.
 2. **There is no write path.** No connection pooling, no locking, no vertical scaling, and read replicas are free.
 
-D1's free tier is the real ceiling. 5 GB holds roughly 5–10 million variants with full specs — comfortably more than every car ever sold in every market.
+D1's free tier is the real ceiling. 5 GB holds tens of millions of vehicle-year and engine pairings — comfortably more than every car ever sold in every market.
 
 ---
 
@@ -121,7 +121,7 @@ Publishing the raw dumps is not an afterthought. An open database that is hard t
 
 **Cache invalidation.** Responses carry `stale-while-revalidate`, so a deploy never causes a latency spike. If you need an immediate purge, bump a version segment in the API path rather than purging by URL — cheaper and more predictable.
 
-**The feature bitmask is baked into the artifact.** `build_info.feature_bits` ships in the same file as the index it describes, so the Worker's fast-path map can never drift from the data. Do not hand-edit it.
+**The browser cache TTL is deliberately short.** Data endpoints carry `max-age=60` against `s-maxage=86400`. The edge absorbs the load; the sixty seconds bounds how long a visitor's cached copy of `/v1/fields` can disagree with the data it is used to render. A long browser TTL there means a schema change leaves people with a filter panel that no longer matches the results, and no amount of reloading fixes it until the entry expires.
 
 **Monitoring.** `[observability]` is on in `wrangler.toml`. The metric that matters is p99 on `/v1/search` with no make/model filter — that is the full-scan case, and it is the first thing that will degrade as the dataset grows.
 
