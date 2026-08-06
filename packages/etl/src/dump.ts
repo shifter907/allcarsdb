@@ -88,10 +88,15 @@ async function main() {
     'variant_fts', 'variant_display', 'variant_search', 'facet_count', 'data_gap',
     'fact_source', 'source', 'contributor', 'variant_feature', 'feature',
     'spec_chassis', 'spec_capacity', 'spec_efficiency', 'spec_performance',
-    'spec_interior', 'spec_exterior', 'powertrain', 'drivetrain', 'transmission',
-    'battery_pack', 'electric_motor', 'engine', 'variant', 'trim', 'model_year',
-    'generation', 'model', 'make', 'manufacturer', 'body_style', 'enum_label',
-    'data_file',
+    'spec_interior', 'spec_exterior', 'spec_safety', 'powertrain', 'drivetrain',
+    'transmission', 'battery_pack', 'electric_motor', 'engine', 'variant', 'trim',
+    'model_year', 'generation', 'model', 'make', 'manufacturer', 'body_style',
+    'enum_label', 'data_file',
+    // From an earlier iteration that modelled paint, packages and interior
+    // trims. These were provisioned directly against D1 before the pipeline
+    // existed, so they appear in no migration this repository has ever had.
+    'option_package', 'package_feature', 'paint_color', 'variant_paint',
+    'interior_trim', 'variant_interior_trim',
   ];
   await write('\n-- Retired by the CSV schema; dropped so old databases converge.\n');
   for (const t of RETIRED) {
