@@ -8,9 +8,20 @@ compatibility_flags = ["nodejs_compat"]
 # or a third-party tool can call without caring that a website also exists --
 # at the cost of the browser making a genuinely cross-origin request, which is
 # why CORS in src/index.ts is not left wide open.
-[[routes]]
-pattern = "api.allcarsdb.com"
-custom_domain = true
+#
+# That custom domain is attached to this Worker in the Cloudflare dashboard,
+# NOT declared here. Declaring it makes `wrangler deploy` call
+# /zones/<zone>/workers/routes to reconcile it, which needs a zone-scoped API
+# token; the deploy token is account-scoped, so every deploy uploaded the
+# Worker successfully and then failed on that call -- a red build for work
+# that had already shipped.
+#
+# To manage it from here instead, add "Zone -> Workers Routes -> Edit" for
+# allcarsdb.com to CLOUDFLARE_API_TOKEN and restore:
+#
+#   [[routes]]
+#   pattern = "api.allcarsdb.com"
+#   custom_domain = true
 
 # The database is a build artifact, imported wholesale on every deploy.
 # Create it once with:

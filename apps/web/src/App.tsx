@@ -65,10 +65,24 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
+  const knownFields = useMemo(() => new Set(fields.map((f) => f.name)), [fields]);
+
   useEffect(() => {
     const params = stateToParams(state);
     const url = params.toString() ? `?${params}` : window.location.pathname;
     window.history.replaceState(null, '', url);
+
+    // Nothing can be searched until the field registry is known, because
+    // without it there is no way to tell a real filter from a stray query
+    // parameter.
+    if (fields.length === 0) return;
+
+    // Query parameters that are not fields are dropped rather than sent.
+    // Every link shared anywhere picks up tracking parameters -- utm_source,
+    // fbclid, gclid -- and passing those through as filters means the server
+    // rejects the whole request and the visitor lands on an error instead of
+    // the search someone meant to show them.
+    const req = { ...state, filters: state.filters.filter((f) => knownFields.has(f.field)) };
 
     inFlight.current?.abort();
     const ctrl = new AbortController();
@@ -76,7 +90,7 @@ export default function App() {
 
     setLoading(true);
     setError(null);
-    search(state, ctrl.signal)
+    search(req, ctrl.signal)
       .then((d) => { setData(d); setLoading(false); })
       .catch((e) => {
         if (e.name === 'AbortError') return;
@@ -85,7 +99,7 @@ export default function App() {
       });
 
     return () => ctrl.abort();
-  }, [state]);
+  }, [state, fields, knownFields]);
 
   const update = useCallback((next: Partial<SearchState>) => {
     // Any change to the query resets paging: staying on page 4 of a result set
