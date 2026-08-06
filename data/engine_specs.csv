@@ -29,3 +29,28 @@ ford-ecoboost-3.5tt-gt,V,6,3497,Twin-Turbocharged,Gasoline,9.0:1,Direct Injectio
 toyota-a25afks-2.5,Inline,4,2487,Naturally Aspirated,Gasoline,13.0:1,Port and Direct Injection
 honda-l15b7-1.5t,Inline,4,1498,Turbocharged,Gasoline,10.3:1,Direct Injection
 audi-2.5tfsi-i5,Inline,5,2480,Turbocharged,Gasoline,10.0:1,Direct Injection
+datsun-l24-2.4,Inline,6,2393,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+bmw-m10-2.0,Inline,4,1990,Naturally Aspirated,Gasoline,,Carburetor
+porsche-356-1.6,Flat,4,1582,Naturally Aspirated,Gasoline,7.5:1,Carburetor
+jaguar-xk-3.8,Inline,6,3781,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+mercedes-m198-3.0,Inline,6,2996,Naturally Aspirated,Gasoline,8.55:1,Direct Injection
+chevrolet-265-v8,V,8,4344,Naturally Aspirated,Gasoline,,Carburetor
+pontiac-389-v8,V,8,6376,Naturally Aspirated,Gasoline,,Carburetor
+buick-lc2-3.8t,V,6,3791,Turbocharged,Gasoline,,Port Injection
+ford-289-4.7,V,8,4727,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+bmw-s14-2.3,Inline,4,2302,Naturally Aspirated,Gasoline,10.5:1,Port Injection
+mazda-13brew-1.3tt,Rotary,,1308,Twin-Turbocharged,Gasoline,9.0:1,Port Injection
+nissan-vg30dett-3.0tt,V,6,2960,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
+toyota-3sgte-2.0t,Inline,4,1998,Turbocharged,Gasoline,8.8:1,Port Injection
+honda-b18c5-1.8,Inline,4,1797,Naturally Aspirated,Gasoline,10.6:1,Port Injection
+lexus-1lrgue-4.8,V,10,4805,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
+mclaren-s70-2-6.1,V,12,6064,Naturally Aspirated,Gasoline,11.0:1,Port Injection
+ferrari-f129-3.5,V,8,3496,Naturally Aspirated,Gasoline,,Port Injection
+ferrari-flat12-4.9,Flat,12,4942,Naturally Aspirated,Gasoline,9.2:1,Port Injection
+lamborghini-v12qv-5.2,V,12,5167,Naturally Aspirated,Gasoline,9.2:1,Port Injection
+ford-427-sideoiler,V,8,6997,Naturally Aspirated,Gasoline,,Carburetor
+porsche-944-2.5,Inline,4,2479,Naturally Aspirated,Gasoline,10.6:1,Port Injection
+porsche-928-4.7,V,8,4664,Naturally Aspirated,Gasoline,9.0:1,Port Injection
+volvo-b5234t-2.3t,Inline,5,2319,Turbocharged,Gasoline,,Port Injection
+saab-b202-2.0t,Inline,4,1985,Turbocharged,Gasoline,,Port Injection
+mercedes-m102-2.3-16,Inline,4,2299,Naturally Aspirated,Gasoline,,Port Injection
