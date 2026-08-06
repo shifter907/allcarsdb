@@ -1,1 +1,13 @@
 Code,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
+mazda-skyactivg-2.0,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
+porsche-9a2evo-3.0tt,Flat,6,2981,Twin-Turbocharged,Gasoline,10.2:1,Direct Injection
+porsche-9a1-4.0,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
+toyota-b58-3.0t,Inline,6,2998,Turbocharged,Gasoline,10.2:1,Direct Injection
+honda-f20c-2.0,Inline,4,1997,Naturally Aspirated,Gasoline,11.0:1,Port Injection
+subaru-fa20dit-2.0t,Flat,4,1998,Turbocharged,Gasoline,10.6:1,Direct Injection
+ford-coyote-gen3-5.0,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
+chevrolet-lt2-6.2,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection
+bmw-s58-3.0tt,Inline,6,2993,Twin-Turbocharged,Gasoline,9.3:1,Direct Injection
+nissan-vr38dett-3.8tt,V,6,3799,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection
+vw-ea888gen3-2.0t,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection
+honda-k20c1-2.0t,Inline,4,1996,Turbocharged,Gasoline,9.8:1,Port and Direct Injection
