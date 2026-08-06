@@ -39,6 +39,12 @@ const app = new Hono<{ Bindings: Bindings }>();
 const ALLOWED_ORIGINS = [
   'https://allcarsdb.com',
   'https://www.allcarsdb.com',
+  // The Pages project's own canonical hostname. This is NOT covered by the
+  // preview-deployment pattern below -- that one requires a subdomain label
+  // (`<hash>.allcarsdb.pages.dev`), so the bare hostname has to be listed
+  // explicitly or the production Pages URL is CORS-blocked while every
+  // preview URL works.
+  'https://allcarsdb.pages.dev',
   'http://localhost:5173', // vite dev server
 ];
 

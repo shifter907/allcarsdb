@@ -87,10 +87,16 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Build and deploy UI
-        run: |
-          npm run build -w @allcarsdb/web
-          npx wrangler pages deploy apps/web/dist --project-name=allcarsdb --branch=main
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # The web UI is NOT deployed from here. The Pages project is connected
+      # directly to this repository via Cloudflare's Git integration, which
+      # owns building and publishing apps/web on every push -- and gives each
+      # PR its own preview URL, which is worth a lot on a project whose whole
+      # contribution model is "open a pull request with car data."
+      #
+      # Two deploy mechanisms pointed at one Pages project fight each other,
+      # so this workflow deliberately stops at the API. Its build settings
+      # live in the Pages project:
+      #   Build command:            npm run build -w @allcarsdb/web
+      #   Build output directory:   apps/web/dist
+      #   Root directory:           /            (monorepo -- must stay root)
+      # Node version comes from .node-version at the repo root.
