@@ -65,6 +65,21 @@ describe('a well-formed dataset', () => {
     // lets a 911 offer two engines without duplicating the car.
     assert.match(out, /8 searchable combinations/);
   });
+
+  test('a vehicle with no engine paired is still searchable', () => {
+    // Search_View is a LEFT JOIN specifically so an incomplete entry stays
+    // findable by make/model/year instead of vanishing until someone gets
+    // around to recording its engine. This dataset has no such vehicle by
+    // default, so the fixture proves the case by adding one.
+    const { out, code } = scenario((d) =>
+      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,1990\n'),
+    );
+    assert.equal(code, 0, out);
+    assert.match(out, /6 vehicle-years \/ 6 engines \/ 8 pairings/);
+    // One more searchable row than pairings: the Saab has no YMM_Engines row
+    // at all, yet still produces one row in Search_View with a null engine.
+    assert.match(out, /9 searchable combinations/);
+  });
 });
 
 describe('referential integrity', () => {

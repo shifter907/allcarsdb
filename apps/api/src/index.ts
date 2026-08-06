@@ -216,6 +216,11 @@ async function runSearch(db: D1Database, req: SearchRequest, c: { json: Function
  * scan, but a consumer thinks in terms of "a car, and the engine in it" -- and
  * a flat bag of thirteen keys makes the caller re-derive that structure every
  * time.
+ *
+ * `engine` is `null` when the vehicle has no engine paired yet -- Search_View
+ * is a LEFT JOIN specifically so an incomplete entry is still returned rather
+ * than dropped, and `null` here is what lets the UI say so instead of
+ * rendering a bogus "0 cylinders, undefined L" engine that was never recorded.
  */
 function shapeResult(r: Record<string, unknown>) {
   return {
@@ -227,17 +232,20 @@ function shapeResult(r: Record<string, unknown>) {
       year: r.Year,
       name: `${r.Year} ${r.Make} ${r.Model}`,
     },
-    engine: {
-      index: r.engine_index,
-      layout: r.Layout,
-      cylinders: r.Cylinders,
-      displacement_cc: r.CC_Displacement,
-      aspiration: r.Aspiration,
-      fuel_type: r.Fuel_Type,
-      compression_ratio: r.Compression_ratio,
-      fuel_delivery: r.Fuel_delivery,
-      summary: engineSummary(r),
-    },
+    engine:
+      r.engine_index === null
+        ? null
+        : {
+            index: r.engine_index,
+            layout: r.Layout,
+            cylinders: r.Cylinders,
+            displacement_cc: r.CC_Displacement,
+            aspiration: r.Aspiration,
+            fuel_type: r.Fuel_Type,
+            compression_ratio: r.Compression_ratio,
+            fuel_delivery: r.Fuel_delivery,
+            summary: engineSummary(r),
+          },
   };
 }
 
@@ -273,7 +281,6 @@ app.get('/v1/fields', (c) =>
         kind: f.kind,
         group: f.group,
         common: f.common ?? false,
-        choices: f.choices ?? false,
         quantity: f.quantity,
         min: f.min,
         max: f.max,
@@ -286,30 +293,31 @@ app.get('/v1/fields', (c) =>
 );
 
 /**
- * Distinct values for the free-text columns.
+ * Distinct values for every field, numeric or text alike.
  *
- * These have no controlled vocabulary -- the data decides what exists. Serving
- * the actual distinct values gives the UI real dropdowns without anyone having
- * to predict every aspiration or fuel type that will ever be entered.
+ * None of these columns have a controlled vocabulary -- there is no enum
+ * table behind Layout or Fuel_Type, and Cylinders or Year are just whatever
+ * has been entered. Serving the actual distinct values is what lets every
+ * filter in the UI be a dropdown of real options instead of a free-text box
+ * that invites a typo the database will silently fail to match.
  */
 app.get('/v1/choices', async (c) => {
-  const wanted = FIELDS.filter((f) => f.choices);
   const rows = await c.env.DB.batch(
-    wanted.map((f) =>
+    FIELDS.map((f) =>
       c.env.DB.prepare(
         `SELECT \`${f.column}\` AS value, COUNT(*) AS n
            FROM Search_View
           WHERE \`${f.column}\` IS NOT NULL
           GROUP BY \`${f.column}\`
-          ORDER BY n DESC, value ASC
+          ORDER BY \`${f.column}\` ASC
           LIMIT 500`,
       ),
     ),
   );
 
-  const choices: Record<string, { value: string; n: number }[]> = {};
-  wanted.forEach((f, i) => {
-    choices[f.name] = (rows[i]?.results ?? []) as { value: string; n: number }[];
+  const choices: Record<string, { value: string | number; n: number }[]> = {};
+  FIELDS.forEach((f, i) => {
+    choices[f.name] = (rows[i]?.results ?? []) as { value: string | number; n: number }[];
   });
 
   return c.json({ choices }, 200, { 'Cache-Control': CACHE });

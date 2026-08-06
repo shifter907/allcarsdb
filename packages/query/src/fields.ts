@@ -30,15 +30,6 @@ export interface FieldDef {
   group: string;
   /** Show in the default filter panel rather than under "more filters". */
   common?: boolean;
-  /**
-   * Offer the distinct values actually present in the data as a dropdown.
-   *
-   * These columns are free text by design -- there is no controlled vocabulary
-   * to validate against. Deriving the choices from the data instead gives the
-   * usability of a fixed list without pretending to know, in advance, every
-   * aspiration or fuel type that will ever be entered.
-   */
-  choices?: boolean;
   /** Plausible bounds, used for slider ranges and to catch nonsense input. */
   min?: number;
   max?: number;
@@ -49,12 +40,12 @@ const F = (d: FieldDef): FieldDef => d;
 
 export const FIELDS: readonly FieldDef[] = [
   // --- Vehicle --------------------------------------------------------------
-  F({ name: 'make', column: 'Make', kind: 'text', label: 'Make', group: 'vehicle', common: true, choices: true }),
+  F({ name: 'make', column: 'Make', kind: 'text', label: 'Make', group: 'vehicle', common: true }),
   F({ name: 'model', column: 'Model', kind: 'text', label: 'Model', group: 'vehicle', common: true }),
   F({ name: 'year', column: 'Year', kind: 'number', label: 'Model Year', group: 'vehicle', common: true, min: 1885, max: 2100 }),
 
   // --- Engine ---------------------------------------------------------------
-  F({ name: 'layout', column: 'Layout', kind: 'text', label: 'Layout', group: 'engine', common: true, choices: true, description: 'Cylinder arrangement -- inline, V, flat, W, rotary.' }),
+  F({ name: 'layout', column: 'Layout', kind: 'text', label: 'Layout', group: 'engine', common: true, description: 'Cylinder arrangement -- inline, V, flat, W, rotary.' }),
   F({ name: 'cylinders', column: 'Cylinders', kind: 'number', label: 'Cylinders', group: 'engine', common: true, min: 0, max: 32 }),
   F({
     name: 'displacement',
@@ -66,12 +57,12 @@ export const FIELDS: readonly FieldDef[] = [
     common: true,
     min: 0,
     max: 200000,
-    description: 'Stored in cc. Accepts cc, l or cuin -- "3.0 l" and "2981 cc" both work.',
+    description: 'Stored in cc.',
   }),
-  F({ name: 'aspiration', column: 'Aspiration', kind: 'text', label: 'Aspiration', group: 'engine', common: true, choices: true, description: 'Naturally aspirated, turbocharged, supercharged, twin-turbo.' }),
-  F({ name: 'fuel_type', column: 'Fuel_Type', kind: 'text', label: 'Fuel Type', group: 'engine', common: true, choices: true }),
-  F({ name: 'compression_ratio', column: 'Compression_ratio', kind: 'text', label: 'Compression Ratio', group: 'engine', choices: true, description: 'Recorded as written, e.g. "10.5:1".' }),
-  F({ name: 'fuel_delivery', column: 'Fuel_delivery', kind: 'text', label: 'Fuel Delivery', group: 'engine', choices: true, description: 'Direct injection, port injection, carburettor.' }),
+  F({ name: 'aspiration', column: 'Aspiration', kind: 'text', label: 'Aspiration', group: 'engine', common: true, description: 'Naturally aspirated, turbocharged, supercharged, twin-turbo.' }),
+  F({ name: 'fuel_type', column: 'Fuel_Type', kind: 'text', label: 'Fuel Type', group: 'engine', common: true }),
+  F({ name: 'compression_ratio', column: 'Compression_ratio', kind: 'text', label: 'Compression Ratio', group: 'engine', description: 'Recorded as written, e.g. "10.5:1".' }),
+  F({ name: 'fuel_delivery', column: 'Fuel_delivery', kind: 'text', label: 'Fuel Delivery', group: 'engine', description: 'Direct injection, port injection, carburettor.' }),
 ] as const;
 
 export const FIELD_BY_NAME: ReadonlyMap<string, FieldDef> = new Map(FIELDS.map((f) => [f.name, f]));

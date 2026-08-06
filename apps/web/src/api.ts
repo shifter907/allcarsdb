@@ -24,7 +24,6 @@ export interface FieldDef {
   kind: 'number' | 'text';
   group: string;
   common: boolean;
-  choices: boolean;
   quantity?: string;
   min?: number;
   max?: number;
@@ -32,13 +31,17 @@ export interface FieldDef {
 }
 
 export interface Choice {
-  value: string;
+  value: string | number;
   n: number;
 }
 
 export interface SearchResult {
   index: number;
   vehicle: { index: number; make: string; model: string; year: number; name: string };
+  // `null` means no engine has been recorded for this vehicle yet -- Search_View
+  // is a LEFT JOIN specifically so an incomplete entry is still returned rather
+  // than hidden. The UI is responsible for saying so rather than pretending the
+  // car has no engine at all.
   engine: {
     index: number;
     layout: string | null;
@@ -49,7 +52,7 @@ export interface SearchResult {
     compression_ratio: string | null;
     fuel_delivery: string | null;
     summary: string | null;
-  };
+  } | null;
 }
 
 export interface SearchResponse {
@@ -172,16 +175,20 @@ export async function loadStats(): Promise<Record<string, unknown>> {
 
 export type UnitSystem = 'imperial' | 'metric';
 
-/** Units offered for a quantity, most likely first. */
-export function unitOptions(quantity: string | undefined, system: UnitSystem): string[] {
-  if (quantity !== 'displacement') return [];
-  return system === 'imperial' ? ['l', 'cc', 'cuin'] : ['l', 'cc'];
-}
-
-/** 2981 -> "3.0 L (2981 cc)". */
-export function formatDisplacement(cc: number | null): string | null {
+/**
+ * 2981 -> "3.0 L (2,981 cc)", or the reverse order in metric.
+ *
+ * Displacement filters are dropdowns of the exact cc values present in the
+ * data (see FilterControl in App.tsx), not a free-typed number with a unit to
+ * get wrong -- so there is no unit *input* to offer any more. The imperial/
+ * metric toggle still does something, though: it decides which figure leads
+ * in a label like this one.
+ */
+export function formatDisplacement(cc: number | null, system: UnitSystem = 'imperial'): string | null {
   if (cc === null || cc === undefined) return null;
-  return `${(cc / 1000).toFixed(1)} L (${cc.toLocaleString()} cc)`;
+  const l = `${(cc / 1000).toFixed(1)} L`;
+  const raw = `${cc.toLocaleString()} cc`;
+  return system === 'imperial' ? `${l} (${raw})` : `${raw} (${l})`;
 }
 
 export const SORT_OPTIONS = [

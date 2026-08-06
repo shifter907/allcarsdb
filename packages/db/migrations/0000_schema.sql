@@ -76,9 +76,17 @@ CREATE INDEX idx_ymm_engines_engine ON YMM_Engines (Engine_Index, YMM_Index);
 --
 -- Search_Text exists so free-text queries ("2026 porsche 911") can match across
 -- all three identity columns without the caller knowing which is which.
+-- LEFT JOIN, deliberately. A vehicle with no engine paired yet must still be
+-- searchable by make, model or year -- this data will always contain
+-- incomplete entries, and hiding a car entirely because one fact is missing
+-- is a worse failure than showing it with a gap. combo_index falls back to
+-- the negative of the vehicle's own index when there is no YMM_Engines row to
+-- number it, which stays unique because a real pairing's index is always
+-- positive; ymm_index and engine_index tell a caller which case it is
+-- (engine_index is NULL exactly when nothing is recorded yet).
 CREATE VIEW Search_View AS
 SELECT
-  ye."Index"            AS combo_index,
+  COALESCE(ye."Index", -ymm."Index") AS combo_index,
   ymm."Index"           AS ymm_index,
   eng."Index"           AS engine_index,
   ymm.Make              AS Make,
@@ -92,9 +100,9 @@ SELECT
   eng.Compression_ratio AS Compression_ratio,
   eng.Fuel_delivery     AS Fuel_delivery,
   ymm.Year || ' ' || ymm.Make || ' ' || ymm.Model AS Search_Text
-FROM YMM_Engines ye
-JOIN Year_Make_Model ymm ON ymm."Index" = ye.YMM_Index
-JOIN Engine_Specs    eng ON eng."Index" = ye.Engine_Index;
+FROM Year_Make_Model ymm
+LEFT JOIN YMM_Engines ye  ON ye.YMM_Index = ymm."Index"
+LEFT JOIN Engine_Specs eng ON eng."Index" = ye.Engine_Index;
 
 -- Build metadata, so the API can report what it is serving without needing the
 -- repository it was built from.

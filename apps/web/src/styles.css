@@ -469,3 +469,10 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 
 .footer { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; }
+
+.incomplete {
+  margin-top: 10px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-dim);
+}

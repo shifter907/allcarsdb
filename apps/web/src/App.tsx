@@ -6,7 +6,6 @@ import {
   paramsToState,
   stateToParams,
   formatDisplacement,
-  unitOptions,
   SORT_OPTIONS,
   EMPTY_STATE,
   type ActiveFilter,
@@ -21,13 +20,16 @@ import {
  * Starting points, phrased as questions rather than filter syntax. A blank
  * search box on a database nobody has used before is a dead end -- these show
  * what the thing can answer.
+ *
+ * Every value here has to be one that could plausibly appear as-is in a
+ * dropdown -- there is no free-text entry any more, so an example pointing at
+ * a value the data does not have would just look broken when clicked.
  */
 const EXAMPLES: { label: string; params: string }[] = [
-  { label: 'Naturally aspirated flat-6', params: 'layout=Flat&cylinders=6&aspiration=contains:Naturally' },
-  { label: 'Turbocharged four-cylinders', params: 'cylinders=4&aspiration=contains:Turbo' },
-  { label: 'Under 2.0 litres', params: 'displacement=lt:2l' },
-  { label: 'V8s, 5 litres and up', params: 'layout=V&cylinders=8&displacement=gte:5l' },
-  { label: 'Diesels', params: 'fuel_type=contains:Diesel' },
+  { label: 'Flat-6s', params: 'layout=Flat&cylinders=6' },
+  { label: 'Turbocharged fours', params: 'cylinders=4&aspiration=Turbocharged' },
+  { label: 'V8s', params: 'layout=V&cylinders=8' },
+  { label: 'Diesels', params: 'fuel_type=Diesel' },
 ];
 
 export default function App() {
@@ -108,10 +110,10 @@ export default function App() {
     setState((s) => ({ ...s, offset: 0, ...next }));
   }, []);
 
-  const setFilter = useCallback((field: string, op: string, value: string, unit?: string) => {
+  const setFilter = useCallback((field: string, op: string, value: string) => {
     setState((s) => {
       const rest = s.filters.filter((f) => f.field !== field);
-      const filters = value === '' ? rest : [...rest, { field, op, value, unit }];
+      const filters = value === '' ? rest : [...rest, { field, op, value }];
       return { ...s, offset: 0, filters };
     });
   }, []);
@@ -242,16 +244,26 @@ export default function App() {
           <article className="card" key={r.index}>
             <div className="card-main">
               <h3>{r.vehicle.name}</h3>
-              {r.engine.summary && <div className="muted">{r.engine.summary}</div>}
-              <dl className="specs">
-                <Spec label="Layout" value={r.engine.layout} />
-                <Spec label="Cylinders" value={r.engine.cylinders} />
-                <Spec label="Displacement" value={formatDisplacement(r.engine.displacement_cc)} />
-                <Spec label="Aspiration" value={r.engine.aspiration} />
-                <Spec label="Fuel" value={r.engine.fuel_type} />
-                <Spec label="Compression" value={r.engine.compression_ratio} />
-                <Spec label="Delivery" value={r.engine.fuel_delivery} />
-              </dl>
+              {r.engine ? (
+                <>
+                  {r.engine.summary && <div className="muted">{r.engine.summary}</div>}
+                  <dl className="specs">
+                    <Spec label="Layout" value={r.engine.layout} />
+                    <Spec label="Cylinders" value={r.engine.cylinders} />
+                    <Spec label="Displacement" value={formatDisplacement(r.engine.displacement_cc, units)} />
+                    <Spec label="Aspiration" value={r.engine.aspiration} />
+                    <Spec label="Fuel" value={r.engine.fuel_type} />
+                    <Spec label="Compression" value={r.engine.compression_ratio} />
+                    <Spec label="Delivery" value={r.engine.fuel_delivery} />
+                  </dl>
+                </>
+              ) : (
+                // A vehicle can exist with no engine recorded yet -- the join
+                // is a LEFT JOIN specifically so this car is still shown rather
+                // than disappearing from every search until someone fills that
+                // in. Saying so plainly beats pretending the gap isn't there.
+                <div className="incomplete">No engine data recorded yet.</div>
+              )}
             </div>
           </article>
         ))}
@@ -338,11 +350,15 @@ function Spec({ label, value }: { label: string; value: string | number | null }
 }
 
 /**
- * One filter control, shaped by the field's declared kind.
+ * One filter control. Every field is a dropdown of values actually present in
+ * the data -- there is no free-text entry anywhere in the filter panel, so
+ * there is no way to type a value the database will silently fail to match
+ * because of a typo or a unit the field wasn't expecting.
  *
- * Text fields with known values get a dropdown built from what is actually in
- * the database; text fields without get a contains-search; numbers get a
- * comparison plus a value, and a unit selector when the quantity has units.
+ * Numeric fields additionally get an operator dropdown ("is" / "at least" /
+ * "at most"), because a comparison is still useful and the value being chosen
+ * from a real list is what makes it safe to offer -- "at least 6" cylinders
+ * means something precise when 6 is a value that exists.
  */
 function FilterControl({
   field,
@@ -355,23 +371,32 @@ function FilterControl({
   choices: Choice[];
   active?: ActiveFilter;
   units: UnitSystem;
-  onChange: (field: string, op: string, value: string, unit?: string) => void;
+  onChange: (field: string, op: string, value: string) => void;
 }) {
-  const unitChoices = unitOptions(field.quantity, units);
-  const [op, setOp] = useState(active?.op ?? (field.kind === 'number' ? 'eq' : 'eq'));
-  const [unit, setUnit] = useState(active?.unit ?? unitChoices[0]);
-
-  useEffect(() => { if (active?.op) setOp(active.op); }, [active?.op]);
-
   const value = active?.value ?? '';
 
-  if (field.kind === 'text' && choices.length > 0) {
-    // A filter can be active with a value that is not one of the choices --
-    // a `contains:` filter from a shared link, or a value that has since left
-    // the data. Without an option to select, the control falls back to "Any"
-    // while the results stay filtered, and the page contradicts itself.
-    const unlisted = value !== '' && !choices.some((c) => c.value === value);
+  // A filter can be active with a value that is no longer among the choices --
+  // most often because the last row carrying it was edited or removed since
+  // the page loaded. Without an option to select, the control would silently
+  // fall back to "Any" while the results stayed filtered, contradicting itself.
+  const unlisted = value !== '' && !choices.some((c) => String(c.value) === value);
 
+  const label = (v: string | number) =>
+    field.name === 'displacement' ? (formatDisplacement(Number(v), units) ?? String(v)) : String(v);
+
+  const options = (
+    <>
+      <option value="">Any</option>
+      {unlisted && <option value={value}>{value} (no longer in the data)</option>}
+      {choices.map((c) => (
+        <option key={String(c.value)} value={String(c.value)}>
+          {label(c.value)} ({c.n})
+        </option>
+      ))}
+    </>
+  );
+
+  if (field.kind === 'text') {
     return (
       <label className="filter">
         <span>{field.label}</span>
@@ -380,67 +405,35 @@ function FilterControl({
           onChange={(e) => onChange(field.name, 'eq', e.target.value)}
           title={field.description}
         >
-          <option value="">Any</option>
-          {unlisted && (
-            <option value={value}>
-              {active?.op === 'contains' ? `contains “${value}”` : value}
-            </option>
-          )}
-          {choices.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.value} ({c.n})
-            </option>
-          ))}
+          {options}
         </select>
       </label>
     );
   }
 
-  if (field.kind === 'text') {
-    return (
-      <label className="filter">
-        <span>{field.label}</span>
-        <input
-          type="text"
-          placeholder="contains…"
-          value={value}
-          onChange={(e) => onChange(field.name, 'contains', e.target.value)}
-          title={field.description}
-        />
-      </label>
-    );
-  }
+  const op = active?.op ?? 'eq';
 
   return (
     <label className="filter">
       <span>{field.label}</span>
       <div className="row">
-        <select value={op} onChange={(e) => { setOp(e.target.value); onChange(field.name, e.target.value, value, unit); }}>
+        <select
+          value={op}
+          onChange={(e) => onChange(field.name, e.target.value, value)}
+        >
           <option value="eq">is</option>
           <option value="gte">at least</option>
           <option value="lte">at most</option>
           <option value="gt">more than</option>
           <option value="lt">less than</option>
         </select>
-        <input
-          type="number"
-          inputMode="decimal"
+        <select
           value={value}
-          min={field.min}
-          max={field.max}
-          onChange={(e) => onChange(field.name, op, e.target.value, unit)}
+          onChange={(e) => onChange(field.name, op, e.target.value)}
           title={field.description}
-        />
-        {unitChoices.length > 0 && (
-          <select
-            value={unit}
-            onChange={(e) => { setUnit(e.target.value); onChange(field.name, op, value, e.target.value); }}
-          >
-            {unitChoices.map((u) => (
-              <option key={u} value={u}>{u}</option>
-            ))}
-          </select>
-        )}
+        >
+          {options}
+        </select>
       </div>
     </label>
   );
