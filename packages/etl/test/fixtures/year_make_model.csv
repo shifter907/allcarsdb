@@ -1,6 +1,6 @@
-Make,Model,Year,Generation
-Porsche,911,2022,992
-Porsche,911,2023,992
-Mazda,MX-5 Miata,2024,ND
-Volkswagen,Golf GTI,2023,Mk8
-Ford,F-150,2023,
+Make,Model,Year,Generation,Dev_Chassis_Code,Platform_Code,Nickname
+Porsche,911,2022,8,992,,
+Porsche,911,2023,8,992,,
+Mazda,MX-5 Miata,2024,4,ND,,
+Volkswagen,Golf GTI,2023,8,Mk8,MQB,
+Ford,F-150,2023,,,,

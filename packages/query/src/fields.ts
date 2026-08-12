@@ -43,7 +43,10 @@ export const FIELDS: readonly FieldDef[] = [
   F({ name: 'make', column: 'Make', kind: 'text', label: 'Make', group: 'vehicle', common: true }),
   F({ name: 'model', column: 'Model', kind: 'text', label: 'Model', group: 'vehicle', common: true }),
   F({ name: 'year', column: 'Year', kind: 'number', label: 'Model Year', group: 'vehicle', common: true, min: 1885, max: 2100 }),
-  F({ name: 'generation', column: 'Generation', kind: 'text', label: 'Generation', group: 'vehicle', description: 'Platform or chassis code -- "992", "Mk7", "E46" -- not a trim name. Often unset.' }),
+  F({ name: 'generation', column: 'Generation', kind: 'number', label: 'Generation', group: 'vehicle', min: 1, max: 50, description: 'Ordinal generation number for this nameplate -- 4, not "E46". Often unset.' }),
+  F({ name: 'dev_chassis_code', column: 'Dev_Chassis_Code', kind: 'text', label: 'Chassis Code', group: 'vehicle', description: 'Manufacturer development code for this generation -- "E46", "992", "ND".' }),
+  F({ name: 'platform_code', column: 'Platform_Code', kind: 'text', label: 'Platform', group: 'vehicle', description: 'Shared architecture code -- can span multiple nameplates, unlike the chassis code.' }),
+  F({ name: 'nickname', column: 'Nickname', kind: 'text', label: 'Nickname', group: 'vehicle', description: 'What people actually call it -- "OBS" for the 1992-1996 F-150 -- when that differs from the official name.' }),
 
   // --- Engine ---------------------------------------------------------------
   F({ name: 'layout', column: 'Layout', kind: 'text', label: 'Layout', group: 'engine', common: true, description: 'Cylinder arrangement -- inline, V, flat, W, rotary.' }),

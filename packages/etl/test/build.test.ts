@@ -72,7 +72,7 @@ describe('a well-formed dataset', () => {
     // around to recording its engine. This dataset has no such vehicle by
     // default, so the fixture proves the case by adding one.
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,1990,\n'),
+      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,1990,,,,\n'),
     );
     assert.equal(code, 0, out);
     assert.match(out, /6 vehicle-years \/ 6 engines \/ 8 pairings/);
@@ -111,7 +111,7 @@ describe('referential integrity', () => {
 
   test('a duplicate vehicle-year is rejected', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'year_make_model.csv'), 'Mazda,MX-5 Miata,2024,\n'),
+      appendFileSync(join(d, 'year_make_model.csv'), 'Mazda,MX-5 Miata,2024,,,,\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /already listed on line/);
@@ -132,7 +132,7 @@ describe('referential integrity', () => {
     // "porsche" and "Porsche" splitting into two makes would quietly halve
     // every search result, which is worse than an error.
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'year_make_model.csv'), 'porsche,911,2022,\n'),
+      appendFileSync(join(d, 'year_make_model.csv'), 'porsche,911,2022,,,,\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /already listed on line/);
@@ -151,7 +151,7 @@ describe('malformed input', () => {
 
   test('a non-numeric year is rejected', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,nineteen-ninety,\n'),
+      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,nineteen-ninety,,,,\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /not a whole number/);
@@ -159,10 +159,20 @@ describe('malformed input', () => {
 
   test('an out-of-range year is rejected', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,20226,\n'),
+      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,20226,,,,\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /above the maximum/);
+  });
+
+  test('a non-numeric generation is rejected', () => {
+    // Generation is an ordinal ("4"), not the chassis code -- "E46" belongs in
+    // Dev_Chassis_Code and must not be accepted here instead.
+    const { out, code } = scenario((d) =>
+      appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,1990,E46,,,\n'),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /not a whole number/);
   });
 
   test('a renamed column is rejected rather than silently ignored', () => {

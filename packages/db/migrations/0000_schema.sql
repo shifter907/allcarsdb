@@ -22,20 +22,37 @@
 -- Every distinct vehicle-year. One row for "2026 Porsche 911", regardless of
 -- how many engines or trims that car was offered with.
 CREATE TABLE Year_Make_Model (
-  "Index"    INTEGER PRIMARY KEY,
-  Make       TEXT    NOT NULL COLLATE NOCASE,
-  Model      TEXT    NOT NULL COLLATE NOCASE,
-  Year       INTEGER NOT NULL,
-  -- The manufacturer's platform/chassis code for this model year -- "992",
-  -- "Mk7", "E46" -- not a marketing trim. Optional: most contributors will
-  -- not know it, and a car is still a real, searchable row without it.
-  Generation TEXT    COLLATE NOCASE,
+  "Index"          INTEGER PRIMARY KEY,
+  Make             TEXT    NOT NULL COLLATE NOCASE,
+  Model            TEXT    NOT NULL COLLATE NOCASE,
+  Year             INTEGER NOT NULL,
+  -- The ordinal generation number for this nameplate -- 4 for the E46 3
+  -- Series, not "E46" itself. An integer, not a code; see Dev_Chassis_Code
+  -- for the code. Optional and rarely known off the top of a contributor's
+  -- head, so a row is still real and searchable without it.
+  Generation       INTEGER,
+  -- The manufacturer's internal development/chassis code for this specific
+  -- generation of this specific nameplate -- "E46", "992", "ND". One
+  -- nameplate, one generation, one code.
+  Dev_Chassis_Code TEXT    COLLATE NOCASE,
+  -- The shared engineering architecture underneath -- distinct from
+  -- Dev_Chassis_Code because a platform can span multiple nameplates. VW's
+  -- "MQB" underlies the Golf, the Audi A3 and a dozen other unrelated-looking
+  -- cars; Dev_Chassis_Code stays specific to the one nameplate, Platform_Code
+  -- is what they have in common.
+  Platform_Code    TEXT    COLLATE NOCASE,
+  -- What people actually call it, when that differs from any official name --
+  -- "OBS" (Old Body Style) for the 1992-1996 F-150. Community language, not
+  -- manufacturer terminology; expect this to be the least consistently filled
+  -- of the four, and that's fine.
+  Nickname         TEXT    COLLATE NOCASE,
 
   -- NOCASE on the text columns means this constraint also catches "porsche"
   -- vs "Porsche" as the same car rather than silently creating a second make
-  -- that splits every search result in half. Generation is descriptive, not
-  -- part of the key: it does not distinguish two rows the way Make/Model/Year
-  -- does, so it stays out of the UNIQUE constraint.
+  -- that splits every search result in half. These four columns are all
+  -- descriptive, not part of the key: none of them distinguish one row from
+  -- another the way Make/Model/Year does, so none are in the UNIQUE
+  -- constraint.
   UNIQUE (Make, Model, Year)
 );
 
@@ -99,6 +116,9 @@ SELECT
   ymm.Model             AS Model,
   ymm.Year              AS Year,
   ymm.Generation        AS Generation,
+  ymm.Dev_Chassis_Code  AS Dev_Chassis_Code,
+  ymm.Platform_Code     AS Platform_Code,
+  ymm.Nickname          AS Nickname,
   eng.Layout            AS Layout,
   eng.Cylinders         AS Cylinders,
   eng.CC_Displacement   AS CC_Displacement,

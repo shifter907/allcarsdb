@@ -69,10 +69,17 @@ async function main() {
   try {
     // --- Year_Make_Model ----------------------------------------------------
     const ymmCsv = await readCsv('year_make_model.csv');
-    requireHeaders(ymmCsv.headers, ['Make', 'Model', 'Year', 'Generation'], ymmCsv.file);
+    requireHeaders(
+      ymmCsv.headers,
+      ['Make', 'Model', 'Year', 'Generation', 'Dev_Chassis_Code', 'Platform_Code', 'Nickname'],
+      ymmCsv.file,
+    );
 
     interface YmmRow {
-      make: string; model: string; year: number; generation: string | null; line: number;
+      make: string; model: string; year: number;
+      generation: number | null; devChassisCode: string | null;
+      platformCode: string | null; nickname: string | null;
+      line: number;
     }
     const ymmRows: YmmRow[] = ymmCsv.rows.map((r) => ({
       make: textCell(r, 'Make', ymmCsv.file, { required: true })!,
@@ -81,10 +88,13 @@ async function main() {
       // model year announced ahead of the calendar year without accepting a
       // transposed digit like 20226 as a real car.
       year: intCell(r, 'Year', ymmCsv.file, { required: true, min: 1885, max: 2100 })!,
-      // The platform/chassis code, not a trim -- "992", "Mk7", "E46". Left
+      // An ordinal ("4"), not a code -- "E46" goes in Dev_Chassis_Code. Left
       // blank far more often than not; a contributor who doesn't know it
       // should never feel blocked from adding the vehicle-year itself.
-      generation: textCell(r, 'Generation', ymmCsv.file),
+      generation: intCell(r, 'Generation', ymmCsv.file, { min: 1, max: 50 }),
+      devChassisCode: textCell(r, 'Dev_Chassis_Code', ymmCsv.file),
+      platformCode: textCell(r, 'Platform_Code', ymmCsv.file),
+      nickname: textCell(r, 'Nickname', ymmCsv.file),
       line: r.line,
     }));
 
@@ -98,7 +108,9 @@ async function main() {
     );
 
     const insertYmm = db.prepare(
-      'INSERT INTO Year_Make_Model (Make, Model, Year, Generation) VALUES (?, ?, ?, ?)',
+      `INSERT INTO Year_Make_Model
+         (Make, Model, Year, Generation, Dev_Chassis_Code, Platform_Code, Nickname)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
     );
     const ymmIndex = new Map<string, number>();
     const ymmSeenAt = new Map<string, number>();
@@ -113,7 +125,9 @@ async function main() {
         );
       }
       ymmSeenAt.set(key, r.line);
-      const id = insertYmm.run(r.make, r.model, r.year, r.generation).lastInsertRowid;
+      const id = insertYmm.run(
+        r.make, r.model, r.year, r.generation, r.devChassisCode, r.platformCode, r.nickname,
+      ).lastInsertRowid;
       ymmIndex.set(key, Number(id));
     }
 

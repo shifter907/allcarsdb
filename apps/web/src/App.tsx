@@ -12,6 +12,7 @@ import {
   type Choice,
   type FieldDef,
   type SearchResponse,
+  type SearchResult,
   type SearchState,
   type UnitSystem,
 } from './api';
@@ -266,12 +267,14 @@ export default function App() {
       )}
 
       <div className="cards">
-        {data?.results.map((r) => (
+        {data?.results.map((r) => {
+          const tag = vehicleTag(r.vehicle);
+          return (
           <article className="card" key={r.index}>
             <div className="card-main">
               <h3>
                 {r.vehicle.name}
-                {r.vehicle.generation && <span className="muted"> ({r.vehicle.generation})</span>}
+                {tag && <span className="muted"> ({tag})</span>}
               </h3>
               {r.engine ? (
                 <>
@@ -295,7 +298,8 @@ export default function App() {
               )}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {/* There used to be a "narrow it down" panel here, listing the top
@@ -344,6 +348,21 @@ export default function App() {
       </div>
     </>
   );
+}
+
+/**
+ * "E46 · Gen 4 · MQB · "OBS"" from whichever of the four vehicle-identity
+ * fields are actually present. Chassis code leads because it's what an
+ * enthusiast recognises fastest; the nickname trails in quotes since it's
+ * the least formal of the four and reads oddly leading a title.
+ */
+function vehicleTag(v: SearchResult['vehicle']): string {
+  const parts: string[] = [];
+  if (v.dev_chassis_code) parts.push(v.dev_chassis_code);
+  if (v.generation) parts.push(`Gen ${v.generation}`);
+  if (v.platform_code) parts.push(v.platform_code);
+  if (v.nickname) parts.push(`"${v.nickname}"`);
+  return parts.join(' · ');
 }
 
 function Spec({ label, value }: { label: string; value: string | number | null }) {

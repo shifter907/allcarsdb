@@ -42,7 +42,10 @@ export interface SearchResult {
     make: string;
     model: string;
     year: number;
-    generation: string | null;
+    generation: number | null;
+    dev_chassis_code: string | null;
+    platform_code: string | null;
+    nickname: string | null;
     name: string;
   };
   // `null` means no engine has been recorded for this vehicle yet -- Search_View
