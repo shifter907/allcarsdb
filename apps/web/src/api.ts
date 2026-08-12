@@ -37,7 +37,14 @@ export interface Choice {
 
 export interface SearchResult {
   index: number;
-  vehicle: { index: number; make: string; model: string; year: number; name: string };
+  vehicle: {
+    index: number;
+    make: string;
+    model: string;
+    year: number;
+    generation: string | null;
+    name: string;
+  };
   // `null` means no engine has been recorded for this vehicle yet -- Search_View
   // is a LEFT JOIN specifically so an incomplete entry is still returned rather
   // than hidden. The UI is responsible for saying so rather than pretending the

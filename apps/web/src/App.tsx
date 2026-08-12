@@ -269,7 +269,10 @@ export default function App() {
         {data?.results.map((r) => (
           <article className="card" key={r.index}>
             <div className="card-main">
-              <h3>{r.vehicle.name}</h3>
+              <h3>
+                {r.vehicle.name}
+                {r.vehicle.generation && <span className="muted"> ({r.vehicle.generation})</span>}
+              </h3>
               {r.engine ? (
                 <>
                   {r.engine.summary && <div className="muted">{r.engine.summary}</div>}

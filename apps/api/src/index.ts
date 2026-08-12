@@ -230,6 +230,7 @@ function shapeResult(r: Record<string, unknown>) {
       make: r.Make,
       model: r.Model,
       year: r.Year,
+      generation: r.Generation,
       name: `${r.Year} ${r.Make} ${r.Model}`,
     },
     engine:
@@ -346,7 +347,7 @@ app.get('/v1/vehicle/:index', async (c) => {
   if (!Number.isInteger(index)) return c.json({ error: 'index must be an integer' }, 400);
 
   const vehicle = await c.env.DB.prepare(
-    `SELECT "Index" AS "index", Make AS make, Model AS model, Year AS year
+    `SELECT "Index" AS "index", Make AS make, Model AS model, Year AS year, Generation AS generation
        FROM Year_Make_Model WHERE "Index" = ?`,
   ).bind(index).first();
 
@@ -384,7 +385,7 @@ app.get('/v1/engine/:index', async (c) => {
   // answer, and the one a normalised engine catalog can answer that a
   // per-car spec sheet cannot.
   const { results: vehicles } = await c.env.DB.prepare(
-    `SELECT v."Index" AS "index", v.Make AS make, v.Model AS model, v.Year AS year
+    `SELECT v."Index" AS "index", v.Make AS make, v.Model AS model, v.Year AS year, v.Generation AS generation
        FROM YMM_Engines ye
        JOIN Year_Make_Model v ON v."Index" = ye.YMM_Index
       WHERE ye.Engine_Index = ?

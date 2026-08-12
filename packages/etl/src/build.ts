@@ -69,9 +69,11 @@ async function main() {
   try {
     // --- Year_Make_Model ----------------------------------------------------
     const ymmCsv = await readCsv('year_make_model.csv');
-    requireHeaders(ymmCsv.headers, ['Make', 'Model', 'Year'], ymmCsv.file);
+    requireHeaders(ymmCsv.headers, ['Make', 'Model', 'Year', 'Generation'], ymmCsv.file);
 
-    interface YmmRow { make: string; model: string; year: number; line: number }
+    interface YmmRow {
+      make: string; model: string; year: number; generation: string | null; line: number;
+    }
     const ymmRows: YmmRow[] = ymmCsv.rows.map((r) => ({
       make: textCell(r, 'Make', ymmCsv.file, { required: true })!,
       model: textCell(r, 'Model', ymmCsv.file, { required: true })!,
@@ -79,6 +81,10 @@ async function main() {
       // model year announced ahead of the calendar year without accepting a
       // transposed digit like 20226 as a real car.
       year: intCell(r, 'Year', ymmCsv.file, { required: true, min: 1885, max: 2100 })!,
+      // The platform/chassis code, not a trim -- "992", "Mk7", "E46". Left
+      // blank far more often than not; a contributor who doesn't know it
+      // should never feel blocked from adding the vehicle-year itself.
+      generation: textCell(r, 'Generation', ymmCsv.file),
       line: r.line,
     }));
 
@@ -92,7 +98,7 @@ async function main() {
     );
 
     const insertYmm = db.prepare(
-      'INSERT INTO Year_Make_Model (Make, Model, Year) VALUES (?, ?, ?)',
+      'INSERT INTO Year_Make_Model (Make, Model, Year, Generation) VALUES (?, ?, ?, ?)',
     );
     const ymmIndex = new Map<string, number>();
     const ymmSeenAt = new Map<string, number>();
@@ -107,7 +113,7 @@ async function main() {
         );
       }
       ymmSeenAt.set(key, r.line);
-      const id = insertYmm.run(r.make, r.model, r.year).lastInsertRowid;
+      const id = insertYmm.run(r.make, r.model, r.year, r.generation).lastInsertRowid;
       ymmIndex.set(key, Number(id));
     }
 

@@ -22,14 +22,20 @@
 -- Every distinct vehicle-year. One row for "2026 Porsche 911", regardless of
 -- how many engines or trims that car was offered with.
 CREATE TABLE Year_Make_Model (
-  "Index" INTEGER PRIMARY KEY,
-  Make    TEXT    NOT NULL COLLATE NOCASE,
-  Model   TEXT    NOT NULL COLLATE NOCASE,
-  Year    INTEGER NOT NULL,
+  "Index"    INTEGER PRIMARY KEY,
+  Make       TEXT    NOT NULL COLLATE NOCASE,
+  Model      TEXT    NOT NULL COLLATE NOCASE,
+  Year       INTEGER NOT NULL,
+  -- The manufacturer's platform/chassis code for this model year -- "992",
+  -- "Mk7", "E46" -- not a marketing trim. Optional: most contributors will
+  -- not know it, and a car is still a real, searchable row without it.
+  Generation TEXT    COLLATE NOCASE,
 
   -- NOCASE on the text columns means this constraint also catches "porsche"
   -- vs "Porsche" as the same car rather than silently creating a second make
-  -- that splits every search result in half.
+  -- that splits every search result in half. Generation is descriptive, not
+  -- part of the key: it does not distinguish two rows the way Make/Model/Year
+  -- does, so it stays out of the UNIQUE constraint.
   UNIQUE (Make, Model, Year)
 );
 
@@ -92,6 +98,7 @@ SELECT
   ymm.Make              AS Make,
   ymm.Model             AS Model,
   ymm.Year              AS Year,
+  ymm.Generation        AS Generation,
   eng.Layout            AS Layout,
   eng.Cylinders         AS Cylinders,
   eng.CC_Displacement   AS CC_Displacement,

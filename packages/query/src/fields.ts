@@ -43,6 +43,7 @@ export const FIELDS: readonly FieldDef[] = [
   F({ name: 'make', column: 'Make', kind: 'text', label: 'Make', group: 'vehicle', common: true }),
   F({ name: 'model', column: 'Model', kind: 'text', label: 'Model', group: 'vehicle', common: true }),
   F({ name: 'year', column: 'Year', kind: 'number', label: 'Model Year', group: 'vehicle', common: true, min: 1885, max: 2100 }),
+  F({ name: 'generation', column: 'Generation', kind: 'text', label: 'Generation', group: 'vehicle', description: 'Platform or chassis code -- "992", "Mk7", "E46" -- not a trim name. Often unset.' }),
 
   // --- Engine ---------------------------------------------------------------
   F({ name: 'layout', column: 'Layout', kind: 'text', label: 'Layout', group: 'engine', common: true, description: 'Cylinder arrangement -- inline, V, flat, W, rotary.' }),
