@@ -49,6 +49,11 @@ export default function App() {
   const [showAll, setShowAll] = useState(false);
 
   const inFlight = useRef<AbortController | null>(null);
+  // The first search (right after metadata loads) fires immediately -- there
+  // is nothing to coalesce it with, so delaying it would only make the
+  // landing page feel slower for no benefit. Every search after that is a
+  // real edit to a real state, and those get debounced.
+  const firstSearch = useRef(true);
 
   useEffect(() => {
     loadMetadata()
@@ -74,7 +79,15 @@ export default function App() {
   // api.ts for why that specific combination narrows the options.
   const facetFields = useMemo(() => fields.map((f) => f.name), [fields]);
 
+  // How long to wait after the *last* filter change before actually asking
+  // the server. Picking Make, then Model, then Cylinders in quick succession
+  // used to be three requests; debounced, it is one, fired after things settle.
+  const SEARCH_DEBOUNCE_MS = 400;
+
   useEffect(() => {
+    // The URL update is not debounced -- it costs nothing (no network) and
+    // "the address bar always matches what's on screen" is worth keeping true
+    // on every keystroke, independent of when the search itself actually fires.
     const params = stateToParams(state);
     const url = params.toString() ? `?${params}` : window.location.pathname;
     window.history.replaceState(null, '', url);
@@ -91,43 +104,57 @@ export default function App() {
     // the search someone meant to show them.
     const req = { ...state, filters: state.filters.filter((f) => knownFields.has(f.field)) };
 
-    inFlight.current?.abort();
-    const ctrl = new AbortController();
-    inFlight.current = ctrl;
+    const runSearch = () => {
+      inFlight.current?.abort();
+      const ctrl = new AbortController();
+      inFlight.current = ctrl;
 
+      setLoading(true);
+      setError(null);
+      search(req, facetFields, ctrl.signal)
+        .then((d) => {
+          setData(d);
+          setLoading(false);
+
+          const newChoices: Record<string, Choice[]> = {};
+          for (const f of d.facets) newChoices[f.field] = f.values;
+          setChoices(newChoices);
+
+          // A filter can be invalidated by a *different* filter changing --
+          // picking Make=Ford after Model=Corvette was already selected leaves
+          // a combination that does not exist. Rather than let it sit selected
+          // and silently return zero results, drop whatever is no longer among
+          // its field's current choices. Each pass can only remove filters, so
+          // this always terminates rather than looping.
+          const stillValid = (f: ActiveFilter) => {
+            const opts = newChoices[f.field];
+            return !opts || opts.some((c) => String(c.value) === f.value);
+          };
+          const survivors = req.filters.filter(stillValid);
+          if (survivors.length !== req.filters.length) {
+            setState((s) => ({ ...s, offset: 0, filters: survivors }));
+          }
+        })
+        .catch((e) => {
+          if (e.name === 'AbortError') return;
+          setError(e.message);
+          setLoading(false);
+        });
+    };
+
+    if (firstSearch.current) {
+      firstSearch.current = false;
+      runSearch();
+      return () => inFlight.current?.abort();
+    }
+
+    // Mark loading immediately so the UI acknowledges the change right away,
+    // even though the request itself waits out the debounce window -- a
+    // spinner that only appears once the network call starts would leave a
+    // dead-looking gap between "I clicked something" and "it's doing anything".
     setLoading(true);
-    setError(null);
-    search(req, facetFields, ctrl.signal)
-      .then((d) => {
-        setData(d);
-        setLoading(false);
-
-        const newChoices: Record<string, Choice[]> = {};
-        for (const f of d.facets) newChoices[f.field] = f.values;
-        setChoices(newChoices);
-
-        // A filter can be invalidated by a *different* filter changing --
-        // picking Make=Ford after Model=Corvette was already selected leaves
-        // a combination that does not exist. Rather than let it sit selected
-        // and silently return zero results, drop whatever is no longer among
-        // its field's current choices. Each pass can only remove filters, so
-        // this always terminates rather than looping.
-        const stillValid = (f: ActiveFilter) => {
-          const opts = newChoices[f.field];
-          return !opts || opts.some((c) => String(c.value) === f.value);
-        };
-        const survivors = req.filters.filter(stillValid);
-        if (survivors.length !== req.filters.length) {
-          setState((s) => ({ ...s, offset: 0, filters: survivors }));
-        }
-      })
-      .catch((e) => {
-        if (e.name === 'AbortError') return;
-        setError(e.message);
-        setLoading(false);
-      });
-
-    return () => ctrl.abort();
+    const timeoutId = setTimeout(runSearch, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timeoutId);
   }, [state, fields, knownFields, facetFields]);
 
   const update = useCallback((next: Partial<SearchState>) => {
