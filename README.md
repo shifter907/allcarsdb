@@ -1,5 +1,7 @@
 # AllCarsDB
 
+## THIS IS VERY MUCH A WORK IN PROGRESS. JUST BUILDING IT IN MY SPARE TIME.  ##
+
 An open, community-built database of vehicle specifications, searchable by any
 combination of them.
 
