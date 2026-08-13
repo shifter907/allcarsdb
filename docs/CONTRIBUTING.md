@@ -37,12 +37,12 @@ spelling keeps the dropdowns tidy.
 
 **2. Is the engine already listed?** Look in `data/engine_specs.csv`. Engines
 are shared between cars, so check before adding: if the same engine is already
-there under some code, reuse that code and skip to step 3.
+there under some ref, reuse that ref and skip to step 3.
 
-If it is new, add it with a readable, unique code:
+If it is new, add it with a readable, unique ref:
 
 ```csv
-mazda-2.0-na-i4,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
+mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
 ```
 
 **3. Connect them** in `data/ymm_engines.csv`:
@@ -79,8 +79,19 @@ that people ask for 3.0 litres and matches within a tolerance, so the precise
 number costs nothing and is worth having.
 
 **One engine, one row.** If two cars use the same engine, reference the same
-code rather than adding a near-identical second row. Duplicates drift: someone
+ref rather than adding a near-identical second row. Duplicates drift: someone
 corrects one and the other stays wrong.
+
+**`Manufacturer` is who built it, not who sold the car.** The BMW-designed B58
+goes in as `Manufacturer: BMW` even on a Toyota GR Supra row — that's the
+whole reason the column exists separately from the vehicle's own `Make`.
+
+**`Named_Variant` is for real, known differentiators** — a factory suffix like
+`B30`, or a tuner name like `Alpina`. If an engine genuinely has several
+unnamed power levels and nothing else distinguishes them, use
+`Silent_Variant` (`1`, `2`, `3`...) instead — it exists purely so those rows
+can coexist and never appears in search results or filters. Leave both blank
+for the common case of an engine with no variants at all.
 
 ---
 
@@ -91,7 +102,7 @@ The error names the file, the line, and usually the fix. Common ones:
 | Message | Cause |
 |---|---|
 | `is not in year_make_model.csv` | The make/model/year in `ymm_engines.csv` does not match a row in `year_make_model.csv`. Usually a typo or a different spelling. |
-| `is not in engine_specs.csv` | The engine code does not match any `Code`. |
+| `is not in engine_specs.csv` | The engine ref does not match any `Ref`. |
 | `found 3 column(s), expected 4` | A value contains a comma. Wrap it in quotes: `"Port, then direct"`. |
 | `is already listed on line N` | Duplicate row. |
 | `missing column(s): Make` | A header was renamed or the file was saved in the wrong format. |

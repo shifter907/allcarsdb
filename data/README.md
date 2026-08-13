@@ -40,7 +40,11 @@ of them gets corrected.
 
 | Column | Type | Notes |
 |---|---|---|
-| `Code` | text | Your handle for this engine. Used only to reference it from `ymm_engines.csv` — it is not stored in the database. Must be unique. |
+| `Ref` | text | Your handle for this engine. Used only to reference it from `ymm_engines.csv` — it is not stored in the database. Must be unique. |
+| `Manufacturer` | text | Who actually built the engine — not always the same as the vehicle's `Make`. The BMW-built B58 goes in as `BMW` even under a Toyota GR Supra row. |
+| `Code` | text | The manufacturer's own designation for the engine family — `N54`, `L76`, `LQ9`. Not unique by itself: one code covers every variant of an engine. |
+| `Named_Variant` | text | A named differentiator appended to `Code` — `B30` for the N54B30, or a tuner name like `Alpina` when that's how the variant is actually known. Most engines don't have one; leave it blank. |
+| `Silent_Variant` | whole number | Only for the rare case where an engine has *no* name to tell variants apart — the same N54B30 code covering three different power levels across different cars, say. Number them `1`, `2`, `3`... in whatever order; the number itself is never shown or searchable, it only exists so each power level can be its own row. Leave blank unless you actually need two rows to otherwise-identical Manufacturer/Code/Named_Variant. |
 | `Layout` | text | `Inline`, `V`, `Flat`, `W`, `Rotary` |
 | `Cylinders` | whole number | |
 | `CC_Displacement` | whole number | Cubic centimetres. A 3.0-litre engine is `2981`, or whatever it actually displaces — not `3000` unless that is the real figure. |
@@ -50,15 +54,17 @@ of them gets corrected.
 | `Fuel_delivery` | text | `Direct Injection`, `Port Injection`, `Carburettor` |
 
 ```csv
-Code,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
-porsche-4.0-na-flat6,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
+Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
+porsche-4.0-na-flat6,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
 ```
 
-A good `Code` is readable and specific: `porsche-4.0-na-flat6`, not `engine1`.
+A good `Ref` is readable and specific: `porsche-4.0-na-flat6`, not `engine1`.
 
-Every column except `Code` may be left blank if you do not know it. Blank means
+Every column except `Ref` may be left blank if you do not know it. Blank means
 *unknown*, and a car with an unknown value is excluded from filters on it —
-which is why guessing is worse than leaving it empty.
+which is why guessing is worse than leaving it empty. `Manufacturer` and `Code`
+are worth filling in when you're confident, but a real engine with neither is
+still a real, searchable row.
 
 There is **no fixed list** of layouts or fuel types. The site builds its
 dropdowns from whatever is actually in the data, so consistency matters: use
@@ -75,10 +81,10 @@ searchable thing.
 | Column | Type | Notes |
 |---|---|---|
 | `Make`, `Model`, `Year` | | Must already exist in `year_make_model.csv` |
-| `Engine_Code` | text | Must match a `Code` in `engine_specs.csv` |
+| `Engine_Ref` | text | Must match a `Ref` in `engine_specs.csv` |
 
 ```csv
-Make,Model,Year,Engine_Code
+Make,Model,Year,Engine_Ref
 Porsche,911,2026,porsche-4.0-na-flat6
 Porsche,911,2026,porsche-3.0-tt-flat6
 ```

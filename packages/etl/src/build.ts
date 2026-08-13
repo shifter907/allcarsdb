@@ -135,22 +135,38 @@ async function main() {
     const engCsv = await readCsv('engine_specs.csv');
     requireHeaders(
       engCsv.headers,
-      ['Code', 'Layout', 'Cylinders', 'CC_Displacement', 'Aspiration', 'Fuel_Type', 'Compression_ratio', 'Fuel_delivery'],
+      [
+        'Ref', 'Manufacturer', 'Code', 'Named_Variant', 'Silent_Variant',
+        'Layout', 'Cylinders', 'CC_Displacement', 'Aspiration', 'Fuel_Type',
+        'Compression_ratio', 'Fuel_delivery',
+      ],
       engCsv.file,
     );
 
     interface EngRow {
-      code: string; layout: string | null; cylinders: number | null;
+      ref: string; manufacturer: string | null; code: string | null;
+      namedVariant: string | null; silentVariant: number | null;
+      layout: string | null; cylinders: number | null;
       cc: number | null; aspiration: string | null; fuelType: string | null;
       compression: string | null; delivery: string | null; line: number;
     }
 
     const engRows: EngRow[] = engCsv.rows.map((r: CsvRow) => ({
-      // Code is a build-time handle only. It is how ymm_engines.csv points at
+      // Ref is a build-time handle only. It is how ymm_engines.csv points at
       // an engine without anyone having to know its assigned index, and it is
       // deliberately not a column in Engine_Specs -- that table holds the specs
       // describing the engine, not the label this repository files it under.
-      code: textCell(r, 'Code', engCsv.file, { required: true })!,
+      // Distinct from Code: Ref just needs to be unique per row, Code is the
+      // manufacturer's real designation and repeats across variants of the
+      // same engine family.
+      ref: textCell(r, 'Ref', engCsv.file, { required: true })!,
+      manufacturer: textCell(r, 'Manufacturer', engCsv.file),
+      code: textCell(r, 'Code', engCsv.file),
+      namedVariant: textCell(r, 'Named_Variant', engCsv.file),
+      // 1-based: a single unnumbered spec is the common case and needs no
+      // Silent_Variant at all, so 1 marking "the first of several" reads more
+      // naturally than 0 would.
+      silentVariant: intCell(r, 'Silent_Variant', engCsv.file, { min: 1, max: 20 }),
       layout: textCell(r, 'Layout', engCsv.file),
       cylinders: intCell(r, 'Cylinders', engCsv.file, { min: 0, max: 32 }),
       cc: intCell(r, 'CC_Displacement', engCsv.file, { min: 0, max: 200000 }),
@@ -161,27 +177,50 @@ async function main() {
       line: r.line,
     }));
 
-    engRows.sort((a, b) => a.code.toLowerCase().localeCompare(b.code.toLowerCase()));
+    engRows.sort((a, b) => a.ref.toLowerCase().localeCompare(b.ref.toLowerCase()));
 
     const insertEng = db.prepare(
       `INSERT INTO Engine_Specs
-         (Layout, Cylinders, CC_Displacement, Aspiration, Fuel_Type, Compression_ratio, Fuel_delivery)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+         (Manufacturer, Code, Named_Variant, Silent_Variant, Layout, Cylinders, CC_Displacement, Aspiration, Fuel_Type, Compression_ratio, Fuel_delivery)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     const engIndex = new Map<string, number>();
     const engSeenAt = new Map<string, number>();
+    // Ref uniqueness (above) only catches two rows sharing a build handle. This
+    // catches the more useful mistake: the same real engine variant entered
+    // twice under two different Refs, which Ref alone would never notice.
+    const engIdentitySeenAt = new Map<string, number>();
 
     for (const r of engRows) {
-      const key = r.code.toLowerCase();
+      const key = r.ref.toLowerCase();
       const prior = engSeenAt.get(key);
       if (prior !== undefined) {
         throw new CsvError(
-          `${engCsv.file}:${r.line}: engine code "${r.code}" is already used on line ${prior}. ` +
-            `Codes identify an engine and must be unique.`,
+          `${engCsv.file}:${r.line}: engine ref "${r.ref}" is already used on line ${prior}. ` +
+            `Refs identify an engine and must be unique.`,
         );
       }
       engSeenAt.set(key, r.line);
+
+      if (r.manufacturer && r.code) {
+        const identityKey = [
+          r.manufacturer.toLowerCase(), r.code.toLowerCase(),
+          r.namedVariant?.toLowerCase() ?? '', r.silentVariant ?? '',
+        ].join('|');
+        const identityPrior = engIdentitySeenAt.get(identityKey);
+        if (identityPrior !== undefined) {
+          throw new CsvError(
+            `${engCsv.file}:${r.line}: this looks like the same engine as line ${identityPrior} ` +
+              `(same Manufacturer, Code, Named_Variant and Silent_Variant) under a different Ref. ` +
+              `If it really is a different variant, give it a Named_Variant or Silent_Variant that ` +
+              `tells them apart.`,
+          );
+        }
+        engIdentitySeenAt.set(identityKey, r.line);
+      }
+
       const id = insertEng.run(
+        r.manufacturer, r.code, r.namedVariant, r.silentVariant,
         r.layout, r.cylinders, r.cc, r.aspiration, r.fuelType, r.compression, r.delivery,
       ).lastInsertRowid;
       engIndex.set(key, Number(id));
@@ -189,7 +228,7 @@ async function main() {
 
     // --- YMM_Engines --------------------------------------------------------
     const linkCsv = await readCsv('ymm_engines.csv');
-    requireHeaders(linkCsv.headers, ['Make', 'Model', 'Year', 'Engine_Code'], linkCsv.file);
+    requireHeaders(linkCsv.headers, ['Make', 'Model', 'Year', 'Engine_Ref'], linkCsv.file);
 
     const insertLink = db.prepare(
       'INSERT INTO YMM_Engines (YMM_Index, Engine_Index) VALUES (?, ?)',
@@ -201,7 +240,7 @@ async function main() {
       const make = textCell(r, 'Make', linkCsv.file, { required: true })!;
       const model = textCell(r, 'Model', linkCsv.file, { required: true })!;
       const year = intCell(r, 'Year', linkCsv.file, { required: true, min: 1885, max: 2100 })!;
-      const code = textCell(r, 'Engine_Code', linkCsv.file, { required: true })!;
+      const ref = textCell(r, 'Engine_Ref', linkCsv.file, { required: true })!;
 
       // Both sides are resolved strictly. A typo here would otherwise create a
       // vehicle that exists only in this file and shows up in searches as a
@@ -213,10 +252,10 @@ async function main() {
             `Add it there first, or correct the spelling here.`,
         );
       }
-      const eid = engIndex.get(code.toLowerCase());
+      const eid = engIndex.get(ref.toLowerCase());
       if (eid === undefined) {
         throw new CsvError(
-          `${linkCsv.file}:${r.line}: engine code "${code}" is not in engine_specs.csv.`,
+          `${linkCsv.file}:${r.line}: engine ref "${ref}" is not in engine_specs.csv.`,
         );
       }
 
@@ -225,7 +264,7 @@ async function main() {
       if (prior !== undefined) {
         throw new CsvError(
           `${linkCsv.file}:${r.line}: "${year} ${make} ${model}" is already paired with engine ` +
-            `"${code}" on line ${prior}.`,
+            `"${ref}" on line ${prior}.`,
         );
       }
       linkSeenAt.set(key, r.line);

@@ -54,6 +54,9 @@ export interface SearchResult {
   // car has no engine at all.
   engine: {
     index: number;
+    manufacturer: string | null;
+    code: string | null;
+    named_variant: string | null;
     layout: string | null;
     cylinders: number | null;
     displacement_cc: number | null;

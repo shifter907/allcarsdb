@@ -1,56 +1,56 @@
-Code,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
-mazda-skyactivg-2.0,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
-porsche-9a2evo-3.0tt,Flat,6,2981,Twin-Turbocharged,Gasoline,10.2:1,Direct Injection
-porsche-9a1-4.0,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
-toyota-b58-3.0t,Inline,6,2998,Turbocharged,Gasoline,10.2:1,Direct Injection
-honda-f20c-2.0,Inline,4,1997,Naturally Aspirated,Gasoline,11.0:1,Port Injection
-subaru-fa20dit-2.0t,Flat,4,1998,Turbocharged,Gasoline,10.6:1,Direct Injection
-ford-coyote-gen3-5.0,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
-chevrolet-lt2-6.2,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection
-bmw-s58-3.0tt,Inline,6,2993,Twin-Turbocharged,Gasoline,9.3:1,Direct Injection
-nissan-vr38dett-3.8tt,V,6,3799,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection
-vw-ea888gen3-2.0t,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection
-honda-k20c1-2.0t,Inline,4,1996,Turbocharged,Gasoline,9.8:1,Port and Direct Injection
-toyota-2jzgte-3.0tt,Inline,6,2997,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
-nissan-rb26dett-2.6tt,Inline,6,2568,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
-mitsubishi-4g63-2.0t,Inline,4,1997,Turbocharged,Gasoline,8.8:1,Port Injection
-subaru-ej257-2.5t,Flat,4,2457,Turbocharged,Gasoline,8.2:1,Port Injection
-dodge-viper-8.4-v10,V,10,8382,Naturally Aspirated,Gasoline,10.2:1,Port Injection
-chevrolet-lt1-6.2,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection
-dodge-hellcat-6.2sc,V,8,6166,Supercharged,Gasoline,9.5:1,Port Injection
-bmw-s54-3.2,Inline,6,3246,Naturally Aspirated,Gasoline,11.5:1,Port Injection
-audi-r8-5.2fsi-v10,V,10,5204,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
-ferrari-f136-4.5,V,8,4499,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
-lamborghini-huracan-5.2,V,10,5204,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
-mclaren-m840t-4.0tt,V,8,3994,Twin-Turbocharged,Gasoline,8.7:1,Direct Injection
-toyota-4age-1.6,Inline,4,1587,Naturally Aspirated,Gasoline,9.4:1,Port Injection
-acura-c30a-3.0,V,6,2977,Naturally Aspirated,Gasoline,10.2:1,Port Injection
-ford-ecoboost-3.5tt-gt,V,6,3497,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection
-toyota-a25afks-2.5,Inline,4,2487,Naturally Aspirated,Gasoline,13.0:1,Port and Direct Injection
-honda-l15b7-1.5t,Inline,4,1498,Turbocharged,Gasoline,10.3:1,Direct Injection
-audi-2.5tfsi-i5,Inline,5,2480,Turbocharged,Gasoline,10.0:1,Direct Injection
-datsun-l24-2.4,Inline,6,2393,Naturally Aspirated,Gasoline,9.0:1,Carburetor
-bmw-m10-2.0,Inline,4,1990,Naturally Aspirated,Gasoline,,Carburetor
-porsche-356-1.6,Flat,4,1582,Naturally Aspirated,Gasoline,7.5:1,Carburetor
-jaguar-xk-3.8,Inline,6,3781,Naturally Aspirated,Gasoline,9.0:1,Carburetor
-mercedes-m198-3.0,Inline,6,2996,Naturally Aspirated,Gasoline,8.55:1,Direct Injection
-chevrolet-265-v8,V,8,4344,Naturally Aspirated,Gasoline,,Carburetor
-pontiac-389-v8,V,8,6376,Naturally Aspirated,Gasoline,,Carburetor
-buick-lc2-3.8t,V,6,3791,Turbocharged,Gasoline,,Port Injection
-ford-289-4.7,V,8,4727,Naturally Aspirated,Gasoline,9.0:1,Carburetor
-bmw-s14-2.3,Inline,4,2302,Naturally Aspirated,Gasoline,10.5:1,Port Injection
-mazda-13brew-1.3tt,Rotary,,1308,Twin-Turbocharged,Gasoline,9.0:1,Port Injection
-nissan-vg30dett-3.0tt,V,6,2960,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
-toyota-3sgte-2.0t,Inline,4,1998,Turbocharged,Gasoline,8.8:1,Port Injection
-honda-b18c5-1.8,Inline,4,1797,Naturally Aspirated,Gasoline,10.6:1,Port Injection
-lexus-1lrgue-4.8,V,10,4805,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
-mclaren-s70-2-6.1,V,12,6064,Naturally Aspirated,Gasoline,11.0:1,Port Injection
-ferrari-f129-3.5,V,8,3496,Naturally Aspirated,Gasoline,,Port Injection
-ferrari-flat12-4.9,Flat,12,4942,Naturally Aspirated,Gasoline,9.2:1,Port Injection
-lamborghini-v12qv-5.2,V,12,5167,Naturally Aspirated,Gasoline,9.2:1,Port Injection
-ford-427-sideoiler,V,8,6997,Naturally Aspirated,Gasoline,,Carburetor
-porsche-944-2.5,Inline,4,2479,Naturally Aspirated,Gasoline,10.6:1,Port Injection
-porsche-928-4.7,V,8,4664,Naturally Aspirated,Gasoline,9.0:1,Port Injection
-volvo-b5234t-2.3t,Inline,5,2319,Turbocharged,Gasoline,,Port Injection
-saab-b202-2.0t,Inline,4,1985,Turbocharged,Gasoline,,Port Injection
-mercedes-m102-2.3-16,Inline,4,2299,Naturally Aspirated,Gasoline,,Port Injection
+Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
+mazda-skyactivg-2.0,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
+porsche-9a2evo-3.0tt,Porsche,9A2evo,,,Flat,6,2981,Twin-Turbocharged,Gasoline,10.2:1,Direct Injection
+porsche-9a1-4.0,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
+toyota-b58-3.0t,BMW,B58,B30,,Inline,6,2998,Turbocharged,Gasoline,10.2:1,Direct Injection
+honda-f20c-2.0,Honda,F20C,,,Inline,4,1997,Naturally Aspirated,Gasoline,11.0:1,Port Injection
+subaru-fa20dit-2.0t,Subaru,FA20DIT,,,Flat,4,1998,Turbocharged,Gasoline,10.6:1,Direct Injection
+ford-coyote-gen3-5.0,Ford,Coyote,Gen 3,,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
+chevrolet-lt2-6.2,Chevrolet,LT2,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection
+bmw-s58-3.0tt,BMW,S58,,,Inline,6,2993,Twin-Turbocharged,Gasoline,9.3:1,Direct Injection
+nissan-vr38dett-3.8tt,Nissan,VR38DETT,,,V,6,3799,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection
+vw-ea888gen3-2.0t,Volkswagen,EA888,Gen 3,,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection
+honda-k20c1-2.0t,Honda,K20C1,,,Inline,4,1996,Turbocharged,Gasoline,9.8:1,Port and Direct Injection
+toyota-2jzgte-3.0tt,Toyota,2JZ-GTE,,,Inline,6,2997,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
+nissan-rb26dett-2.6tt,Nissan,RB26DETT,,,Inline,6,2568,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
+mitsubishi-4g63-2.0t,Mitsubishi,4G63,,,Inline,4,1997,Turbocharged,Gasoline,8.8:1,Port Injection
+subaru-ej257-2.5t,Subaru,EJ257,,,Flat,4,2457,Turbocharged,Gasoline,8.2:1,Port Injection
+dodge-viper-8.4-v10,Dodge,,,,V,10,8382,Naturally Aspirated,Gasoline,10.2:1,Port Injection
+chevrolet-lt1-6.2,Chevrolet,LT1,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection
+dodge-hellcat-6.2sc,Dodge,Hellcat,,,V,8,6166,Supercharged,Gasoline,9.5:1,Port Injection
+bmw-s54-3.2,BMW,S54,,,Inline,6,3246,Naturally Aspirated,Gasoline,11.5:1,Port Injection
+audi-r8-5.2fsi-v10,Audi,,,,V,10,5204,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
+ferrari-f136-4.5,Ferrari,F136,,,V,8,4499,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
+lamborghini-huracan-5.2,Lamborghini,,,,V,10,5204,Naturally Aspirated,Gasoline,12.5:1,Direct Injection
+mclaren-m840t-4.0tt,McLaren,M840T,,,V,8,3994,Twin-Turbocharged,Gasoline,8.7:1,Direct Injection
+toyota-4age-1.6,Toyota,4A-GE,,,Inline,4,1587,Naturally Aspirated,Gasoline,9.4:1,Port Injection
+acura-c30a-3.0,Acura,C30A,,,V,6,2977,Naturally Aspirated,Gasoline,10.2:1,Port Injection
+ford-ecoboost-3.5tt-gt,Ford,,,,V,6,3497,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection
+toyota-a25afks-2.5,Toyota,A25A-FKS,,,Inline,4,2487,Naturally Aspirated,Gasoline,13.0:1,Port and Direct Injection
+honda-l15b7-1.5t,Honda,L15B7,,,Inline,4,1498,Turbocharged,Gasoline,10.3:1,Direct Injection
+audi-2.5tfsi-i5,Audi,,,,Inline,5,2480,Turbocharged,Gasoline,10.0:1,Direct Injection
+datsun-l24-2.4,Datsun,L24,,,Inline,6,2393,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+bmw-m10-2.0,BMW,M10,,,Inline,4,1990,Naturally Aspirated,Gasoline,,Carburetor
+porsche-356-1.6,Porsche,616,,,Flat,4,1582,Naturally Aspirated,Gasoline,7.5:1,Carburetor
+jaguar-xk-3.8,Jaguar,XK,,,Inline,6,3781,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+mercedes-m198-3.0,Mercedes-Benz,M198,,,Inline,6,2996,Naturally Aspirated,Gasoline,8.55:1,Direct Injection
+chevrolet-265-v8,Chevrolet,,,,V,8,4344,Naturally Aspirated,Gasoline,,Carburetor
+pontiac-389-v8,Pontiac,,,,V,8,6376,Naturally Aspirated,Gasoline,,Carburetor
+buick-lc2-3.8t,Buick,LC2,,,V,6,3791,Turbocharged,Gasoline,,Port Injection
+ford-289-4.7,Ford,,,,V,8,4727,Naturally Aspirated,Gasoline,9.0:1,Carburetor
+bmw-s14-2.3,BMW,S14,,,Inline,4,2302,Naturally Aspirated,Gasoline,10.5:1,Port Injection
+mazda-13brew-1.3tt,Mazda,13B-REW,,,Rotary,,1308,Twin-Turbocharged,Gasoline,9.0:1,Port Injection
+nissan-vg30dett-3.0tt,Nissan,VG30DETT,,,V,6,2960,Twin-Turbocharged,Gasoline,8.5:1,Port Injection
+toyota-3sgte-2.0t,Toyota,3S-GTE,,,Inline,4,1998,Turbocharged,Gasoline,8.8:1,Port Injection
+honda-b18c5-1.8,Honda,B18C5,,,Inline,4,1797,Naturally Aspirated,Gasoline,10.6:1,Port Injection
+lexus-1lrgue-4.8,Lexus,1LR-GUE,,,V,10,4805,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection
+mclaren-s70-2-6.1,BMW,S70/2,,,V,12,6064,Naturally Aspirated,Gasoline,11.0:1,Port Injection
+ferrari-f129-3.5,Ferrari,F129,,,V,8,3496,Naturally Aspirated,Gasoline,,Port Injection
+ferrari-flat12-4.9,Ferrari,F113,,,Flat,12,4942,Naturally Aspirated,Gasoline,9.2:1,Port Injection
+lamborghini-v12qv-5.2,Lamborghini,,,,V,12,5167,Naturally Aspirated,Gasoline,9.2:1,Port Injection
+ford-427-sideoiler,Ford,FE,427 Side-Oiler,,V,8,6997,Naturally Aspirated,Gasoline,,Carburetor
+porsche-944-2.5,Porsche,,,,Inline,4,2479,Naturally Aspirated,Gasoline,10.6:1,Port Injection
+porsche-928-4.7,Porsche,M28,,,V,8,4664,Naturally Aspirated,Gasoline,9.0:1,Port Injection
+volvo-b5234t-2.3t,Volvo,B5234T,,,Inline,5,2319,Turbocharged,Gasoline,,Port Injection
+saab-b202-2.0t,Saab,B202,,,Inline,4,1985,Turbocharged,Gasoline,,Port Injection
+mercedes-m102-2.3-16,Mercedes-Benz,M102,,,Inline,4,2299,Naturally Aspirated,Gasoline,,Port Injection

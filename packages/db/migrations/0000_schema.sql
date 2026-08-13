@@ -64,6 +64,25 @@ CREATE INDEX idx_ymm_model ON Year_Make_Model (Model);
 -- that drift apart when one of them gets corrected.
 CREATE TABLE Engine_Specs (
   "Index"           INTEGER PRIMARY KEY,
+  -- Who actually designed/built this engine -- not always the same as the
+  -- vehicle's Make. BMW's B58 shows up under the Toyota GR Supra; Manufacturer
+  -- says "BMW" there while Year_Make_Model still says "Toyota".
+  Manufacturer      TEXT COLLATE NOCASE,
+  -- The manufacturer's own designation for the engine family -- "N54",
+  -- "L76", "LQ9". Not unique on its own: one code covers every variant of it.
+  Code              TEXT COLLATE NOCASE,
+  -- A named differentiator appended to Code -- "B30" for the N54B30, or a
+  -- tuner name like "Alpina" when that's how the variant is actually known.
+  -- Most engines don't have one, and that's the common case, not a gap.
+  Named_Variant     TEXT COLLATE NOCASE,
+  -- Differentiates variants that have no name at all -- the N54B30 alone
+  -- covers three distinct power levels depending what car it was fitted to.
+  -- 1-based (1, 2, 3, ...) rather than 0-based, so the number is never
+  -- confused with "no variant" the way a 0 could be. Deliberately excluded
+  -- from search results and from the field registry: it exists only so two
+  -- otherwise-identical rows can both exist, not to be shown or filtered on.
+  -- Compare Named_Variant, which is the one meant to be seen.
+  Silent_Variant    INTEGER,
   Layout            TEXT COLLATE NOCASE,
   Cylinders         INTEGER,
   CC_Displacement   INTEGER,
@@ -76,6 +95,7 @@ CREATE TABLE Engine_Specs (
 CREATE INDEX idx_engine_shape ON Engine_Specs (Cylinders, Layout, Aspiration);
 CREATE INDEX idx_engine_disp  ON Engine_Specs (CC_Displacement);
 CREATE INDEX idx_engine_fuel  ON Engine_Specs (Fuel_Type);
+CREATE INDEX idx_engine_code  ON Engine_Specs (Manufacturer, Code);
 
 -- Which engines were available in which vehicle-year. This is the many-to-many
 -- join, and it is the row a search actually returns: "2026 Porsche 911 with the
@@ -119,6 +139,9 @@ SELECT
   ymm.Dev_Chassis_Code  AS Dev_Chassis_Code,
   ymm.Platform_Code     AS Platform_Code,
   ymm.Nickname          AS Nickname,
+  eng.Manufacturer      AS Manufacturer,
+  eng.Code              AS Code,
+  eng.Named_Variant     AS Named_Variant,
   eng.Layout            AS Layout,
   eng.Cylinders         AS Cylinders,
   eng.CC_Displacement   AS CC_Displacement,

@@ -49,6 +49,9 @@ export const FIELDS: readonly FieldDef[] = [
   F({ name: 'nickname', column: 'Nickname', kind: 'text', label: 'Nickname', group: 'vehicle', description: 'What people actually call it -- "OBS" for the 1992-1996 F-150 -- when that differs from the official name.' }),
 
   // --- Engine ---------------------------------------------------------------
+  F({ name: 'manufacturer', column: 'Manufacturer', kind: 'text', label: 'Engine Manufacturer', group: 'engine', common: true, description: 'Who built the engine -- not always the vehicle\'s own Make. The BMW B58 shows up under the Toyota GR Supra.' }),
+  F({ name: 'code', column: 'Code', kind: 'text', label: 'Engine Code', group: 'engine', description: 'The manufacturer\'s own designation for the engine family -- "N54", "L76", "LQ9".' }),
+  F({ name: 'named_variant', column: 'Named_Variant', kind: 'text', label: 'Variant', group: 'engine', description: 'A named differentiator appended to the code -- "B30" for the N54B30, or a tuner name like "Alpina". Most engines don\'t have one.' }),
   F({ name: 'layout', column: 'Layout', kind: 'text', label: 'Layout', group: 'engine', common: true, description: 'Cylinder arrangement -- inline, V, flat, W, rotary.' }),
   F({ name: 'cylinders', column: 'Cylinders', kind: 'number', label: 'Cylinders', group: 'engine', common: true, min: 0, max: 32 }),
   F({

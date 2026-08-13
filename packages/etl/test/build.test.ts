@@ -117,15 +117,30 @@ describe('referential integrity', () => {
     assert.match(out, /already listed on line/);
   });
 
-  test('a duplicate engine code is rejected', () => {
+  test('a duplicate engine ref is rejected', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'mazda-2.0-na-i4,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection\n',
+        'mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection\n',
       ),
     );
     assert.equal(code, 1);
     assert.match(out, /already used on line/);
+  });
+
+  test('the same engine under a different ref is rejected', () => {
+    // Ref uniqueness alone would let the same real engine be entered twice
+    // under two different build handles. Manufacturer+Code+Named_Variant+
+    // Silent_Variant matching an existing row catches that even though the
+    // Refs themselves differ.
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'engine_specs.csv'),
+        'mazda-2.0-na-i4-again,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /looks like the same engine as line/);
   });
 
   test('case differences are the same car, not a second one', () => {
@@ -217,7 +232,7 @@ describe('spreadsheet quirks', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-big-v12,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection\n',
+        'test-big-v12,,,,,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection\n',
       ),
     );
     assert.equal(code, 0, out);
@@ -228,7 +243,7 @@ describe('spreadsheet quirks', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-quoted,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct"\n',
+        'test-quoted,,,,,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct"\n',
       ),
     );
     assert.equal(code, 0, out);

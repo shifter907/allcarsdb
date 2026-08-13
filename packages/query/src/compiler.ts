@@ -82,6 +82,7 @@ const MAX_FACETS = 40;
 const RESULT_COLUMNS = [
   'combo_index', 'ymm_index', 'engine_index',
   'Make', 'Model', 'Year', 'Generation', 'Dev_Chassis_Code', 'Platform_Code', 'Nickname',
+  'Manufacturer', 'Code', 'Named_Variant',
   'Layout', 'Cylinders', 'CC_Displacement',
   'Aspiration', 'Fuel_Type', 'Compression_ratio', 'Fuel_delivery',
 ].map((c) => `\`${c}\``).join(', ');

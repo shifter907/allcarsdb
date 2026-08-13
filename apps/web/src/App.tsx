@@ -305,7 +305,13 @@ export default function App() {
               </h3>
               {r.engine ? (
                 <>
-                  {r.engine.summary && <div className="muted">{r.engine.summary}</div>}
+                  {(r.engine.summary || engineTag(r.engine)) && (
+                    <div className="muted">
+                      {r.engine.summary}
+                      {r.engine.summary && engineTag(r.engine) && ' — '}
+                      {engineTag(r.engine)}
+                    </div>
+                  )}
                   <dl className="specs">
                     <Spec label="Layout" value={r.engine.layout} />
                     <Spec label="Cylinders" value={r.engine.cylinders} />
@@ -390,6 +396,21 @@ function vehicleTag(v: SearchResult['vehicle']): string {
   if (v.platform_code) parts.push(v.platform_code);
   if (v.nickname) parts.push(`"${v.nickname}"`);
   return parts.join(' · ');
+}
+
+/**
+ * "BMW S58" or "BMW S58 B30" from whichever of the engine-identity fields are
+ * present. Silent_Variant never reaches the client at all -- it exists purely
+ * to let two otherwise-identical rows coexist in the database -- so there is
+ * nothing to filter out here; Named_Variant is the only differentiator meant
+ * to ever be seen.
+ */
+function engineTag(e: NonNullable<SearchResult['engine']>): string {
+  const parts: string[] = [];
+  if (e.manufacturer) parts.push(e.manufacturer);
+  if (e.code) parts.push(e.code);
+  if (e.named_variant) parts.push(e.named_variant);
+  return parts.join(' ');
 }
 
 function Spec({ label, value }: { label: string; value: string | number | null }) {

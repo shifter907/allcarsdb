@@ -241,6 +241,9 @@ function shapeResult(r: Record<string, unknown>) {
         ? null
         : {
             index: r.engine_index,
+            manufacturer: r.Manufacturer,
+            code: r.Code,
+            named_variant: r.Named_Variant,
             layout: r.Layout,
             cylinders: r.Cylinders,
             displacement_cc: r.CC_Displacement,
@@ -358,7 +361,8 @@ app.get('/v1/vehicle/:index', async (c) => {
   if (!vehicle) return c.json({ error: 'Not found' }, 404);
 
   const { results: engines } = await c.env.DB.prepare(
-    `SELECT e."Index" AS "index", e.Layout AS layout, e.Cylinders AS cylinders,
+    `SELECT e."Index" AS "index", e.Manufacturer AS manufacturer, e.Code AS code,
+            e.Named_Variant AS named_variant, e.Layout AS layout, e.Cylinders AS cylinders,
             e.CC_Displacement AS displacement_cc, e.Aspiration AS aspiration,
             e.Fuel_Type AS fuel_type, e.Compression_ratio AS compression_ratio,
             e.Fuel_delivery AS fuel_delivery
@@ -376,7 +380,8 @@ app.get('/v1/engine/:index', async (c) => {
   if (!Number.isInteger(index)) return c.json({ error: 'index must be an integer' }, 400);
 
   const engine = await c.env.DB.prepare(
-    `SELECT "Index" AS "index", Layout AS layout, Cylinders AS cylinders,
+    `SELECT "Index" AS "index", Manufacturer AS manufacturer, Code AS code,
+            Named_Variant AS named_variant, Layout AS layout, Cylinders AS cylinders,
             CC_Displacement AS displacement_cc, Aspiration AS aspiration,
             Fuel_Type AS fuel_type, Compression_ratio AS compression_ratio,
             Fuel_delivery AS fuel_delivery
