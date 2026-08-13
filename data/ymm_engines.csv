@@ -6,7 +6,12 @@ Toyota,GR Supra,2021,toyota-b58-3.0t
 Honda,S2000,2000,honda-f20c-2.0
 Subaru,WRX,2018,subaru-fa20dit-2.0t
 Ford,Mustang,2020,ford-coyote-gen3-5.0
-Chevrolet,Corvette,2021,chevrolet-lt2-6.2
+Chevrolet,Corvette,2020,chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2021,chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2022,chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2023,chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2024,chevrolet-lt2-6.2-late
+Chevrolet,Corvette,2025,chevrolet-lt2-6.2-late
 BMW,M3,2022,bmw-s58-3.0tt
 Nissan,GT-R,2020,nissan-vr38dett-3.8tt
 Volkswagen,Golf GTI,2017,vw-ea888gen3-2.0t
@@ -16,7 +21,6 @@ Nissan,Skyline GT-R,1999,nissan-rb26dett-2.6tt
 Mitsubishi,Lancer Evolution,2006,mitsubishi-4g63-2.0t
 Subaru,Impreza WRX STI,2006,subaru-ej257-2.5t
 Dodge,Viper,2013,dodge-viper-8.4-v10
-Chevrolet,Camaro,2016,chevrolet-lt1-6.2
 Dodge,Challenger,2015,dodge-hellcat-6.2sc
 BMW,M3,2003,bmw-s54-3.2
 Audi,R8,2017,audi-r8-5.2fsi-v10
@@ -79,6 +83,7 @@ Chevrolet,Corvette,2004,chevrolet-ls6-5.7
 Chevrolet,Corvette,2005,chevrolet-ls2-6.0
 Chevrolet,Corvette,2006,chevrolet-ls2-6.0
 Chevrolet,Corvette,2007,chevrolet-ls2-6.0
+Pontiac,GTO,2004,chevrolet-ls1-5.7-gto
 Pontiac,GTO,2005,chevrolet-ls2-6.0
 Pontiac,GTO,2006,chevrolet-ls2-6.0
 Chevrolet,Trailblazer,2006,chevrolet-ls2-6.0
@@ -124,6 +129,7 @@ Chevrolet,Camaro,2013,chevrolet-lsa-6.2sc-zl1
 Chevrolet,Camaro,2014,chevrolet-lsa-6.2sc-zl1
 Chevrolet,Camaro,2015,chevrolet-lsa-6.2sc-zl1
 Chevrolet,Corvette Stingray,2014,chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2014,chevrolet-lt1-6.2-vette
 Chevrolet,Corvette,2015,chevrolet-lt1-6.2-vette
 Chevrolet,Corvette,2016,chevrolet-lt1-6.2-vette
 Chevrolet,Corvette,2017,chevrolet-lt1-6.2-vette
@@ -597,14 +603,17 @@ Chevrolet,Suburban,2010,chevrolet-lmg-5.3
 Chevrolet,Suburban,2011,chevrolet-lmg-5.3
 Chevrolet,Suburban,2012,chevrolet-lmg-5.3
 Chevrolet,Suburban,2013,chevrolet-lmg-5.3
+Chevrolet,Suburban,2014,chevrolet-lmg-5.3
 Chevrolet,Tahoe,2010,chevrolet-lmg-5.3
 Chevrolet,Tahoe,2011,chevrolet-lmg-5.3
 Chevrolet,Tahoe,2012,chevrolet-lmg-5.3
 Chevrolet,Tahoe,2013,chevrolet-lmg-5.3
+Chevrolet,Tahoe,2014,chevrolet-lmg-5.3
 GMC,Yukon,2010,chevrolet-lmg-5.3
 GMC,Yukon,2011,chevrolet-lmg-5.3
 GMC,Yukon,2012,chevrolet-lmg-5.3
 GMC,Yukon,2013,chevrolet-lmg-5.3
+GMC,Yukon,2014,chevrolet-lmg-5.3
 GMC,Yukon XL,2010,chevrolet-lmg-5.3
 GMC,Yukon XL,2011,chevrolet-lmg-5.3
 Chevrolet,Silverado,2014,chevrolet-l86-6.2

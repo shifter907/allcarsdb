@@ -6,7 +6,8 @@ toyota-b58-3.0t,BMW,B58,B30,,Inline,6,2998,Turbocharged,Gasoline,10.2:1,Direct I
 honda-f20c-2.0,Honda,F20C,,,Inline,4,1997,Naturally Aspirated,Gasoline,11.0:1,Port Injection,,
 subaru-fa20dit-2.0t,Subaru,FA20DIT,,,Flat,4,1998,Turbocharged,Gasoline,10.6:1,Direct Injection,,
 ford-coyote-gen3-5.0,Ford,Coyote,Gen 3,,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,Port and Direct Injection,,
-chevrolet-lt2-6.2,Chevrolet,LT2,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,,
+chevrolet-lt2-6.2-early,Chevrolet,LT2,,1,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,490,465
+chevrolet-lt2-6.2-late,Chevrolet,LT2,,2,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,495,470
 bmw-s58-3.0tt,BMW,S58,,,Inline,6,2993,Twin-Turbocharged,Gasoline,9.3:1,Direct Injection,,
 nissan-vr38dett-3.8tt,Nissan,VR38DETT,,,V,6,3799,Twin-Turbocharged,Gasoline,9.0:1,Direct Injection,,
 vw-ea888gen3-2.0t,Volkswagen,EA888,Gen 3,,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection,,
@@ -16,7 +17,6 @@ nissan-rb26dett-2.6tt,Nissan,RB26DETT,,,Inline,6,2568,Twin-Turbocharged,Gasoline
 mitsubishi-4g63-2.0t,Mitsubishi,4G63,,,Inline,4,1997,Turbocharged,Gasoline,8.8:1,Port Injection,,
 subaru-ej257-2.5t,Subaru,EJ257,,,Flat,4,2457,Turbocharged,Gasoline,8.2:1,Port Injection,,
 dodge-viper-8.4-v10,Dodge,,,,V,10,8382,Naturally Aspirated,Gasoline,10.2:1,Port Injection,,
-chevrolet-lt1-6.2,Chevrolet,LT1,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,,
 dodge-hellcat-6.2sc,Dodge,Hellcat,,,V,8,6166,Supercharged,Gasoline,9.5:1,Port Injection,,
 bmw-s54-3.2,BMW,S54,,,Inline,6,3246,Naturally Aspirated,Gasoline,11.5:1,Port Injection,,
 audi-r8-5.2fsi-v10,Audi,,,,V,10,5204,Naturally Aspirated,Gasoline,12.5:1,Direct Injection,,
@@ -58,6 +58,7 @@ chevrolet-ls1-5.7-vette,Chevrolet,LS1,,1,V,8,5665,Naturally Aspirated,Gasoline,1
 chevrolet-ls1-5.7-fbody,Chevrolet,LS1,,2,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,305,335
 chevrolet-ls1-5.7-holden,Chevrolet,LS1,,3,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,302,340
 chevrolet-ls1-5.7-hsv,Chevrolet,LS1,,4,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,355,365
+chevrolet-ls1-5.7-gto,Chevrolet,LS1,,5,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,350,365
 chevrolet-ls6-5.7,Chevrolet,LS6,,,V,8,5665,Naturally Aspirated,Gasoline,10.5:1,Port Injection,405,400
 chevrolet-ls2-6.0,Chevrolet,LS2,,,V,8,5967,Naturally Aspirated,Gasoline,10.9:1,Port Injection,400,400
 chevrolet-l76-6.0,Chevrolet,L76,,,V,8,5967,Naturally Aspirated,Gasoline,,Port Injection,361,385
