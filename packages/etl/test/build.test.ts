@@ -121,7 +121,7 @@ describe('referential integrity', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection\n',
+        'mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151\n',
       ),
     );
     assert.equal(code, 1);
@@ -136,7 +136,7 @@ describe('referential integrity', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'mazda-2.0-na-i4-again,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection\n',
+        'mazda-2.0-na-i4-again,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151\n',
       ),
     );
     assert.equal(code, 1);
@@ -232,7 +232,7 @@ describe('spreadsheet quirks', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-big-v12,,,,,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection\n',
+        'test-big-v12,,,,,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection,700,650\n',
       ),
     );
     assert.equal(code, 0, out);
@@ -243,7 +243,7 @@ describe('spreadsheet quirks', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-quoted,,,,,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct"\n',
+        'test-quoted,,,,,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct",400,400\n',
       ),
     );
     assert.equal(code, 0, out);

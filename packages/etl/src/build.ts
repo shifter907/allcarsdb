@@ -138,7 +138,7 @@ async function main() {
       [
         'Ref', 'Manufacturer', 'Code', 'Named_Variant', 'Silent_Variant',
         'Layout', 'Cylinders', 'CC_Displacement', 'Aspiration', 'Fuel_Type',
-        'Compression_ratio', 'Fuel_delivery',
+        'Compression_ratio', 'Fuel_delivery', 'Horsepower', 'Torque_lbft',
       ],
       engCsv.file,
     );
@@ -148,7 +148,8 @@ async function main() {
       namedVariant: string | null; silentVariant: number | null;
       layout: string | null; cylinders: number | null;
       cc: number | null; aspiration: string | null; fuelType: string | null;
-      compression: string | null; delivery: string | null; line: number;
+      compression: string | null; delivery: string | null;
+      horsepower: number | null; torque: number | null; line: number;
     }
 
     const engRows: EngRow[] = engCsv.rows.map((r: CsvRow) => ({
@@ -174,6 +175,12 @@ async function main() {
       fuelType: textCell(r, 'Fuel_Type', engCsv.file),
       compression: textCell(r, 'Compression_ratio', engCsv.file),
       delivery: textCell(r, 'Fuel_delivery', engCsv.file),
+      // SAE net (or the manufacturer's official published figure), in hp / lb-ft.
+      // Gross-vs-net horsepower is a different test methodology, not a unit --
+      // there's no conversion factor that fixes a figure sourced the wrong way,
+      // so the bound here only catches nonsense input, not a wrong standard.
+      horsepower: intCell(r, 'Horsepower', engCsv.file, { min: 0, max: 3000 }),
+      torque: intCell(r, 'Torque_lbft', engCsv.file, { min: 0, max: 5000 }),
       line: r.line,
     }));
 
@@ -181,8 +188,8 @@ async function main() {
 
     const insertEng = db.prepare(
       `INSERT INTO Engine_Specs
-         (Manufacturer, Code, Named_Variant, Silent_Variant, Layout, Cylinders, CC_Displacement, Aspiration, Fuel_Type, Compression_ratio, Fuel_delivery)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         (Manufacturer, Code, Named_Variant, Silent_Variant, Layout, Cylinders, CC_Displacement, Aspiration, Fuel_Type, Compression_ratio, Fuel_delivery, Horsepower, Torque_lbft)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     const engIndex = new Map<string, number>();
     const engSeenAt = new Map<string, number>();
@@ -222,6 +229,7 @@ async function main() {
       const id = insertEng.run(
         r.manufacturer, r.code, r.namedVariant, r.silentVariant,
         r.layout, r.cylinders, r.cc, r.aspiration, r.fuelType, r.compression, r.delivery,
+        r.horsepower, r.torque,
       ).lastInsertRowid;
       engIndex.set(key, Number(id));
     }

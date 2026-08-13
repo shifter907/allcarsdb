@@ -52,10 +52,12 @@ of them gets corrected.
 | `Fuel_Type` | text | `Gasoline`, `Diesel`, `E85`, `Hydrogen` |
 | `Compression_ratio` | text | Written as published: `10.5:1` |
 | `Fuel_delivery` | text | `Direct Injection`, `Port Injection`, `Carburettor` |
+| `Horsepower` | whole number | SAE net hp, or the manufacturer's official published figure. Not a unit-conversion question — gross vs. net horsepower is a different test standard, so source the right figure rather than converting one you have. |
+| `Torque_lbft` | whole number | Same sourcing rule as `Horsepower`. Pound-feet. |
 
 ```csv
-Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
-porsche-4.0-na-flat6,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
+Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery,Horsepower,Torque_lbft
+porsche-4.0-na-flat6,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection,502,346
 ```
 
 A good `Ref` is readable and specific: `porsche-4.0-na-flat6`, not `engine1`.

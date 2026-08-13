@@ -64,6 +64,8 @@ export interface SearchResult {
     fuel_type: string | null;
     compression_ratio: string | null;
     fuel_delivery: string | null;
+    horsepower: number | null;
+    torque_lbft: number | null;
     summary: string | null;
   } | null;
 }
@@ -228,8 +230,25 @@ export function formatDisplacement(cc: number | null, system: UnitSystem = 'impe
   return system === 'imperial' ? `${l} (${raw})` : `${raw} (${l})`;
 }
 
+/** 503 -> "503 hp (375 kW)", or the reverse order in metric. */
+export function formatPower(hp: number | null, system: UnitSystem = 'imperial'): string | null {
+  if (hp === null || hp === undefined) return null;
+  const hpStr = `${hp.toLocaleString()} hp`;
+  const kwStr = `${Math.round(hp * 0.745699872).toLocaleString()} kW`;
+  return system === 'imperial' ? `${hpStr} (${kwStr})` : `${kwStr} (${hpStr})`;
+}
+
+/** 479 -> "479 lb-ft (649 Nm)", or the reverse order in metric. */
+export function formatTorque(lbft: number | null, system: UnitSystem = 'imperial'): string | null {
+  if (lbft === null || lbft === undefined) return null;
+  const lbftStr = `${lbft.toLocaleString()} lb-ft`;
+  const nmStr = `${Math.round(lbft * 1.35581795).toLocaleString()} Nm`;
+  return system === 'imperial' ? `${lbftStr} (${nmStr})` : `${nmStr} (${lbftStr})`;
+}
+
 export const SORT_OPTIONS = [
   { value: '', label: 'Newest first' },
+  { value: '-horsepower', label: 'Most powerful' },
   { value: '-displacement', label: 'Largest engine' },
   { value: 'displacement', label: 'Smallest engine' },
   { value: '-cylinders', label: 'Most cylinders' },

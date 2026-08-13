@@ -251,12 +251,14 @@ function shapeResult(r: Record<string, unknown>) {
             fuel_type: r.Fuel_Type,
             compression_ratio: r.Compression_ratio,
             fuel_delivery: r.Fuel_delivery,
+            horsepower: r.Horsepower,
+            torque_lbft: r.Torque_lbft,
             summary: engineSummary(r),
           },
   };
 }
 
-/** "3.0L twin-turbocharged flat-6" from the parts that are actually present. */
+/** "3.0L twin-turbocharged flat-6, 503 hp" from the parts that are actually present. */
 function engineSummary(r: Record<string, unknown>): string | null {
   const parts: string[] = [];
   if (typeof r.CC_Displacement === 'number') {
@@ -270,7 +272,11 @@ function engineSummary(r: Record<string, unknown>): string | null {
   } else if (typeof r.Cylinders === 'number') {
     parts.push(`${r.Cylinders}-cylinder`);
   }
-  return parts.length ? parts.join(' ') : null;
+  let summary = parts.length ? parts.join(' ') : null;
+  if (typeof r.Horsepower === 'number') {
+    summary = summary ? `${summary}, ${r.Horsepower} hp` : `${r.Horsepower} hp`;
+  }
+  return summary;
 }
 
 // ---------------------------------------------------------------------------
@@ -365,7 +371,7 @@ app.get('/v1/vehicle/:index', async (c) => {
             e.Named_Variant AS named_variant, e.Layout AS layout, e.Cylinders AS cylinders,
             e.CC_Displacement AS displacement_cc, e.Aspiration AS aspiration,
             e.Fuel_Type AS fuel_type, e.Compression_ratio AS compression_ratio,
-            e.Fuel_delivery AS fuel_delivery
+            e.Fuel_delivery AS fuel_delivery, e.Horsepower AS horsepower, e.Torque_lbft AS torque_lbft
        FROM YMM_Engines ye
        JOIN Engine_Specs e ON e."Index" = ye.Engine_Index
       WHERE ye.YMM_Index = ?
@@ -384,7 +390,7 @@ app.get('/v1/engine/:index', async (c) => {
             Named_Variant AS named_variant, Layout AS layout, Cylinders AS cylinders,
             CC_Displacement AS displacement_cc, Aspiration AS aspiration,
             Fuel_Type AS fuel_type, Compression_ratio AS compression_ratio,
-            Fuel_delivery AS fuel_delivery
+            Fuel_delivery AS fuel_delivery, Horsepower AS horsepower, Torque_lbft AS torque_lbft
        FROM Engine_Specs WHERE "Index" = ?`,
   ).bind(index).first();
 

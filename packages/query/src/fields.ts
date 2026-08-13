@@ -70,6 +70,30 @@ export const FIELDS: readonly FieldDef[] = [
   F({ name: 'fuel_type', column: 'Fuel_Type', kind: 'text', label: 'Fuel Type', group: 'engine', common: true }),
   F({ name: 'compression_ratio', column: 'Compression_ratio', kind: 'text', label: 'Compression Ratio', group: 'engine', description: 'Recorded as written, e.g. "10.5:1".' }),
   F({ name: 'fuel_delivery', column: 'Fuel_delivery', kind: 'text', label: 'Fuel Delivery', group: 'engine', description: 'Direct injection, port injection, carburettor.' }),
+  F({
+    name: 'horsepower',
+    column: 'Horsepower',
+    kind: 'number',
+    quantity: 'power',
+    label: 'Horsepower',
+    group: 'engine',
+    common: true,
+    min: 0,
+    max: 3000,
+    description: 'SAE net (or the manufacturer\'s official published figure). Stored in hp.',
+  }),
+  F({
+    name: 'torque',
+    column: 'Torque_lbft',
+    kind: 'number',
+    quantity: 'torque',
+    label: 'Torque',
+    group: 'engine',
+    common: true,
+    min: 0,
+    max: 5000,
+    description: 'SAE net (or the manufacturer\'s official published figure). Stored in lb-ft.',
+  }),
 ] as const;
 
 export const FIELD_BY_NAME: ReadonlyMap<string, FieldDef> = new Map(FIELDS.map((f) => [f.name, f]));

@@ -106,6 +106,13 @@ describe('plausibility guards', () => {
       /above the plausible maximum/,
     );
   });
+
+  test('an impossible horsepower figure is rejected', () => {
+    assert.throws(
+      () => compile({ filters: [{ field: 'horsepower', op: 'eq', value: 9000 }] }),
+      /above the plausible maximum/,
+    );
+  });
 });
 
 describe('operators', () => {

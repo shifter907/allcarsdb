@@ -1,7 +1,7 @@
-Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery
-porsche-4.0-na-flat6,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection
-porsche-3.0-tt-flat6,Porsche,9A2evo,,,Flat,6,2981,Twin-Turbocharged,Gasoline,10.2:1,Direct Injection
-mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
-vw-2.0-turbo-i4,Volkswagen,EA888,Gen 3,,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection
-ford-5.0-na-v8,Ford,Coyote,Gen 3,,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,"Port and Direct Injection"
-ford-3.5-tt-v6,Ford,EcoBoost,,,V,6,3496,Twin-Turbocharged,Gasoline,10.5:1,"Port and Direct Injection"
+Ref,Manufacturer,Code,Named_Variant,Silent_Variant,Layout,Cylinders,CC_Displacement,Aspiration,Fuel_Type,Compression_ratio,Fuel_delivery,Horsepower,Torque_lbft
+porsche-4.0-na-flat6,Porsche,9A1,,,Flat,6,3996,Naturally Aspirated,Gasoline,13.3:1,Direct Injection,502,346
+porsche-3.0-tt-flat6,Porsche,9A2evo,,,Flat,6,2981,Twin-Turbocharged,Gasoline,10.2:1,Direct Injection,443,391
+mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151
+vw-2.0-turbo-i4,Volkswagen,EA888,Gen 3,,Inline,4,1984,Turbocharged,Gasoline,9.6:1,Direct Injection,220,258
+ford-5.0-na-v8,Ford,Coyote,Gen 3,,V,8,5038,Naturally Aspirated,Gasoline,12.0:1,"Port and Direct Injection",460,420
+ford-3.5-tt-v6,Ford,EcoBoost,,,V,6,3496,Twin-Turbocharged,Gasoline,10.5:1,"Port and Direct Injection",647,550

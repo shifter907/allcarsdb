@@ -6,6 +6,8 @@ import {
   paramsToState,
   stateToParams,
   formatDisplacement,
+  formatPower,
+  formatTorque,
   SORT_OPTIONS,
   EMPTY_STATE,
   type ActiveFilter,
@@ -329,6 +331,8 @@ export default function App() {
                     <Spec label="Layout" value={r.engine.layout} />
                     <Spec label="Cylinders" value={r.engine.cylinders} />
                     <Spec label="Displacement" value={formatDisplacement(r.engine.displacement_cc, units)} />
+                    <Spec label="Horsepower" value={formatPower(r.engine.horsepower, units)} />
+                    <Spec label="Torque" value={formatTorque(r.engine.torque_lbft, units)} />
                     <Spec label="Aspiration" value={r.engine.aspiration} />
                     <Spec label="Fuel" value={r.engine.fuel_type} />
                     <Spec label="Compression" value={r.engine.compression_ratio} />
@@ -472,8 +476,12 @@ function FilterControl({
   // fall back to "Any" while the results stayed filtered, contradicting itself.
   const unlisted = value !== '' && !choices.some((c) => String(c.value) === value);
 
-  const label = (v: string | number) =>
-    field.name === 'displacement' ? (formatDisplacement(Number(v), units) ?? String(v)) : String(v);
+  const label = (v: string | number) => {
+    if (field.name === 'displacement') return formatDisplacement(Number(v), units) ?? String(v);
+    if (field.name === 'horsepower') return formatPower(Number(v), units) ?? String(v);
+    if (field.name === 'torque') return formatTorque(Number(v), units) ?? String(v);
+    return String(v);
+  };
 
   const options = (
     <>

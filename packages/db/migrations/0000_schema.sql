@@ -89,13 +89,22 @@ CREATE TABLE Engine_Specs (
   Aspiration        TEXT COLLATE NOCASE,
   Fuel_Type         TEXT COLLATE NOCASE,
   Compression_ratio TEXT COLLATE NOCASE,
-  Fuel_delivery     TEXT COLLATE NOCASE
+  Fuel_delivery     TEXT COLLATE NOCASE,
+  -- SAE net (or the manufacturer's official published) rating, in hp. Not a
+  -- unit-conversion concern -- gross vs net horsepower is a different test
+  -- methodology, not a different unit, so a contributor has to source the
+  -- right figure rather than the loader being able to fix a wrong one.
+  Horsepower        INTEGER,
+  -- Same sourcing rule as Horsepower. Stored in lb-ft; Nm is accepted on
+  -- input and converted, same as every other measured quantity here.
+  Torque_lbft        INTEGER
 );
 
 CREATE INDEX idx_engine_shape ON Engine_Specs (Cylinders, Layout, Aspiration);
 CREATE INDEX idx_engine_disp  ON Engine_Specs (CC_Displacement);
 CREATE INDEX idx_engine_fuel  ON Engine_Specs (Fuel_Type);
 CREATE INDEX idx_engine_code  ON Engine_Specs (Manufacturer, Code);
+CREATE INDEX idx_engine_power ON Engine_Specs (Horsepower);
 
 -- Which engines were available in which vehicle-year. This is the many-to-many
 -- join, and it is the row a search actually returns: "2026 Porsche 911 with the
@@ -142,6 +151,8 @@ SELECT
   eng.Manufacturer      AS Manufacturer,
   eng.Code              AS Code,
   eng.Named_Variant     AS Named_Variant,
+  eng.Horsepower        AS Horsepower,
+  eng.Torque_lbft       AS Torque_lbft,
   eng.Layout            AS Layout,
   eng.Cylinders         AS Cylinders,
   eng.CC_Displacement   AS CC_Displacement,

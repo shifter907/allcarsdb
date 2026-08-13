@@ -85,6 +85,7 @@ const RESULT_COLUMNS = [
   'Manufacturer', 'Code', 'Named_Variant',
   'Layout', 'Cylinders', 'CC_Displacement',
   'Aspiration', 'Fuel_Type', 'Compression_ratio', 'Fuel_delivery',
+  'Horsepower', 'Torque_lbft',
 ].map((c) => `\`${c}\``).join(', ');
 
 interface Predicate {

@@ -83,6 +83,7 @@ run('diesel, 2015 or newer', {
     { field: 'year', op: 'gte', value: 2015 },
   ],
 });
+run('at least 400 hp', { filters: [{ field: 'horsepower', op: 'gte', value: 400 }] });
 run('free text', { q: 'porsche 911' });
 run('faceted', { filters: [{ field: 'cylinders', op: 'gte', value: 8 }], facets: ['make', 'aspiration', 'fuel_type'] });
 run('sorted by displacement', { sort: [{ field: 'displacement', dir: 'desc' }], limit: 5 });
@@ -102,7 +103,7 @@ rejects(
 );
 rejects(
   'an unknown field',
-  { filters: [{ field: 'horsepower', op: 'gte', value: 500 }] },
+  { filters: [{ field: 'top_speed', op: 'gte', value: 150 }] },
   /Unknown field/,
 );
 

@@ -42,7 +42,7 @@ there under some ref, reuse that ref and skip to step 3.
 If it is new, add it with a readable, unique ref:
 
 ```csv
-mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection
+mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151
 ```
 
 **3. Connect them** in `data/ymm_engines.csv`:
@@ -92,6 +92,13 @@ unnamed power levels and nothing else distinguishes them, use
 `Silent_Variant` (`1`, `2`, `3`...) instead — it exists purely so those rows
 can coexist and never appears in search results or filters. Leave both blank
 for the common case of an engine with no variants at all.
+
+**`Horsepower` and `Torque_lbft` are SAE net, not gross.** Pre-1972 US cars
+are often quoted in gross horsepower, which runs meaningfully higher than the
+net figure for the same engine — if a source doesn't say which one it's
+giving, that's a reason to leave the cell blank rather than guess. This isn't
+something the site can fix with a unit conversion: gross and net are different
+test procedures, not different units for the same measurement.
 
 ---
 
