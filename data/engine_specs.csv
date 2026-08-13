@@ -56,6 +56,8 @@ saab-b202-2.0t,Saab,B202,,,Inline,4,1985,Turbocharged,Gasoline,,Port Injection,,
 mercedes-m102-2.3-16,Mercedes-Benz,M102,,,Inline,4,2299,Naturally Aspirated,Gasoline,,Port Injection,,
 chevrolet-ls1-5.7-vette,Chevrolet,LS1,,1,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,345,350
 chevrolet-ls1-5.7-fbody,Chevrolet,LS1,,2,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,305,335
+chevrolet-ls1-5.7-holden,Chevrolet,LS1,,3,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,302,340
+chevrolet-ls1-5.7-hsv,Chevrolet,LS1,,4,V,8,5665,Naturally Aspirated,Gasoline,10.25:1,Port Injection,355,365
 chevrolet-ls6-5.7,Chevrolet,LS6,,,V,8,5665,Naturally Aspirated,Gasoline,10.5:1,Port Injection,405,400
 chevrolet-ls2-6.0,Chevrolet,LS2,,,V,8,5967,Naturally Aspirated,Gasoline,10.9:1,Port Injection,400,400
 chevrolet-l76-6.0,Chevrolet,L76,,,V,8,5967,Naturally Aspirated,Gasoline,,Port Injection,361,385
@@ -77,3 +79,34 @@ ford-ecoboost-2.7-gen1,Ford,EcoBoost,2.7L Gen 1,,V,6,2694,Twin-Turbocharged,Gaso
 ford-ecoboost-2.7-gen2,Ford,EcoBoost,2.7L Gen 2,,V,6,2694,Twin-Turbocharged,Gasoline,10.3:1,Port and Direct Injection,325,400
 ford-ecoboost-2.3-mustang,Ford,EcoBoost,2.3L,,Inline,4,2261,Turbocharged,Gasoline,9.5:1,Direct Injection,310,320
 ford-ecoboost-2.0-focusst,Ford,EcoBoost,2.0L,,Inline,4,1999,Turbocharged,Gasoline,9.3:1,Direct Injection,252,270
+chevrolet-lr4-4.8,Chevrolet,LR4,,,V,8,4806,Naturally Aspirated,Gasoline,9.45:1,Port Injection,285,295
+chevrolet-lm7-5.3,Chevrolet,LM7,,,V,8,5327,Naturally Aspirated,Gasoline,9.5:1,Port Injection,285,325
+chevrolet-l59-5.3,Chevrolet,L59,,,V,8,5327,Naturally Aspirated,Gasoline,9.5:1,Port Injection,290,325
+chevrolet-lq4-6.0,Chevrolet,LQ4,,,V,8,5967,Naturally Aspirated,Gasoline,9.4:1,Port Injection,300,360
+chevrolet-lq9-6.0,Chevrolet,LQ9,,,V,8,5967,Naturally Aspirated,Gasoline,10.0:1,Port Injection,345,380
+chevrolet-lm4-5.3,Chevrolet,LM4,,,V,8,5327,Naturally Aspirated,Gasoline,9.5:1,Port Injection,290,325
+chevrolet-l33-5.3,Chevrolet,L33,,,V,8,5327,Naturally Aspirated,Gasoline,10.0:1,Port Injection,310,335
+chevrolet-l98-6.0,Chevrolet,L98,,,V,8,5972,Naturally Aspirated,Gasoline,10.4:1,Port Injection,362,391
+chevrolet-l77-6.0-manual,Chevrolet,L77,,1,V,8,5972,Naturally Aspirated,Gasoline,10.4:1,Port Injection,362,391
+chevrolet-l77-6.0-auto,Chevrolet,L77,,2,V,8,5972,Naturally Aspirated,Gasoline,10.4:1,Port Injection,349,381
+chevrolet-ly6-6.0,Chevrolet,LY6,,,V,8,5967,Naturally Aspirated,Gasoline,9.6:1,Port Injection,361,385
+chevrolet-l96-6.0,Chevrolet,L96,,,V,8,5967,Naturally Aspirated,Gasoline,9.7:1,Port Injection,361,385
+chevrolet-lfa-6.0hy,Chevrolet,LFA,,,V,8,5967,Naturally Aspirated,Gasoline,10.8:1,Port Injection,332,367
+chevrolet-lz1-6.0hy,Chevrolet,LZ1,,,V,8,5967,Naturally Aspirated,Gasoline,10.8:1,Port Injection,332,367
+chevrolet-ly2-4.8,Chevrolet,LY2,,,V,8,4806,Naturally Aspirated,Gasoline,9.1:1,Port Injection,260,295
+chevrolet-l20-4.8,Chevrolet,L20,,,V,8,4806,Naturally Aspirated,Gasoline,8.8:1,Port Injection,260,295
+chevrolet-lh6-5.3,Chevrolet,LH6,,,V,8,5327,Naturally Aspirated,Gasoline,10.0:1,Port Injection,300,330
+chevrolet-ls4-5.3,Chevrolet,LS4,,,V,8,5327,Naturally Aspirated,Gasoline,10.0:1,Port Injection,303,323
+chevrolet-ly5-5.3,Chevrolet,LY5,,,V,8,5327,Naturally Aspirated,Gasoline,10.0:1,Port Injection,320,340
+chevrolet-lc9-5.3,Chevrolet,LC9,,,V,8,5327,Naturally Aspirated,Gasoline,9.8:1,Port Injection,315,335
+chevrolet-lmg-5.3,Chevrolet,LMG,,,V,8,5327,Naturally Aspirated,Gasoline,9.6:1,Port Injection,320,340
+chevrolet-l86-6.2,Chevrolet,L86,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,420,460
+chevrolet-l87-6.2,Chevrolet,L87,,,V,8,6162,Naturally Aspirated,Gasoline,11.5:1,Direct Injection,420,460
+chevrolet-l83-5.3,Chevrolet,L83,,,V,8,5327,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,355,383
+chevrolet-l8b-5.3,Chevrolet,L8B,,,V,8,5327,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,355,383
+chevrolet-l82-5.3,Chevrolet,L82,,,V,8,5327,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,355,383
+chevrolet-l84-5.3,Chevrolet,L84,,,V,8,5327,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,355,383
+chevrolet-lt5-6.2sc,Chevrolet,LT5,,,V,8,6162,Supercharged,Gasoline,10.0:1,Direct Injection,755,715
+chevrolet-lv3-4.3,Chevrolet,LV3,,,V,6,4261,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,285,305
+chevrolet-lv1-4.3,Chevrolet,LV1,,,V,6,4261,Naturally Aspirated,Gasoline,11.0:1,Direct Injection,265,295
+chevrolet-l8t-6.6,Chevrolet,L8T,,,V,8,6572,Naturally Aspirated,Gasoline,10.8:1,Direct Injection,401,464
