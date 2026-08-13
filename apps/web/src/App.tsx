@@ -166,7 +166,14 @@ export default function App() {
 
   const setFilter = useCallback((field: string, op: string, value: string) => {
     setState((s) => {
-      const rest = s.filters.filter((f) => f.field !== field);
+      let rest = s.filters.filter((f) => f.field !== field);
+      // Engine Variant only means anything relative to a chosen Engine Code --
+      // clearing Code should clear whatever variant was picked under it too,
+      // rather than leaving an invisible filter still narrowing the results
+      // once its control has disappeared from the panel.
+      if (field === 'code' && value === '') {
+        rest = rest.filter((f) => f.field !== 'named_variant');
+      }
       const filters = value === '' ? rest : [...rest, { field, op, value }];
       return { ...s, offset: 0, filters };
     });
@@ -177,9 +184,15 @@ export default function App() {
     [state.filters],
   );
 
+  // Engine Variant ("B30", "Alpina") only means something once an Engine Code
+  // is chosen -- a raw list of every variant name across every engine family
+  // is not a useful thing to filter on by itself. Hiding the control until
+  // Code is active also means there is never an empty dropdown sitting in the
+  // panel with nothing to offer.
+  const codeActive = state.filters.some((f) => f.field === 'code' && f.value !== '');
   const visibleFields = useMemo(
-    () => fields.filter((f) => showAll || f.common),
-    [fields, showAll],
+    () => fields.filter((f) => (showAll || f.common) && (f.name !== 'named_variant' || codeActive)),
+    [fields, showAll, codeActive],
   );
 
   const applyExample = (params: string) => setState(paramsToState(new URLSearchParams(params)));
