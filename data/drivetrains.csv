@@ -12,3 +12,10 @@ awd-clutch,AWD,Single-speed,,,Fixed,Clutch-pack,Open,Open
 4wd-nv246,4WD,Full-time,NV246,2.72,Auto Locking,Clutch-pack,Open,Open
 4wd-bw4419,4WD,Part-time,BW4419,2.64,Auto Locking,,Open,Limited-slip
 4wd-selectable-locker,4WD,Selectable,,2.72,Auto Locking,,Locking,Locking
+epa-fwd,FWD,,,,,,,
+epa-rwd,RWD,,,,,,,
+epa-awd,AWD,,,,,,,
+epa-4wd,4WD,,,,,,,
+epa-4wd-parttime,4WD,Part-time,,,,,,
+epa-4wd-or-awd,4WD or AWD,,,,,,,
+epa-2wd,2WD,,,,,,,

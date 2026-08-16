@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 import {
   parseCsv, requireHeaders, intCell, realCell, boolCell, textCell, CsvError, type CsvRow,
 } from './csv.js';
-import { FIELDS } from '@allcarsdb/query';
+import { FIELDS, SOURCES } from '@allcarsdb/query';
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..', '..', '..');
 const MIGRATIONS = join(ROOT, 'packages', 'db', 'migrations');
@@ -826,16 +826,31 @@ async function main() {
     );
     let choiceRows = 0;
     for (const field of FIELDS) {
-      if (field.source && field.source !== 'view') continue;
-      const rows = db.prepare(
-        `SELECT \`${field.column}\` AS value, COUNT(*) AS n
-           FROM Search_View
-          WHERE \`${field.column}\` IS NOT NULL
-          GROUP BY \`${field.column}\`
-          ORDER BY \`${field.column}\`
-          LIMIT 500`,
-      ).all() as { value: unknown; n: number }[];
-      for (const row of rows) {
+      const source = SOURCES[field.source ?? 'view'];
+
+      // A base-view field groups directly. A field on another relation has to
+      // join out and count distinct vehicles -- "how many cars have a
+      // ten-speed", not "how many build rows mention one". Both shapes mirror
+      // what the compiler emits for a live facet, so the materialised answer
+      // and the computed one agree.
+      const sql = source.kind === 'base'
+        ? `SELECT \`${field.column}\` AS value, COUNT(*) AS n
+             FROM Search_View
+            WHERE \`${field.column}\` IS NOT NULL
+            GROUP BY \`${field.column}\`
+            ORDER BY \`${field.column}\`
+            LIMIT 500`
+        : `SELECT \`${source.alias}\`.\`${field.column}\` AS value,
+                  COUNT(DISTINCT Search_View.combo_index) AS n
+             FROM Search_View
+             JOIN ${source.from} ON ${source.correlate}
+             ${source.joins ?? ''}
+            WHERE \`${source.alias}\`.\`${field.column}\` IS NOT NULL
+            GROUP BY \`${source.alias}\`.\`${field.column}\`
+            ORDER BY \`${source.alias}\`.\`${field.column}\`
+            LIMIT 500`;
+
+      for (const row of db.prepare(sql).all() as { value: unknown; n: number }[]) {
         insertChoice.run(field.name, String(row.value), row.n);
         choiceRows++;
       }

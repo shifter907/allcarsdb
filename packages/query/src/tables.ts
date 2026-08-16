@@ -410,7 +410,7 @@ const BUILDS: TableDef = {
     { name: "Tongue_Weight_lb", type: "integer", description: "Maximum download on the hitch, which is often the real limit rather than the tow rating." },
     { name: "EPA_City_mpg", type: "real", description: "EPA city figure." },
     { name: "EPA_Highway_mpg", type: "real", description: "EPA highway figure." },
-    { name: "EPA_Combined_mpg", type: "real", description: "EPA combined figure." },
+    { name: "EPA_Combined_mpg", type: "real", description: "EPA combined figure. An electric vehicle carries MPGe here, which EPA publishes on the same scale for comparison -- so an EV reads far above any combustion car." },
     { name: "EPA_Electric_Range_mi", type: "integer", description: "EPA electric range for this configuration." },
     { name: "Zero_To_Sixty_s", type: "real", description: "Manufacturer or instrumented-test figure." },
     { name: "Quarter_Mile_s", type: "real", description: "Elapsed time over a standing quarter mile." },

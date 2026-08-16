@@ -277,7 +277,7 @@ export const FIELDS: readonly FieldDef[] = [
   F({ name: 'payload', column: 'Max_Payload_lb', kind: 'number', quantity: 'mass', label: 'Max Payload', group: 'capability', grain: 'build', min: 0, max: 50000 }),
   F({ name: 'curb_weight', column: 'Min_Curb_Weight_lb', kind: 'number', quantity: 'mass', label: 'Curb Weight (lightest)', group: 'capability', grain: 'build', min: 0, max: 100000 }),
   F({ name: 'gvwr', column: 'Max_GVWR_lb', kind: 'number', quantity: 'mass', label: 'Max GVWR', group: 'capability', grain: 'build', min: 0, max: 100000 }),
-  F({ name: 'fuel_economy', column: 'Max_EPA_Combined_mpg', kind: 'number', label: 'Best EPA Combined (mpg)', group: 'capability', grain: 'build', min: 0, max: 250 }),
+  F({ name: 'fuel_economy', column: 'Max_EPA_Combined_mpg', kind: 'number', label: 'Best EPA Combined (mpg)', group: 'capability', grain: 'build', min: 0, max: 250, description: 'EPA combined figure for the most efficient recorded configuration. Electric vehicles carry MPGe, which EPA publishes on this same scale so the two can be compared -- which is why an EV reads well above any combustion car here.' }),
   F({ name: 'zero_to_sixty', column: 'Min_Zero_To_Sixty_s', kind: 'number', quantity: 'time', label: 'Quickest 0-60 (s)', group: 'capability', grain: 'build', min: 0, max: 60 }),
   // Reached through the Builds table rather than the rollup, because these have
   // no single "best" that means anything -- an axle ratio maximum is not a
