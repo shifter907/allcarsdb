@@ -165,3 +165,31 @@ npm run validate
 
 Parses everything and reports the first problem with a file and line number.
 Nothing is written, so it is safe to run at any time.
+
+---
+
+## Reviewing dropped EPA matches
+
+`data/epa_model_aliases.csv` holds human-confirmed name equivalences between
+EPA's fuel-economy dataset and this catalogue.
+
+The importer's automatic rules only ever join two spellings of one name — it
+will match `F150` to `F-150`, but not `Sierra 1500` to `Sierra`, because that
+second one is a judgement rather than a lookup. Roughly 24,500 EPA rows are
+dropped for want of such a judgement.
+
+To rescue them, add a line:
+
+```csv
+Make,EPA_Model,Our_Model
+GMC,Sierra 1500 2WD,Sierra
+Audi,A4 quattro,A4
+```
+
+An alias only renames the model. The model year still has to exist on its own,
+so confirming a name is not a claim that we hold every year of it.
+
+The dropped rows, each with its closest candidates and the evidence behind the
+guess, are listed in the review sheet generated alongside this file. Names
+already present here are skipped the next time that sheet is generated, so a
+decision is made once.
