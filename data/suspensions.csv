@@ -1,0 +1,10 @@
+Ref,Front_Type,Rear_Type,Front_Spring,Rear_Spring,Damping,Ride_Height_Adjustable
+truck-dw-leaf,Double Wishbone,Live Axle,Coil,Leaf,Passive,FALSE
+truck-ifs-coil,Double Wishbone,Live Axle,Coil,Coil,Passive,FALSE
+truck-solid-leaf,Solid Axle,Live Axle,Leaf,Leaf,Passive,FALSE
+sports-dw-multilink,Double Wishbone,Multi-link,Coil,Coil,Passive,FALSE
+sports-dw-adaptive,Double Wishbone,Multi-link,Coil,Coil,Adaptive,FALSE
+sports-macpherson,MacPherson,Multi-link,Coil,Coil,Passive,FALSE
+magneride,Double Wishbone,Multi-link,Coil,Coil,Magnetorheological,FALSE
+air-adaptive,Multi-link,Multi-link,Air,Air,Adaptive,TRUE
+econ-macpherson-torsion,MacPherson,Torsion Beam,Coil,Coil,Passive,FALSE

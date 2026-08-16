@@ -633,3 +633,39 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 
 .brand-link { text-decoration: none; color: inherit; }
 .brand-link:hover strong { color: var(--accent); }
+
+/* Powertrain badge on a result card -- only shown when the powertrain is
+   something other than a plain combustion engine, so it reads as information
+   rather than as a label on every row. */
+.pt-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Capability figures are a second, quieter spec block: they describe the range
+   across configurations rather than this specific car, so they should not read
+   with the same weight as the engine specs above them. */
+.specs.capability {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+.specs.capability dt { color: var(--text-dim); }
+
+.same-build {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0 12px 14px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.same-build input { margin-top: 2px; flex-shrink: 0; }

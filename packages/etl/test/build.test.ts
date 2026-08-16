@@ -7,8 +7,9 @@
  * a dangling reference is caught, whether the exit code is non-zero so CI
  * actually fails.
  *
- * The production CSVs under data/ are nearly empty, so validating those proves
- * almost nothing -- a loader that accepted no rows at all would pass.
+ * The production CSVs under data/ are mostly empty for the newer tables, so
+ * validating those proves almost nothing -- a loader that accepted no rows at
+ * all would pass just as well.
  */
 
 import { test, describe, before, after } from 'node:test';
@@ -60,50 +61,66 @@ describe('a well-formed dataset', () => {
   test('loads and reports what it loaded', () => {
     const { out, code } = scenario();
     assert.equal(code, 0, out);
-    assert.match(out, /5 vehicle-years \/ 6 engines \/ 8 pairings/);
-    // Eight pairings across five vehicle-years: the junction table is what
-    // lets a 911 offer two engines without duplicating the car.
-    assert.match(out, /8 searchable combinations/);
+    assert.match(out, /7 vehicle-years \/ 8 powertrains/);
+    assert.match(out, /7 engines, 2 motors, 2 batteries/);
+    assert.match(out, /10 pairings/);
+    assert.match(out, /4 trims \/ 4 builds/);
   });
 
-  test('a vehicle with no engine paired is still searchable', () => {
+  test('a vehicle with no powertrain paired is still searchable', () => {
     // Search_View is a LEFT JOIN specifically so an incomplete entry stays
     // findable by make/model/year instead of vanishing until someone gets
-    // around to recording its engine. This dataset has no such vehicle by
-    // default, so the fixture proves the case by adding one.
+    // around to recording its powertrain.
     const { out, code } = scenario((d) =>
       appendFileSync(join(d, 'year_make_model.csv'), 'Saab,900,1990,,,,\n'),
     );
     assert.equal(code, 0, out);
-    assert.match(out, /6 vehicle-years \/ 6 engines \/ 8 pairings/);
-    // One more searchable row than pairings: the Saab has no YMM_Engines row
-    // at all, yet still produces one row in Search_View with a null engine.
-    assert.match(out, /9 searchable combinations/);
+    assert.match(out, /8 vehicle-years/);
+    // One more searchable row than pairings: the Saab has no YMM_Powertrains
+    // row at all, yet still produces one row in Search_View.
+    assert.match(out, /11 searchable combinations/);
+  });
+
+  test('builds roll up into per-vehicle capability ranges', () => {
+    // Three of the four fixture builds are F-150s, so exactly two vehicles
+    // (F-150 and 911) should have a rollup row.
+    const { out, code } = scenario();
+    assert.equal(code, 0, out);
+    assert.match(out, /4 builds \(2 rolled up\)/);
   });
 });
 
 describe('referential integrity', () => {
   test('a vehicle not in year_make_model.csv is rejected by name', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'ymm_engines.csv'), 'Porsche,912,2022,porsche-4.0-na-flat6\n'),
+      appendFileSync(join(d, 'ymm_powertrains.csv'), 'Porsche,912,2022,pt-porsche-4.0\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /2022 Porsche 912/);
     assert.match(out, /not in year_make_model\.csv/);
   });
 
-  test('an unknown engine code is rejected', () => {
+  test('an unknown powertrain ref is rejected', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'ymm_engines.csv'), 'Ford,F-150,2023,does-not-exist\n'),
+      appendFileSync(join(d, 'ymm_powertrains.csv'), 'Ford,F-150,2023,does-not-exist\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /does-not-exist/);
-    assert.match(out, /not in engine_specs\.csv/);
+    assert.match(out, /not in data\/powertrains\.csv/);
   });
 
-  test('the same car and engine listed twice is rejected', () => {
+  test('a powertrain naming an unknown engine is rejected', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'ymm_engines.csv'), 'Mazda,MX-5 Miata,2024,mazda-2.0-na-i4\n'),
+      appendFileSync(join(d, 'powertrains.csv'), 'pt-ghost,ICE,no-such-engine,,,,,,,\n'),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /no-such-engine/);
+    assert.match(out, /not in data\/engine_specs\.csv/);
+  });
+
+  test('the same car and powertrain listed twice is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(join(d, 'ymm_powertrains.csv'), 'Mazda,MX-5 Miata,2024,pt-mazda-2.0\n'),
     );
     assert.equal(code, 1);
     assert.match(out, /already paired/);
@@ -121,7 +138,7 @@ describe('referential integrity', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151\n',
+        'mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151,,,,,,,\n',
       ),
     );
     assert.equal(code, 1);
@@ -136,11 +153,22 @@ describe('referential integrity', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'mazda-2.0-na-i4-again,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151\n',
+        'mazda-2.0-na-i4-again,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151,,,,,,,\n',
       ),
     );
     assert.equal(code, 1);
     assert.match(out, /looks like the same engine as line/);
+  });
+
+  test('a build naming a trim the vehicle does not have is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'builds.csv'),
+        'b-ghost,Ford,F-150,2023,Platinum,,pt-ford-5.0,,,,,,,,,,,,,,,,,,,,\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /no "Platinum" trim/);
   });
 
   test('case differences are the same car, not a second one', () => {
@@ -154,13 +182,56 @@ describe('referential integrity', () => {
   });
 });
 
+describe('facts that contradict themselves', () => {
+  test('a BEV powertrain with an engine is rejected', () => {
+    // The whole point of the powertrain layer is that a missing engine on an
+    // EV is meaningful rather than absent data. A BEV carrying an engine would
+    // undo that distinction silently.
+    const { out, code } = scenario((d) =>
+      appendFileSync(join(d, 'powertrains.csv'), 'pt-impossible,BEV,ford-5.0-na-v8,,,,,,,\n'),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /typed BEV but names an engine/);
+  });
+
+  test('usable battery capacity above gross is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(join(d, 'batteries.csv'), 'bat-wrong,NMC,50,60,400,Liquid,Pouch\n'),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /larger than Gross_kWh/);
+  });
+
+  test('GVWR below curb weight is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'builds.csv'),
+        'b-heavy,Ford,F-150,2023,XL,,pt-ford-5.0,,,,,,,6000,5000,,,,,,,,,,,,\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /below Curb_Weight_lb/);
+  });
+
+  test('seats-folded cargo volume below seats-up is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'body_configs.csv'),
+        'body-wrong,SUV,4,,,,,110,190,75,70,,,,,,,,40,20,18,2\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /smaller than/);
+  });
+});
+
 describe('malformed input', () => {
   test('a row with too few columns names the file, line and expectation', () => {
     const { out, code } = scenario((d) =>
-      appendFileSync(join(d, 'ymm_engines.csv'), 'Mazda,MX-5 Miata\n'),
+      appendFileSync(join(d, 'ymm_powertrains.csv'), 'Mazda,MX-5 Miata\n'),
     );
     assert.equal(code, 1);
-    assert.match(out, /ymm_engines\.csv:\d+/);
+    assert.match(out, /ymm_powertrains\.csv:\d+/);
     assert.match(out, /found 2 column\(s\), expected 4/);
   });
 
@@ -188,6 +259,40 @@ describe('malformed input', () => {
     );
     assert.equal(code, 1);
     assert.match(out, /not a whole number/);
+  });
+
+  test('a decimal in a decimal column is accepted', () => {
+    // Axle ratios and gear ratios are genuinely fractional; rejecting them the
+    // way an integer column would is the bug this guards against.
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'transmissions.csv'),
+        'tx-test,ZF,8HP,Automatic,8,4.71,0.67\n',
+      ),
+    );
+    assert.equal(code, 0, out);
+  });
+
+  test('a non-numeric decimal is rejected', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'transmissions.csv'),
+        'tx-bad,ZF,8HP,Automatic,8,four-point-seven,0.67\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /not a number/);
+  });
+
+  test('an unrecognised boolean is rejected with the accepted spellings', () => {
+    const { out, code } = scenario((d) =>
+      appendFileSync(
+        join(d, 'suspensions.csv'),
+        'sus-bad,MacPherson,Multi-link,Coil,Coil,Passive,sometimes\n',
+      ),
+    );
+    assert.equal(code, 1);
+    assert.match(out, /Use TRUE or FALSE/);
   });
 
   test('a renamed column is rejected rather than silently ignored', () => {
@@ -220,7 +325,7 @@ describe('spreadsheet quirks', () => {
 
   test('CRLF line endings load cleanly', () => {
     const { out, code } = scenario((d) => {
-      for (const f of ['year_make_model.csv', 'engine_specs.csv', 'ymm_engines.csv']) {
+      for (const f of ['year_make_model.csv', 'engine_specs.csv', 'ymm_powertrains.csv']) {
         const p = join(d, f);
         writeFileSync(p, readFileSync(p, 'utf8').replace(/\n/g, '\r\n'));
       }
@@ -232,21 +337,21 @@ describe('spreadsheet quirks', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-big-v12,,,,,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection,700,650\n',
+        'test-big-v12,Test,V12,,,V,12,"6,750",Naturally Aspirated,Gasoline,11.0:1,Port Injection,700,650,,,,,,,\n',
       ),
     );
     assert.equal(code, 0, out);
-    assert.match(out, /7 engines/);
+    assert.match(out, /8 engines/);
   });
 
   test('a quoted value containing a comma stays one field', () => {
     const { out, code } = scenario((d) =>
       appendFileSync(
         join(d, 'engine_specs.csv'),
-        'test-quoted,,,,,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct",400,400\n',
+        'test-quoted,Test,QT,,,V,8,5000,Supercharged,Gasoline,9.0:1,"Port, then direct",400,400,,,,,,,\n',
       ),
     );
     assert.equal(code, 0, out);
-    assert.match(out, /7 engines/);
+    assert.match(out, /8 engines/);
   });
 });

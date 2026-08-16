@@ -180,6 +180,57 @@ export function intCell(
   return n;
 }
 
+/**
+ * Parse a decimal cell -- gear ratios, dimensions, kWh. Same blank-is-unknown
+ * rule as `intCell`; the difference is only that a fractional part is allowed,
+ * because "3.73" is the actual value of an axle ratio rather than a rounding of
+ * one.
+ */
+export function realCell(
+  row: CsvRow,
+  name: string,
+  file: string,
+  opts: { min?: number; max?: number; required?: boolean } = {},
+): number | null {
+  const raw = get(row, name);
+  if (raw === '') {
+    if (opts.required) throw new CsvError(`${file}:${row.line}: ${name} is required`);
+    return null;
+  }
+  const cleaned = raw.replace(/,/g, '');
+  if (!/^-?\d+(\.\d+)?$/.test(cleaned)) {
+    throw new CsvError(`${file}:${row.line}: ${name} is "${raw}", which is not a number`);
+  }
+  const n = Number(cleaned);
+  if (opts.min !== undefined && n < opts.min) {
+    throw new CsvError(`${file}:${row.line}: ${name} is ${n}, below the minimum of ${opts.min}`);
+  }
+  if (opts.max !== undefined && n > opts.max) {
+    throw new CsvError(`${file}:${row.line}: ${name} is ${n}, above the maximum of ${opts.max}`);
+  }
+  return n;
+}
+
+/**
+ * Parse a boolean cell. Accepts the spellings a spreadsheet actually produces
+ * rather than insisting on one -- TRUE/FALSE, yes/no, 1/0 -- and stores 1 or 0,
+ * since SQLite has no boolean type. Blank stays unknown, which is a third state
+ * and not the same as false.
+ */
+export function boolCell(
+  row: CsvRow,
+  name: string,
+  file: string,
+): number | null {
+  const raw = get(row, name).trim().toLowerCase();
+  if (raw === '') return null;
+  if (['true', 'yes', 'y', '1'].includes(raw)) return 1;
+  if (['false', 'no', 'n', '0'].includes(raw)) return 0;
+  throw new CsvError(
+    `${file}:${row.line}: ${name} is "${raw}". Use TRUE or FALSE (or leave it blank if unknown).`,
+  );
+}
+
 /** Parse a text cell. Blank becomes `null` rather than an empty string. */
 export function textCell(
   row: CsvRow,

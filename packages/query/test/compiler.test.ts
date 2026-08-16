@@ -229,3 +229,124 @@ describe('field registry', () => {
     assert.throws(() => getField('nope'), /Unknown field/);
   });
 });
+
+describe('semi-join sources', () => {
+  test('a field on another relation becomes an EXISTS, not a join', () => {
+    // Joining these into the base view would multiply rows against the
+    // powertrain join; a semi-join filters without changing the row count.
+    const q = compile({ filters: [{ field: 'body_style', op: 'eq', value: 'Pickup' }] });
+    assert.match(q.countSql, /EXISTS \(SELECT 1 FROM YMM_Body_Configs/);
+    assert.match(q.countSql, /ybc\.YMM_Index = Search_View\.ymm_index/);
+    assert.deepEqual(q.countParams, ['Pickup']);
+  });
+
+  test('several filters on one relation share a single EXISTS', () => {
+    // One subquery per predicate would cost N times as much and, worse, would
+    // let each be satisfied by a different row of that relation.
+    const q = compile({
+      filters: [
+        { field: 'body_style', op: 'eq', value: 'Pickup' },
+        { field: 'cab_config', op: 'eq', value: 'Crew' },
+      ],
+    });
+    assert.equal((q.countSql.match(/EXISTS/g) ?? []).length, 1);
+    assert.match(q.countSql, /Body_Style` = \? AND .*Cab_Config` = \?/s);
+  });
+
+  test('different relations get their own EXISTS', () => {
+    const q = compile({
+      filters: [
+        { field: 'body_style', op: 'eq', value: 'Pickup' },
+        { field: 'drive_layout', op: 'eq', value: '4WD' },
+      ],
+    });
+    assert.equal((q.countSql.match(/EXISTS/g) ?? []).length, 2);
+  });
+
+  test('semi-join predicates sort after every base-view predicate', () => {
+    // Rule 2: a cheap column test should narrow the scan before any subquery
+    // is evaluated.
+    const q = compile({
+      filters: [
+        { field: 'body_style', op: 'eq', value: 'Pickup' },
+        { field: 'make', op: 'eq', value: 'Ford' },
+      ],
+    });
+    assert.ok(
+      q.countSql.indexOf('`Make`') < q.countSql.indexOf('EXISTS'),
+      'the base predicate should be emitted before the subquery',
+    );
+  });
+
+  test('same_build folds build-rooted filters into one subquery', () => {
+    const loose = compile({
+      filters: [
+        { field: 'axle_ratio', op: 'eq', value: 3.73 },
+        { field: 'transmission_type', op: 'eq', value: 'Automatic' },
+      ],
+    });
+    const strict = compile({
+      combine: 'same_build',
+      filters: [
+        { field: 'axle_ratio', op: 'eq', value: 3.73 },
+        { field: 'transmission_type', op: 'eq', value: 'Automatic' },
+      ],
+    });
+    // Loose: two subqueries, so two different builds can satisfy them.
+    assert.equal((loose.countSql.match(/EXISTS/g) ?? []).length, 2);
+    // Strict: one subquery, so one build has to satisfy both.
+    assert.equal((strict.countSql.match(/EXISTS/g) ?? []).length, 1);
+    assert.match(strict.countSql, /FROM Builds b JOIN Transmissions/);
+  });
+
+  test('a facet excludes its own filter from inside a shared EXISTS', () => {
+    // The subtle one: dropping the whole wrapper would also drop the sibling
+    // constraint, so the two dropdowns would silently stop narrowing each
+    // other while still producing plausible-looking counts.
+    const q = compile({
+      filters: [
+        { field: 'body_style', op: 'eq', value: 'Pickup' },
+        { field: 'cab_config', op: 'eq', value: 'Crew' },
+      ],
+      facets: ['cab_config'],
+    });
+    const facet = q.facetQueries.find((f) => f.facet === 'cab_config')!;
+    // Its own constraint is gone...
+    assert.doesNotMatch(facet.sql, /Cab_Config` = \?/);
+    // ...but the sibling constraint from the same relation survives.
+    assert.match(facet.sql, /Body_Style` = \?/);
+    assert.deepEqual(facet.params, ['Pickup']);
+  });
+
+  test('a semi-join facet counts vehicles, not joined rows', () => {
+    const q = compile({ facets: ['cab_config'] });
+    const facet = q.facetQueries.find((f) => f.facet === 'cab_config')!;
+    assert.match(facet.sql, /COUNT\(DISTINCT Search_View\.combo_index\)/);
+  });
+
+  test('sorting by a semi-join field is refused', () => {
+    assert.throws(
+      () => compile({ sort: [{ field: 'body_style', dir: 'asc' }] }),
+      /no single value/,
+    );
+  });
+});
+
+describe('result shape', () => {
+  test('result columns are derived from the registry, not hand-listed', () => {
+    const q = compile({});
+    // Every base-view field must be selectable, or the card renders a blank.
+    for (const f of FIELDS) {
+      if ((f.source ?? 'view') !== 'view') continue;
+      assert.match(q.sql, new RegExp(`\`${f.column}\``), `${f.name} missing from result columns`);
+    }
+  });
+
+  test('semi-join fields are not selected as result columns', () => {
+    // They have no column on the outer row; selecting one would be a SQL error.
+    const q = compile({});
+    const selectClause = q.sql.slice(0, q.sql.indexOf('FROM'));
+    assert.doesNotMatch(selectClause, /Cab_Config/);
+    assert.doesNotMatch(selectClause, /Transfer_Case_Type/);
+  });
+});

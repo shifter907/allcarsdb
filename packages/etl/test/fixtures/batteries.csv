@@ -1,0 +1,3 @@
+Ref,Chemistry,Gross_kWh,Usable_kWh,Nominal_Voltage,Thermal_Management,Cell_Format
+tesla-m3-lfp,LFP,60,57.5,350,Liquid,Prismatic
+prius-2023-liion,NMC,1.1,0.9,177,Air,Prismatic

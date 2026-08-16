@@ -20,7 +20,10 @@
  * Engine_Specs and YMM_Engines. One row is one vehicle-year-plus-engine.
  */
 
-import { getField, type FieldDef } from './fields.js';
+import {
+  getField, sourceOf, FIELDS, SOURCES,
+  type FieldDef, type SourceId,
+} from './fields.js';
 import { toCanonical } from './units.js';
 
 // ---------------------------------------------------------------------------
@@ -57,6 +60,19 @@ export interface SearchRequest {
   offset?: number;
   /** Field names to compute facet counts for over the filtered set. */
   facets?: string[];
+  /**
+   * How several build-level filters combine.
+   *
+   * `any_build` (the default) reads each capability filter against the
+   * vehicle's rollup independently: "tows 10,000" and "carries 2,000" can be
+   * satisfied by two *different* configurations of the same truck.
+   *
+   * `same_build` requires one configuration to satisfy all of them at once,
+   * by routing every build-level predicate into a single shared EXISTS. That
+   * is a genuinely different -- and usually stricter -- question, which is why
+   * it is explicit rather than inferred.
+   */
+  combine?: 'any_build' | 'same_build';
 }
 
 export interface CompiledQuery {
@@ -71,28 +87,51 @@ export class QueryError extends Error {}
 
 const MAX_LIMIT = 200;
 const MAX_FILTERS = 60;
-// The UI now requests a facet for every field on every search, to drive
-// cascading dropdowns -- so this is sized to comfortably exceed the field
-// registry, not to allow arbitrary growth. Each facet is its own prepared
-// statement in the D1 batch, so an unbounded array here is an unbounded
-// batch size at someone else's request.
+// Facets are requested lazily by the UI -- active filters, the open dropdown,
+// and the common fields -- rather than one per field on every search. At this
+// field count "facet everything" would be over a hundred GROUP BY statements
+// per keystroke-debounced request. Each facet is its own prepared statement in
+// the D1 batch, so an unbounded array here is an unbounded batch size at
+// someone else's request.
 const MAX_FACETS = 40;
 
-/** Columns returned for every result row. Fixed list, never user-controlled. */
+/**
+ * Columns returned for every result row.
+ *
+ * Derived from the field registry rather than hand-listed, so a field added
+ * there cannot go missing here. Only base-view fields qualify: anything reached
+ * through an EXISTS has no column on the outer row to select. The identity
+ * columns lead, and are not fields.
+ */
 const RESULT_COLUMNS = [
-  'combo_index', 'ymm_index', 'engine_index',
-  'Make', 'Model', 'Year', 'Generation', 'Dev_Chassis_Code', 'Platform_Code', 'Nickname',
-  'Manufacturer', 'Code', 'Named_Variant',
-  'Layout', 'Cylinders', 'CC_Displacement',
-  'Aspiration', 'Fuel_Type', 'Compression_ratio', 'Fuel_delivery',
-  'Horsepower', 'Torque_lbft',
-].map((c) => `\`${c}\``).join(', ');
+  'combo_index', 'ymm_index', 'powertrain_index', 'engine_index',
+  'Powertrain_Type', 'Trim_Summary', 'Build_Count',
+  ...FIELDS.filter((f) => (f.source ?? 'view') === 'view').map((f) => f.column),
+]
+  // The same column can back more than one field, and Search_View exposes some
+  // columns (Powertrain_Type) both as a field and as part of the result shape.
+  .filter((c, i, all) => all.indexOf(c) === i)
+  .map((c) => `\`${c}\``)
+  .join(', ');
 
-interface Predicate {
+/** A predicate body, before provenance is attached. */
+interface RawPredicate {
   sql: string;
   params: unknown[];
   /** Lower sorts earlier. Reflects rough evaluation cost. */
   cost: number;
+}
+
+interface Predicate extends RawPredicate {
+  /**
+   * Which relation this predicate reads. Carried structurally rather than
+   * recovered by inspecting the SQL text: a predicate wrapped in an EXISTS
+   * mentions several columns, so string-matching a column name to decide what a
+   * predicate is about breaks as soon as subqueries exist.
+   */
+  source: SourceId;
+  /** Field names this predicate constrains, for facet self-exclusion. */
+  fields: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -109,11 +148,11 @@ export function compile(req: SearchRequest): CompiledQuery {
     throw new QueryError(`Too many facets (max ${MAX_FACETS})`);
   }
 
-  const predicates: Predicate[] = filters.map(compileFieldFilter);
-  if (req.q) predicates.push(compileTextSearch(req.q));
+  const raw: Predicate[] = filters.map(compileFieldFilter);
+  if (req.q) raw.push(compileTextSearch(req.q));
 
-  // Cheapest predicates first -- see rule 2.
-  predicates.sort((a, b) => a.cost - b.cost);
+  const sameBuild = req.combine === 'same_build';
+  const predicates = assemble(raw, sameBuild);
 
   const where = predicates.length ? `WHERE ${predicates.map((p) => p.sql).join('\n    AND ')}` : '';
   const whereParams = predicates.flatMap((p) => p.params);
@@ -133,26 +172,56 @@ LIMIT ? OFFSET ?`.trim();
 
   const facetQueries = (req.facets ?? []).map((name) => {
     const field = getField(name);
+    const source = sourceOf(field);
+
     // A facet's own filter is excluded from its count -- otherwise selecting
     // "Turbocharged" makes every other aspiration read zero, which is useless
     // for answering "what else could I pick".
-    const others = predicates.filter((p) => !p.sql.includes(`\`${field.column}\``));
+    //
+    // The exclusion is by field name, structurally, and it happens BEFORE the
+    // EXISTS wrappers are built. Dropping a whole wrapper instead would also
+    // drop its sibling constraints -- so picking a cab config would silently
+    // stop constraining the bed-length dropdown, and the numbers would look
+    // perfectly plausible while being wrong.
+    const others = assemble(raw.filter((p) => !p.fields.includes(name)), sameBuild);
     const facetWhere = others.length ? `WHERE ${others.map((p) => p.sql).join(' AND ')}` : '';
+    const facetParams = others.flatMap((p) => p.params);
+
+    // Rows with no recorded value are grouped out rather than shown as a
+    // nameless bucket -- "(null) 412" is not a filter anyone can click.
+    // Ordered by value rather than count: this drives a <select>, and years or
+    // displacements in chronological/numeric order are usable in a dropdown in
+    // a way that popularity order is not.
+    if (source.kind === 'base') {
+      return {
+        facet: name,
+        sql: `SELECT \`${field.column}\` AS value, COUNT(*) AS n
+              FROM Search_View ${facetWhere}
+              GROUP BY \`${field.column}\`
+              HAVING \`${field.column}\` IS NOT NULL
+              ORDER BY \`${field.column}\` ASC
+              LIMIT 100`,
+        params: facetParams,
+      };
+    }
+
+    // A field reached through a semi-join has no column on the outer row, so
+    // its facet has to join out and count distinct vehicles -- "how many cars
+    // remain if I pick Crew Cab", not "how many body-config rows match".
+    const alias = source.alias!;
     return {
       facet: name,
-      // Rows with no recorded value are grouped out rather than shown as a
-      // nameless bucket -- "(null) 412" is not a filter anyone can click.
-      // Ordered by value rather than count: this result drives a <select>
-      // now as well as the "narrow it down" panel, and years or displacements
-      // in chronological/numeric order are usable in a dropdown in a way that
-      // popularity order is not.
-      sql: `SELECT \`${field.column}\` AS value, COUNT(*) AS n
-            FROM Search_View ${facetWhere}
-            GROUP BY \`${field.column}\`
-            HAVING \`${field.column}\` IS NOT NULL
-            ORDER BY \`${field.column}\` ASC
+      sql: `SELECT \`${alias}\`.\`${field.column}\` AS value,
+                   COUNT(DISTINCT Search_View.combo_index) AS n
+            FROM Search_View
+            JOIN ${source.from} ON ${source.correlate}
+            ${source.joins ?? ''}
+            ${facetWhere}
+            GROUP BY \`${alias}\`.\`${field.column}\`
+            HAVING \`${alias}\`.\`${field.column}\` IS NOT NULL
+            ORDER BY \`${alias}\`.\`${field.column}\` ASC
             LIMIT 100`,
-      params: others.flatMap((p) => p.params),
+      params: facetParams,
     };
   });
 
@@ -165,21 +234,125 @@ LIMIT ? OFFSET ?`.trim();
   };
 }
 
+/**
+ * Turn raw per-filter predicates into the final WHERE terms.
+ *
+ * Base-view predicates pass through untouched. Everything else is grouped by
+ * source and wrapped in one EXISTS per source -- one subquery holding all of
+ * that relation's constraints, never one subquery per constraint. Per-predicate
+ * wrapping would pay N subquery costs *and* quietly change the meaning: three
+ * separate EXISTS over Builds can be satisfied by three different builds.
+ *
+ * With `same_build`, every build-level source collapses into a single EXISTS
+ * over Builds so one configuration has to satisfy all of them together.
+ */
+function assemble(raw: Predicate[], sameBuild: boolean): Predicate[] {
+  const base = raw.filter((p) => SOURCES[p.source].kind === 'base');
+  const rest = raw.filter((p) => SOURCES[p.source].kind === 'exists');
+
+  const wrapped: Predicate[] = [];
+
+  if (sameBuild) {
+    // Sources whose semi-join starts from Builds can share one subquery. The
+    // others (body configs, trims) hang off the vehicle-year, not off a build,
+    // so they cannot honestly be folded in.
+    const buildish = rest.filter((p) => BUILD_ROOTED.has(p.source));
+    const other = rest.filter((p) => !BUILD_ROOTED.has(p.source));
+    if (buildish.length) wrapped.push(wrapSameBuild(buildish));
+    wrapped.push(...groupBySource(other));
+  } else {
+    wrapped.push(...groupBySource(rest));
+  }
+
+  // Cheapest predicates first -- see rule 2. Semi-joins cost more than any
+  // plain column test, and their cost is set below to sort after all of them.
+  return [...base, ...wrapped].sort((a, b) => a.cost - b.cost);
+}
+
+/** Sources whose FROM begins at Builds, and so can share one correlated row. */
+const BUILD_ROOTED: ReadonlySet<SourceId> = new Set<SourceId>([
+  'build', 'transmission', 'drivetrain', 'suspension', 'seating',
+]);
+
+function groupBySource(preds: Predicate[]): Predicate[] {
+  const bySource = new Map<SourceId, Predicate[]>();
+  for (const p of preds) {
+    const list = bySource.get(p.source);
+    if (list) list.push(p);
+    else bySource.set(p.source, [p]);
+  }
+
+  return [...bySource.entries()].map(([sourceId, group]) => {
+    const source = SOURCES[sourceId];
+    return {
+      sql:
+        `EXISTS (SELECT 1 FROM ${source.from} ${source.joins ?? ''} ` +
+        `WHERE ${source.correlate} AND ${group.map((p) => p.sql).join(' AND ')})`,
+      params: group.flatMap((p) => p.params),
+      // Sorted after every base predicate, so a cheap Make test narrows the
+      // scan before any subquery is evaluated.
+      cost: 100 + Math.max(...group.map((p) => p.cost)),
+      source: sourceId,
+      fields: group.flatMap((p) => p.fields),
+    };
+  });
+}
+
+/**
+ * One EXISTS over Builds carrying every build-rooted constraint, with the
+ * catalog joins each one needs. This is what makes "tows 10,000 AND has a
+ * 10-speed" mean one truck rather than two.
+ */
+function wrapSameBuild(preds: Predicate[]): Predicate {
+  const joins = new Set<string>();
+  for (const p of preds) {
+    if (p.source === 'build') continue;
+    // Each build-rooted source declares its own Builds alias; inside this one
+    // shared subquery there is only one, so only the catalog joins are taken.
+    const j = SOURCES[p.source].joins;
+    if (j) joins.add(j);
+  }
+
+  const from = ['Builds b', ...joins].join(' ');
+  // Those catalog joins reference their own Builds alias (btx, bdt, ...).
+  // Rewrite them onto the single alias this subquery actually has.
+  const normalised = from.replace(/\bb(tx|dt|sus|sc)\./g, 'b.');
+
+  return {
+    sql:
+      `EXISTS (SELECT 1 FROM ${normalised} ` +
+      `WHERE b.YMM_Index = Search_View.ymm_index AND ` +
+      `${preds.map((p) => p.sql).join(' AND ')})`,
+    params: preds.flatMap((p) => p.params),
+    cost: 100 + Math.max(...preds.map((p) => p.cost)),
+    source: 'build',
+    fields: preds.flatMap((p) => p.fields),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Field filters
 // ---------------------------------------------------------------------------
 
 function compileFieldFilter(f: FieldFilter): Predicate {
   const field = getField(f.field);
-  const col = `\`${field.column}\``;
+  const source = sourceOf(field);
+  const sourceId: SourceId = field.source ?? 'view';
 
-  if (f.op === 'exists') {
-    return { sql: `${col} IS NOT NULL`, params: [], cost: 10 };
-  }
+  // A base-view column stands alone; anything else has to be qualified with
+  // its subquery's alias, because several of these relations have columns of
+  // the same name (Transmissions.Code and Engine_Specs.Code both exist).
+  const col = source.kind === 'base'
+    ? `\`${field.column}\``
+    : `\`${source.alias}\`.\`${field.column}\``;
 
-  return field.kind === 'text'
-    ? compileTextFilter(f, field, col)
-    : compileNumericFilter(f, field, col);
+  const base = f.op === 'exists'
+    ? { sql: `${col} IS NOT NULL`, params: [] as unknown[], cost: 10 }
+    : field.kind === 'text'
+      ? compileTextFilter(f, field, col)
+      : compileNumericFilter(f, field, col);
+
+  return { ...base, source: sourceId, fields: [field.name] };
 }
 
 /**
@@ -193,7 +366,7 @@ function escapeLike(v: string): string {
   return v.replace(/[\\%_]/g, (c) => `\\${c}`);
 }
 
-function compileTextFilter(f: FieldFilter, field: FieldDef, col: string): Predicate {
+function compileTextFilter(f: FieldFilter, field: FieldDef, col: string): RawPredicate {
   const asText = (v: unknown): string => {
     if (v === null || v === undefined) throw new QueryError(`${field.name}: missing value`);
     if (typeof v === 'object') throw new QueryError(`${field.name}: expected a single value`);
@@ -227,7 +400,7 @@ function compileTextFilter(f: FieldFilter, field: FieldDef, col: string): Predic
   }
 }
 
-function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): Predicate {
+function compileNumericFilter(f: FieldFilter, field: FieldDef, col: string): RawPredicate {
   const conv = (v: unknown): number => {
     const n = typeof v === 'number' ? v : Number(v);
     if (!Number.isFinite(n)) throw new QueryError(`${field.name}: "${v}" is not a number`);
@@ -341,12 +514,19 @@ function compileTextSearch(q: string): Predicate {
     .slice(0, 8)
     .map((t) => `%${escapeLike(t)}%`);
 
-  if (tokens.length === 0) return { sql: '1=1', params: [], cost: 0 };
+  // `q` is not a field, so it has no name to exclude from any facet -- an
+  // empty `fields` list means every facet keeps the text constraint, which is
+  // right: typing "porsche" should narrow every dropdown.
+  if (tokens.length === 0) {
+    return { sql: '1=1', params: [], cost: 0, source: 'view', fields: [] };
+  }
 
   return {
     sql: tokens.map(() => `\`Search_Text\` LIKE ? ESCAPE '\\'`).join(' AND '),
     params: tokens,
     cost: 65,
+    source: 'view',
+    fields: [],
   };
 }
 
@@ -362,6 +542,16 @@ function compileSort(sorts: SortSpec[] | undefined): string {
   } else {
     for (const s of sorts.slice(0, 4)) {
       const field = getField(s.field);
+      // Only base-view columns can be sorted on. A field reached through a
+      // semi-join has no column on the result row to order by, and there is no
+      // single value to pick from the many rows the subquery matched -- sorting
+      // by "cab config" when a truck has three is not a defined question.
+      if ((field.source ?? 'view') !== 'view') {
+        throw new QueryError(
+          `Cannot sort by ${field.name}: it describes configurations of a vehicle rather than ` +
+            `the vehicle itself, so a result row has no single value for it.`,
+        );
+      }
       const dir = s.dir === 'asc' ? 'ASC' : 'DESC';
       const nulls = s.nulls ?? 'last';
       const col = `\`${field.column}\``;

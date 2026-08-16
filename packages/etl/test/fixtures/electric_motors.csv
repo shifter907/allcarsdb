@@ -1,0 +1,3 @@
+Ref,Manufacturer,Code,Motor_Type,Horsepower,Torque_lbft,Cooling
+tesla-rear-3,Tesla,RWDU3,PMSM,283,330,Liquid
+toyota-prius-mg2,Toyota,MG2,PMSM,111,152,Liquid

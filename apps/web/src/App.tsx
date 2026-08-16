@@ -44,7 +44,13 @@ const EXAMPLES: { label: string; params: string }[] = [
  */
 const GROUP_LABELS: Record<string, string> = {
   vehicle: 'Vehicle',
+  powertrain: 'Powertrain & Electric',
   engine: 'Engine',
+  drivetrain: 'Transmission & Drivetrain',
+  body: 'Body & Dimensions',
+  interior: 'Interior',
+  capability: 'Towing, Weight & Performance',
+  trim: 'Trim',
 };
 
 const groupLabel = (key: string) =>
@@ -155,10 +161,31 @@ function SearchPage({ units }: { units: UnitSystem }) {
   }, []);
 
   const knownFields = useMemo(() => new Set(fields.map((f) => f.name)), [fields]);
-  // Every field is requested as a facet, not a curated subset -- this is what
-  // makes each dropdown reflect every *other* active filter. See search() in
-  // api.ts for why that specific combination narrows the options.
-  const facetFields = useMemo(() => fields.map((f) => f.name), [fields]);
+
+  /**
+   * Which fields to ask for facets on.
+   *
+   * This used to be "every field", which is what made the dropdowns narrow
+   * each other. At ~60 fields that becomes ~60 GROUP BY statements per
+   * debounced keystroke, several of them over semi-joins -- and the compiler
+   * rejects the request outright past its facet cap. So it is now the fields
+   * that actually need fresh options: the ones with an active filter, the
+   * sections the user has open, and the common fields that make up the default
+   * panel. Everything else keeps whatever options it already had, which is
+   * correct because a collapsed dropdown nobody is looking at does not need to
+   * re-narrow.
+   */
+  const facetFields = useMemo(() => {
+    const wanted = new Set<string>();
+    for (const f of fields) {
+      if (f.common) wanted.add(f.name);
+      if (openGroups?.has(f.group)) wanted.add(f.name);
+    }
+    for (const f of state.filters) if (knownFields.has(f.field)) wanted.add(f.field);
+    // Bounded well below the compiler's cap, so a user opening every section
+    // at once still produces a request the server will accept.
+    return [...wanted].slice(0, 36);
+  }, [fields, openGroups, state.filters, knownFields]);
 
   // How long to wait after the *last* filter change before actually asking
   // the server. Picking Make, then Model, then Cylinders in quick succession
@@ -197,9 +224,13 @@ function SearchPage({ units }: { units: UnitSystem }) {
           setData(d);
           setLoading(false);
 
-          const newChoices: Record<string, Choice[]> = {};
-          for (const f of d.facets) newChoices[f.field] = f.values;
-          setChoices(newChoices);
+          // Merged, not replaced. Facets are requested lazily now, so a
+          // response only carries the fields that were asked for -- replacing
+          // wholesale would blank out every dropdown the user had not just
+          // interacted with.
+          const fresh: Record<string, Choice[]> = {};
+          for (const f of d.facets) fresh[f.field] = f.values;
+          setChoices((prev) => ({ ...prev, ...fresh }));
 
           // A filter can be invalidated by a *different* filter changing --
           // picking Make=Ford after Model=Corvette was already selected leaves
@@ -207,8 +238,13 @@ function SearchPage({ units }: { units: UnitSystem }) {
           // and silently return zero results, drop whatever is no longer among
           // its field's current choices. Each pass can only remove filters, so
           // this always terminates rather than looping.
+          //
+          // Only fields whose facets came back in THIS response can be judged.
+          // A field that was not requested has no fresh evidence against it, and
+          // treating stale or absent options as proof of invalidity would drop
+          // filters the user set deliberately.
           const stillValid = (f: ActiveFilter) => {
-            const opts = newChoices[f.field];
+            const opts = fresh[f.field];
             return !opts || opts.some((c) => String(c.value) === f.value);
           };
           const survivors = req.filters.filter(stillValid);
@@ -293,6 +329,10 @@ function SearchPage({ units }: { units: UnitSystem }) {
       key,
       label: groupLabel(key),
       fields: groupFields,
+      // Whether this section contains any filter that describes a specific
+      // configuration rather than the car -- which is what makes the
+      // same-configuration question meaningful here.
+      hasBuildFields: groupFields.some((f) => f.grain === 'build'),
       // A section holding at least one "common" field is one most people want
       // open on arrival. As the registry grows, the specialised sections
       // (interior dimensions, drivetrain internals) have no common fields and
@@ -382,6 +422,28 @@ function SearchPage({ units }: { units: UnitSystem }) {
                     ))}
                   </div>
                 )}
+
+                {/* Configuration-level filters can be read two ways, and the
+                    difference is not obvious from the controls alone, so the
+                    choice is offered where those filters actually are. */}
+                {open && group.hasBuildFields && (
+                  <label className="same-build">
+                    <input
+                      type="checkbox"
+                      checked={state.sameBuild}
+                      onChange={(e) =>
+                        setState((s) => ({ ...s, offset: 0, sameBuild: e.target.checked }))
+                      }
+                    />
+                    <span>
+                      Require one configuration to meet all of these
+                      <span className="muted">
+                        {' '}— otherwise a vehicle qualifies if different configurations
+                        satisfy them separately.
+                      </span>
+                    </span>
+                  </label>
+                )}
               </section>
             );
           })}
@@ -435,6 +497,9 @@ function SearchPage({ units }: { units: UnitSystem }) {
                       {r.engine.summary}
                       {r.engine.summary && engineTag(r.engine) && ' — '}
                       {engineTag(r.engine)}
+                      {r.powertrain?.type && r.powertrain.type !== 'ICE' && (
+                        <span className="pt-badge">{r.powertrain.type}</span>
+                      )}
                     </div>
                   )}
                   <dl className="specs">
@@ -447,14 +512,47 @@ function SearchPage({ units }: { units: UnitSystem }) {
                     <Spec label="Fuel" value={r.engine.fuel_type} />
                     <Spec label="Compression" value={r.engine.compression_ratio} />
                     <Spec label="Delivery" value={r.engine.fuel_delivery} />
+                    <Spec label="Valvetrain" value={r.engine.valvetrain} />
+                    <Spec label="Redline" value={r.engine.redline_rpm ? `${r.engine.redline_rpm.toLocaleString()} rpm` : null} />
+                  </dl>
+                </>
+              ) : r.powertrain && !r.powertrain.engine_expected ? (
+                // A battery-electric or fuel-cell car genuinely has no engine.
+                // Saying "no engine data recorded yet" here would report a
+                // complete record as an incomplete one.
+                <>
+                  <div className="muted">
+                    {electricSummary(r.powertrain, units)}
+                    <span className="pt-badge">{r.powertrain.type}</span>
+                  </div>
+                  <dl className="specs">
+                    <Spec label="Power" value={formatPower(r.powertrain.combined_horsepower, units)} />
+                    <Spec label="Torque" value={formatTorque(r.powertrain.combined_torque_lbft, units)} />
+                    <Spec label="Range" value={r.powertrain.electric_range_mi ? `${r.powertrain.electric_range_mi} mi` : null} />
+                    <Spec label="Battery" value={r.powertrain.battery?.usable_kwh ? `${r.powertrain.battery.usable_kwh} kWh usable` : null} />
+                    <Spec label="Chemistry" value={r.powertrain.battery?.chemistry ?? null} />
+                    <Spec label="DC Charge" value={r.powertrain.dc_charge_kw ? `${r.powertrain.dc_charge_kw} kW` : null} />
+                    <Spec label="Port" value={r.powertrain.charge_port} />
                   </dl>
                 </>
               ) : (
-                // A vehicle can exist with no engine recorded yet -- the join
-                // is a LEFT JOIN specifically so this car is still shown rather
-                // than disappearing from every search until someone fills that
-                // in. Saying so plainly beats pretending the gap isn't there.
+                // A vehicle can exist with no powertrain recorded yet -- the
+                // join is a LEFT JOIN specifically so this car is still shown
+                // rather than disappearing from every search until someone
+                // fills that in. Saying so plainly beats pretending the gap
+                // isn't there.
                 <div className="incomplete">No engine data recorded yet.</div>
+              )}
+
+              {r.capability && (
+                <dl className="specs capability">
+                  <Spec label="Max towing" value={r.capability.max_towing_lb ? `${r.capability.max_towing_lb.toLocaleString()} lb` : null} />
+                  <Spec label="Max payload" value={r.capability.max_payload_lb ? `${r.capability.max_payload_lb.toLocaleString()} lb` : null} />
+                  <Spec label="Curb weight" value={r.capability.min_curb_weight_lb ? `from ${r.capability.min_curb_weight_lb.toLocaleString()} lb` : null} />
+                  <Spec label="Best MPG" value={r.capability.best_epa_combined_mpg} />
+                  <Spec label="0–60" value={r.capability.quickest_zero_to_sixty_s ? `${r.capability.quickest_zero_to_sixty_s}s` : null} />
+                  <Spec label="Trims" value={r.capability.trims} />
+                </dl>
               )}
             </div>
           </article>
@@ -510,6 +608,22 @@ function vehicleTag(v: SearchResult['vehicle']): string {
  * nothing to filter out here; Named_Variant is the only differentiator meant
  * to ever be seen.
  */
+/**
+ * "272 mi · 57.5 kWh" for a car with no engine to summarise. Built from
+ * whichever parts are present, the same way engineSummary is on the server.
+ */
+function electricSummary(
+  p: NonNullable<SearchResult['powertrain']>,
+  units: UnitSystem,
+): string {
+  const parts: string[] = [];
+  const power = formatPower(p.combined_horsepower, units);
+  if (power) parts.push(power);
+  if (p.electric_range_mi) parts.push(`${p.electric_range_mi} mi range`);
+  if (p.battery?.usable_kwh) parts.push(`${p.battery.usable_kwh} kWh`);
+  return parts.join(' · ');
+}
+
 function engineTag(e: NonNullable<SearchResult['engine']>): string {
   const parts: string[] = [];
   if (e.manufacturer) parts.push(e.manufacturer);

@@ -1,6 +1,9 @@
 # Contributing
 
-The database is three CSV files. Adding a car means adding rows to them.
+The database is a set of CSV files. Adding a car means adding rows to them.
+
+Every table and column is documented, with its current contents, at
+[allcarsdb.pages.dev/tables](https://allcarsdb.pages.dev/tables).
 
 You do not need to know TypeScript, SQL, or how the site is built. If you can
 edit a spreadsheet and open a pull request, you can contribute.
@@ -45,10 +48,16 @@ If it is new, add it with a readable, unique ref:
 mazda-2.0-na-i4,Mazda,PE-VPS,,,Inline,4,1998,Naturally Aspirated,Gasoline,13.0:1,Direct Injection,181,151
 ```
 
-**3. Connect them** in `data/ymm_engines.csv`:
+**3. Connect them.** Give the engine a powertrain in `data/powertrains.csv`:
 
 ```csv
-Mazda,MX-5 Miata,2026,mazda-2.0-na-i4
+pt-mazda-2.0,ICE,mazda-2.0-na-i4,,,,,,,
+```
+
+then connect that to the car in `data/ymm_powertrains.csv`:
+
+```csv
+Mazda,MX-5 Miata,2026,pt-mazda-2.0
 ```
 
 If the car offered three engines, that is three rows here — one per engine —
@@ -108,8 +117,11 @@ The error names the file, the line, and usually the fix. Common ones:
 
 | Message | Cause |
 |---|---|
-| `is not in year_make_model.csv` | The make/model/year in `ymm_engines.csv` does not match a row in `year_make_model.csv`. Usually a typo or a different spelling. |
-| `is not in engine_specs.csv` | The engine ref does not match any `Ref`. |
+| `is not in year_make_model.csv` | The make/model/year in a referencing file does not match a row in `year_make_model.csv`. Usually a typo or a different spelling. |
+| `is not in data/<file>.csv` | A `Ref` does not match any row in the file it points at. |
+| `typed BEV but names an engine` | A battery-electric powertrain cannot have a combustion engine. If it really has one, it is a hybrid — say which kind in `Powertrain_Type`. |
+| `is larger than Gross_kWh` | Usable battery capacity is a portion of gross, so it cannot exceed it. The two are probably swapped. |
+| `below Curb_Weight_lb` | GVWR includes the vehicle's own weight, so it is always the larger figure. |
 | `found 3 column(s), expected 4` | A value contains a comma. Wrap it in quotes: `"Port, then direct"`. |
 | `is already listed on line N` | Duplicate row. |
 | `missing column(s): Make` | A header was renamed or the file was saved in the wrong format. |

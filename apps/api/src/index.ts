@@ -18,6 +18,8 @@ import {
   getField,
   getTable,
   FIELDS,
+  FIELD_BY_NAME,
+  FIELD_GROUPS,
   TABLES,
   type SearchRequest,
 } from '@allcarsdb/query';
@@ -103,6 +105,11 @@ app.get('/v1/search', async (c) => {
       case 'limit': req.limit = Number(raw); continue;
       case 'offset': req.offset = Number(raw); continue;
       case 'facets': req.facets = raw.split(',').filter(Boolean); continue;
+      case 'combine':
+        // Anything other than the one recognised value falls back to the
+        // default rather than erroring: a stale link should still search.
+        req.combine = raw === 'same_build' ? 'same_build' : 'any_build';
+        continue;
       case 'sort':
         req.sort = raw.split(',').filter(Boolean).map((s) =>
           s.startsWith('-')
@@ -225,6 +232,12 @@ async function runSearch(db: D1Database, req: SearchRequest, c: { json: Function
  * rendering a bogus "0 cylinders, undefined L" engine that was never recorded.
  */
 function shapeResult(r: Record<string, unknown>) {
+  const type = r.Powertrain_Type ? String(r.Powertrain_Type) : null;
+  // "Has no engine" and "has an engine nobody has recorded" are different
+  // facts, and only the powertrain type can tell them apart. A BEV genuinely
+  // has none; a car with no powertrain row at all is simply unrecorded.
+  const electricOnly = type !== null && ['bev', 'fcev'].includes(type.toLowerCase());
+
   return {
     index: r.combo_index,
     vehicle: {
@@ -238,6 +251,31 @@ function shapeResult(r: Record<string, unknown>) {
       nickname: r.Nickname,
       name: `${r.Year} ${r.Make} ${r.Model}`,
     },
+    powertrain:
+      r.powertrain_index === null
+        ? null
+        : {
+            index: r.powertrain_index,
+            type,
+            combined_horsepower: r.Combined_Horsepower,
+            combined_torque_lbft: r.Combined_Torque_lbft,
+            electric_range_mi: r.Electric_Range_mi,
+            dc_charge_kw: r.DC_Charge_kW,
+            ac_charge_kw: r.AC_Charge_kW,
+            charge_port: r.Charge_Port,
+            battery:
+              r.Battery_Usable_kWh === null && r.Battery_Chemistry === null
+                ? null
+                : {
+                    chemistry: r.Battery_Chemistry,
+                    gross_kwh: r.Battery_Gross_kWh,
+                    usable_kwh: r.Battery_Usable_kWh,
+                  },
+            // `false` where an engine is genuinely absent by design, `true`
+            // where one just has not been entered. The UI needs the difference
+            // to avoid telling someone a Tesla is missing data.
+            engine_expected: !electricOnly,
+          },
     engine:
       r.engine_index === null
         ? null
@@ -253,9 +291,28 @@ function shapeResult(r: Record<string, unknown>) {
             fuel_type: r.Fuel_Type,
             compression_ratio: r.Compression_ratio,
             fuel_delivery: r.Fuel_delivery,
+            valvetrain: r.Valvetrain,
+            redline_rpm: r.Redline_RPM,
+            fuel_requirement: r.Fuel_Requirement,
             horsepower: r.Horsepower,
             torque_lbft: r.Torque_lbft,
             summary: engineSummary(r),
+          },
+    // Present only where builds have been recorded. These are the specs that
+    // are true of a configuration rather than of the car, so they are reported
+    // as the range across everything known rather than as single figures.
+    capability:
+      r.Build_Count === null || r.Build_Count === 0
+        ? null
+        : {
+            build_count: r.Build_Count,
+            max_towing_lb: r.Max_Towing_Capacity_lb,
+            max_payload_lb: r.Max_Payload_lb,
+            min_curb_weight_lb: r.Min_Curb_Weight_lb,
+            max_gvwr_lb: r.Max_GVWR_lb,
+            best_epa_combined_mpg: r.Max_EPA_Combined_mpg,
+            quickest_zero_to_sixty_s: r.Min_Zero_To_Sixty_s,
+            trims: r.Trim_Summary,
           },
   };
 }
@@ -300,7 +357,16 @@ app.get('/v1/fields', (c) =>
         min: f.min,
         max: f.max,
         description: f.description,
+        // `grain` tells the UI what a filter narrows to -- a car, the engine in
+        // it, or one specific configuration of it. `sortable` is derived rather
+        // than declared: only a column on the base view has a single value per
+        // result row to order by.
+        grain: f.grain ?? 'vehicle',
+        sortable: (f.source ?? 'view') === 'view',
       })),
+      // Sent so the filter panel can order its sections deliberately instead of
+      // by whatever order the fields happen to appear in.
+      groups: FIELD_GROUPS,
     },
     200,
     { 'Cache-Control': CACHE },
@@ -317,23 +383,27 @@ app.get('/v1/fields', (c) =>
  * that invites a typo the database will silently fail to match.
  */
 app.get('/v1/choices', async (c) => {
-  const rows = await c.env.DB.batch(
-    FIELDS.map((f) =>
-      c.env.DB.prepare(
-        `SELECT \`${f.column}\` AS value, COUNT(*) AS n
-           FROM Search_View
-          WHERE \`${f.column}\` IS NOT NULL
-          GROUP BY \`${f.column}\`
-          ORDER BY \`${f.column}\` ASC
-          LIMIT 500`,
-      ),
-    ),
-  );
+  // One indexed read of a table the loader already built, rather than one
+  // GROUP BY per field over a multi-join view. At this field count the live
+  // version was the most expensive query in the system and it ran on every
+  // cold page load, before the visitor had done anything at all.
+  const { results } = await c.env.DB.prepare(
+    'SELECT Field_Name, Value, N FROM Field_Choices ORDER BY Field_Name, Value',
+  ).all<{ Field_Name: string; Value: string; N: number }>();
 
   const choices: Record<string, { value: string | number; n: number }[]> = {};
-  FIELDS.forEach((f, i) => {
-    choices[f.name] = (rows[i]?.results ?? []) as { value: string | number; n: number }[];
-  });
+  for (const f of FIELDS) choices[f.name] = [];
+  for (const row of results ?? []) {
+    const field = FIELD_BY_NAME.get(row.Field_Name);
+    if (!field) continue;
+    // Numeric fields are stored as text in the choice table (one column, mixed
+    // types); handing them back as numbers keeps the client from having to
+    // guess which ones to coerce before comparing against a filter value.
+    choices[row.Field_Name]!.push({
+      value: field.kind === 'number' ? Number(row.Value) : row.Value,
+      n: row.N,
+    });
+  }
 
   return c.json({ choices }, 200, { 'Cache-Control': CACHE });
 });
@@ -450,19 +520,79 @@ app.get('/v1/vehicle/:index', async (c) => {
 
   if (!vehicle) return c.json({ error: 'Not found' }, 404);
 
-  const { results: engines } = await c.env.DB.prepare(
-    `SELECT e."Index" AS "index", e.Manufacturer AS manufacturer, e.Code AS code,
-            e.Named_Variant AS named_variant, e.Layout AS layout, e.Cylinders AS cylinders,
+  const { results: powertrains } = await c.env.DB.prepare(
+    `SELECT p."Index" AS "index", p.Powertrain_Type AS type,
+            p.Combined_Horsepower AS combined_horsepower,
+            p.Combined_Torque_lbft AS combined_torque_lbft,
+            p.Electric_Range_mi AS electric_range_mi,
+            p.DC_Charge_kW AS dc_charge_kw, p.AC_Charge_kW AS ac_charge_kw,
+            p.Charge_Port AS charge_port,
+            e."Index" AS engine_index, e.Manufacturer AS engine_manufacturer,
+            e.Code AS engine_code, e.Named_Variant AS engine_named_variant,
+            e.Layout AS layout, e.Cylinders AS cylinders,
             e.CC_Displacement AS displacement_cc, e.Aspiration AS aspiration,
             e.Fuel_Type AS fuel_type, e.Compression_ratio AS compression_ratio,
-            e.Fuel_delivery AS fuel_delivery, e.Horsepower AS horsepower, e.Torque_lbft AS torque_lbft
-       FROM YMM_Engines ye
-       JOIN Engine_Specs e ON e."Index" = ye.Engine_Index
-      WHERE ye.YMM_Index = ?
-      ORDER BY e.CC_Displacement`,
+            e.Fuel_delivery AS fuel_delivery, e.Horsepower AS horsepower,
+            e.Torque_lbft AS torque_lbft,
+            b.Chemistry AS battery_chemistry, b.Gross_kWh AS battery_gross_kwh,
+            b.Usable_kWh AS battery_usable_kwh
+       FROM YMM_Powertrains yp
+       JOIN Powertrains p ON p."Index" = yp.Powertrain_Index
+       LEFT JOIN Engine_Specs e ON e."Index" = p.Engine_Index
+       LEFT JOIN Batteries b    ON b."Index" = p.Battery_Index
+      WHERE yp.YMM_Index = ?
+      ORDER BY e.CC_Displacement, p."Index"`,
   ).bind(index).all();
 
-  return c.json({ vehicle, engines }, 200, { 'Cache-Control': CACHE });
+  // Every recorded configuration of this vehicle. This is the drill-down the
+  // search results deliberately do not fan out into -- one row per build here,
+  // rather than one result card per build on the search page.
+  const { results: builds } = await c.env.DB.prepare(
+    `SELECT bd."Index" AS "index", t.Trim_Name AS trim,
+            bc.Body_Style AS body_style, bc.Cab_Config AS cab_config,
+            bc.Bed_Length_in AS bed_length_in, bc.Wheelbase_in AS wheelbase_in,
+            tx.Code AS transmission, tx.Type AS transmission_type,
+            dt.Layout AS drive_layout, dt.Transfer_Case_Type AS transfer_case,
+            sc.Capacity AS seating_capacity, sc.Second_Row_Type AS second_row_type,
+            bd.Axle_Ratio AS axle_ratio, bd.Equipment_Note AS equipment_note,
+            bd.Curb_Weight_lb AS curb_weight_lb, bd.GVWR_lb AS gvwr_lb,
+            bd.Payload_lb AS payload_lb, bd.Towing_Capacity_lb AS towing_capacity_lb,
+            bd.EPA_Combined_mpg AS epa_combined_mpg,
+            bd.Zero_To_Sixty_s AS zero_to_sixty_s
+       FROM Builds bd
+       LEFT JOIN Trims t            ON t."Index"  = bd.Trim_Index
+       LEFT JOIN Body_Configs bc    ON bc."Index" = bd.Body_Config_Index
+       LEFT JOIN Transmissions tx   ON tx."Index" = bd.Transmission_Index
+       LEFT JOIN Drivetrains dt     ON dt."Index" = bd.Drivetrain_Index
+       LEFT JOIN Seating_Configs sc ON sc."Index" = bd.Seating_Config_Index
+      WHERE bd.YMM_Index = ?
+      ORDER BY t.Trim_Level, bd."Index"`,
+  ).bind(index).all();
+
+  const { results: bodies } = await c.env.DB.prepare(
+    `SELECT bc."Index" AS "index", bc.Body_Style AS body_style, bc.Doors AS doors,
+            bc.Cab_Config AS cab_config, bc.Bed_Length_in AS bed_length_in,
+            bc.Wheelbase_in AS wheelbase_in, bc.Length_in AS length_in,
+            bc.Width_in AS width_in, bc.Height_in AS height_in,
+            bc.Ground_Clearance_in AS ground_clearance_in,
+            bc.Cargo_Volume_cuft AS cargo_volume_cuft,
+            bc.Fuel_Capacity_gal AS fuel_capacity_gal
+       FROM YMM_Body_Configs ybc
+       JOIN Body_Configs bc ON bc."Index" = ybc.Body_Config_Index
+      WHERE ybc.YMM_Index = ?
+      ORDER BY bc.Body_Style, bc.Cab_Config`,
+  ).bind(index).all();
+
+  const { results: trims } = await c.env.DB.prepare(
+    `SELECT "Index" AS "index", Trim_Name AS name, Trim_Level AS level, Notes AS notes
+       FROM Trims WHERE YMM_Index = ? ORDER BY Trim_Level, Trim_Name`,
+  ).bind(index).all();
+
+  return c.json(
+    { vehicle, powertrains, builds, bodies, trims },
+    200,
+    { 'Cache-Control': CACHE },
+  );
 });
 
 app.get('/v1/engine/:index', async (c) => {
@@ -486,9 +616,10 @@ app.get('/v1/engine/:index', async (c) => {
   const { results: vehicles } = await c.env.DB.prepare(
     `SELECT v."Index" AS "index", v.Make AS make, v.Model AS model, v.Year AS year, v.Generation AS generation,
             v.Dev_Chassis_Code AS dev_chassis_code, v.Platform_Code AS platform_code, v.Nickname AS nickname
-       FROM YMM_Engines ye
-       JOIN Year_Make_Model v ON v."Index" = ye.YMM_Index
-      WHERE ye.Engine_Index = ?
+       FROM Powertrains p
+       JOIN YMM_Powertrains yp   ON yp.Powertrain_Index = p."Index"
+       JOIN Year_Make_Model v    ON v."Index" = yp.YMM_Index
+      WHERE p.Engine_Index = ?
       ORDER BY v.Make, v.Model, v.Year`,
   ).bind(index).all();
 
@@ -505,7 +636,11 @@ app.get('/v1/stats', async (c) => {
        (SELECT COUNT(*) FROM Year_Make_Model)          AS vehicle_years,
        (SELECT COUNT(DISTINCT Make) FROM Year_Make_Model) AS makes,
        (SELECT COUNT(*) FROM Engine_Specs)             AS engines,
-       (SELECT COUNT(*) FROM YMM_Engines)              AS pairings,
+       (SELECT COUNT(*) FROM Powertrains)              AS powertrains,
+       (SELECT COUNT(*) FROM YMM_Powertrains)          AS pairings,
+       (SELECT COUNT(*) FROM Builds)                   AS builds,
+       (SELECT COUNT(*) FROM Body_Configs)             AS body_configs,
+       (SELECT COUNT(*) FROM Trims)                    AS trims,
        (SELECT MIN(Year) FROM Year_Make_Model)         AS earliest_year,
        (SELECT MAX(Year) FROM Year_Make_Model)         AS latest_year`,
   ).first();

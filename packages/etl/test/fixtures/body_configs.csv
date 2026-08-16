@@ -1,0 +1,4 @@
+Ref,Body_Style,Doors,Cab_Config,Bed_Length_in,Bed_Volume_cuft,Roof_Height,Wheelbase_in,Length_in,Width_in,Height_in,Track_Front_in,Track_Rear_in,Ground_Clearance_in,Approach_Angle_deg,Departure_Angle_deg,Breakover_Angle_deg,Drag_Coefficient,Cargo_Volume_cuft,Cargo_Volume_Max_cuft,Fuel_Capacity_gal,Seating_Rows
+f150-supercrew-55,Pickup,4,Crew,67.1,52.8,,145,231.7,79.9,77.2,68.4,67.6,8.4,25.5,26.2,21,,,,26,2
+f150-regular-8,Pickup,2,Regular,97.6,77.4,,141.6,227.9,79.9,75.6,68.4,67.6,8.4,25.5,26.2,21,,,,23,1
+porsche-911-coupe,Coupe,2,,,,,96.5,178.4,72.9,51.1,,,,,,,0.31,4.6,,16.9,2

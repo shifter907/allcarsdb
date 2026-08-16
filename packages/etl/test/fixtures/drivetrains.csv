@@ -1,0 +1,3 @@
+Ref,Layout,Transfer_Case_Type,Transfer_Case_Model,Low_Range_Ratio,Front_Hub_Type,Center_Differential,Front_Diff_Type,Rear_Diff_Type
+f150-4x4,4WD,Part-time,BW4419,2.64,Auto Locking,,Open,Limited-slip
+f150-4x2,RWD,None,,,,,,Open

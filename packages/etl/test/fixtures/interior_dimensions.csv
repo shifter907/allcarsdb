@@ -1,0 +1,5 @@
+Body_Config_Ref,Seating_Config_Ref,Row_Number,Headroom_in,Legroom_in,Shoulder_Room_in,Hip_Room_in
+f150-supercrew-55,,1,40.8,43.9,66.7,62.5
+f150-supercrew-55,f150-bench-6,2,40.4,43.6,65.9,62.6
+f150-supercrew-55,f150-buckets-5,2,40.4,43.6,65.9,60.1
+porsche-911-coupe,,1,37.7,41.9,54.7,

@@ -1,0 +1,5 @@
+Ref,Make,Model,Year,Trim_Name,Body_Config_Ref,Powertrain_Ref,Transmission_Ref,Drivetrain_Ref,Suspension_Ref,Seating_Config_Ref,Axle_Ratio,Equipment_Note,Curb_Weight_lb,GVWR_lb,GCWR_lb,Payload_lb,Towing_Capacity_lb,Tongue_Weight_lb,EPA_City_mpg,EPA_Highway_mpg,EPA_Combined_mpg,EPA_Electric_Range_mi,Zero_To_Sixty_s,Quarter_Mile_s,Top_Speed_mph,Braking_60_0_ft
+f150-xlt-crew-35tt-373-maxtow,Ford,F-150,2023,XLT,f150-supercrew-55,pt-ford-3.5tt,ford-10r80,f150-4x4,f150-standard,f150-buckets-5,3.73,w/ Max Trailering Package,5014,7050,18100,2036,13500,1350,18,24,20,,6.1,,,
+f150-xlt-crew-35tt-355,Ford,F-150,2023,XLT,f150-supercrew-55,pt-ford-3.5tt,ford-10r80,f150-4x4,f150-standard,f150-buckets-5,3.55,,5014,7050,15100,2036,11200,1120,18,24,20,,6.1,,,
+f150-xl-reg-50-355,Ford,F-150,2023,XL,f150-regular-8,pt-ford-5.0,ford-10r80,f150-4x2,f150-standard,f150-bench-6,3.55,,4021,6800,13000,2779,8200,820,17,24,20,,6.8,,,
+porsche-911-carrera-2023,Porsche,911,2023,Carrera,porsche-911-coupe,pt-porsche-3.0tt,porsche-pdk8,,,,3.44,,3354,,,,,,18,25,21,,4,12.4,182,149

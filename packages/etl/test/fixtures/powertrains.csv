@@ -1,0 +1,9 @@
+Ref,Powertrain_Type,Engine_Ref,Battery_Ref,Combined_Horsepower,Combined_Torque_lbft,Electric_Range_mi,DC_Charge_kW,AC_Charge_kW,Charge_Port
+pt-porsche-4.0,ICE,porsche-4.0-na-flat6,,,,,,,
+pt-porsche-3.0tt,ICE,porsche-3.0-tt-flat6,,,,,,,
+pt-mazda-2.0,ICE,mazda-2.0-na-i4,,,,,,,
+pt-vw-2.0t,ICE,vw-2.0-turbo-i4,,,,,,,
+pt-ford-5.0,ICE,ford-5.0-na-v8,,,,,,,
+pt-ford-3.5tt,ICE,ford-3.5-tt-v6,,,,,,,
+pt-tesla-m3-rwd,BEV,,tesla-m3-lfp,283,330,272,170,11.5,NACS
+pt-prius-hybrid,Full Hybrid,toyota-2.0-hybrid-i4,prius-2023-liion,194,,,,,

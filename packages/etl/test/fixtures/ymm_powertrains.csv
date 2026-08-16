@@ -1,0 +1,11 @@
+Make,Model,Year,Powertrain_Ref
+Porsche,911,2022,pt-porsche-4.0
+Porsche,911,2022,pt-porsche-3.0tt
+Porsche,911,2023,pt-porsche-4.0
+Porsche,911,2023,pt-porsche-3.0tt
+Mazda,MX-5 Miata,2024,pt-mazda-2.0
+Volkswagen,Golf GTI,2023,pt-vw-2.0t
+Ford,F-150,2023,pt-ford-5.0
+Ford,F-150,2023,pt-ford-3.5tt
+Tesla,Model 3,2023,pt-tesla-m3-rwd
+Toyota,Prius,2023,pt-prius-hybrid

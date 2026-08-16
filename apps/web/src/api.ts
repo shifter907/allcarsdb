@@ -28,6 +28,15 @@ export interface FieldDef {
   min?: number;
   max?: number;
   description?: string;
+  /**
+   * What a filter on this field narrows to: the car itself, the engine in it,
+   * or one specific configuration of it. `build` fields are the ones that can
+   * legitimately return nothing early on -- a vehicle with no recorded
+   * configurations is excluded from them rather than assumed to qualify.
+   */
+  grain?: 'vehicle' | 'powertrain' | 'build';
+  /** Only base-view fields can be sorted; the rest have no single row value. */
+  sortable?: boolean;
 }
 
 export interface Choice {
@@ -48,6 +57,39 @@ export interface SearchResult {
     nickname: string | null;
     name: string;
   };
+  /**
+   * What drives the car. `engine_expected` is false for a battery-electric or
+   * fuel-cell powertrain, which is how the UI tells "this car has no engine"
+   * apart from "nobody has entered one yet" -- the same words would otherwise
+   * describe both, and only one of them is a gap.
+   */
+  powertrain: {
+    index: number;
+    type: string | null;
+    combined_horsepower: number | null;
+    combined_torque_lbft: number | null;
+    electric_range_mi: number | null;
+    dc_charge_kw: number | null;
+    ac_charge_kw: number | null;
+    charge_port: string | null;
+    battery: {
+      chemistry: string | null;
+      gross_kwh: number | null;
+      usable_kwh: number | null;
+    } | null;
+    engine_expected: boolean;
+  } | null;
+  /** Ranges across every recorded configuration. Null when none are recorded. */
+  capability: {
+    build_count: number;
+    max_towing_lb: number | null;
+    max_payload_lb: number | null;
+    min_curb_weight_lb: number | null;
+    max_gvwr_lb: number | null;
+    best_epa_combined_mpg: number | null;
+    quickest_zero_to_sixty_s: number | null;
+    trims: string | null;
+  } | null;
   // `null` means no engine has been recorded for this vehicle yet -- Search_View
   // is a LEFT JOIN specifically so an incomplete entry is still returned rather
   // than hidden. The UI is responsible for saying so rather than pretending the
@@ -64,6 +106,9 @@ export interface SearchResult {
     fuel_type: string | null;
     compression_ratio: string | null;
     fuel_delivery: string | null;
+    valvetrain: string | null;
+    redline_rpm: number | null;
+    fuel_requirement: string | null;
     horsepower: number | null;
     torque_lbft: number | null;
     summary: string | null;
@@ -91,9 +136,18 @@ export interface SearchState {
   q: string;
   sort: string;
   offset: number;
+  /**
+   * When true, every configuration-level filter must be satisfied by the SAME
+   * configuration. Off by default because the looser reading is what most
+   * people mean -- "show me trucks that tow 10,000" rarely means "and that
+   * exact truck must also do everything else I picked".
+   */
+  sameBuild: boolean;
 }
 
-export const EMPTY_STATE: SearchState = { filters: [], q: '', sort: '', offset: 0 };
+export const EMPTY_STATE: SearchState = {
+  filters: [], q: '', sort: '', offset: 0, sameBuild: false,
+};
 
 // ---------------------------------------------------------------------------
 // URL <-> state
@@ -110,6 +164,7 @@ export function stateToParams(s: SearchState): URLSearchParams {
   }
   if (s.q) p.set('q', s.q);
   if (s.sort) p.set('sort', s.sort);
+  if (s.sameBuild) p.set('combine', 'same_build');
   if (s.offset) p.set('offset', String(s.offset));
   return p;
 }
@@ -122,6 +177,7 @@ export function paramsToState(p: URLSearchParams): SearchState {
     if (key === 'q') { s.q = raw; continue; }
     if (key === 'sort') { s.sort = raw; continue; }
     if (key === 'offset') { s.offset = Number(raw) || 0; continue; }
+    if (key === 'combine') { s.sameBuild = raw === 'same_build'; continue; }
     if (key === 'limit' || key === 'facets') continue;
 
     const colon = raw.indexOf(':');

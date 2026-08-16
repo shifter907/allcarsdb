@@ -1,0 +1,14 @@
+Ref,Layout,Transfer_Case_Type,Transfer_Case_Model,Low_Range_Ratio,Front_Hub_Type,Center_Differential,Front_Diff_Type,Rear_Diff_Type
+rwd-open,RWD,None,,,,,,Open
+rwd-lsd,RWD,None,,,,,,Limited-slip
+rwd-elocker,RWD,None,,,,,,e-Locker
+fwd-open,FWD,None,,,,,Open,
+awd-open-center,AWD,Single-speed,,,Fixed,Open,Open,Open
+awd-torsen,AWD,Single-speed,,,Fixed,Torsen,Open,Open
+awd-clutch,AWD,Single-speed,,,Fixed,Clutch-pack,Open,Open
+4wd-parttime-auto,4WD,Part-time,,2.72,Auto Locking,,Open,Open
+4wd-parttime-manual,4WD,Part-time,,2.72,Manual Locking,,Open,Open
+4wd-nv241,4WD,Part-time,NV241,2.72,Auto Locking,,Open,Open
+4wd-nv246,4WD,Full-time,NV246,2.72,Auto Locking,Clutch-pack,Open,Open
+4wd-bw4419,4WD,Part-time,BW4419,2.64,Auto Locking,,Open,Limited-slip
+4wd-selectable-locker,4WD,Selectable,,2.72,Auto Locking,,Locking,Locking
