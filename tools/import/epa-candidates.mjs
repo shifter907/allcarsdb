@@ -11,6 +11,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { parseCsv, esc, loadCatalogue, matchVehicle, stripSuffixes, loose } from './match-lib.mjs';
+import { resolveSeries } from './series-map.mjs';
 import { DATA, CACHE } from './paths.mjs';
 
 const ALIASES = DATA + 'epa_model_aliases.csv';
@@ -36,7 +37,11 @@ for (const r of epa.slice(1)) {
   if (!Number.isFinite(year)) continue;
   const make = r[ix.make].trim();
   const model = r[ix.model].trim();
+  // Mirrors epa-import's resolve() exactly. If the two disagreed, this sheet
+  // would list names the importer already handles -- or worse, hide ones it
+  // does not.
   if (matchVehicle(cat, make, model, String(year))) continue;
+  if (resolveSeries(cat, make, model, String(year))) continue;
   if (confirmed.has(`${make.toLowerCase()}|${model.toLowerCase()}`)) continue;
 
   const key = `${make}|${model}`;

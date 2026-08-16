@@ -103,6 +103,9 @@ export const SERIES_RULES = [
   // rather than being claimed as a pickup by the ^[CKRV]1500 pattern.
   R('Chevrolet', 'Suburban', '2500', [/\bSUBURBAN\b/i, SERIES.s2500]),
   R('Chevrolet', 'Suburban', '1500', [/\bSUBURBAN\b/i, SERIES.s1500]),
+  // Same as Yukon below: the Tahoe carried no series badge, but EPA files it
+  // as "Tahoe 1500" / "Tahoe C1500".
+  R('Chevrolet', 'Tahoe',    '1500', [/\bTAHOE\b/i, SERIES.s1500]),
 
   // --- Chevrolet pre-Silverado full-size ------------------------------------
   // GM's R/V series (1987-1991) is the carried-over square-body sold beside the
@@ -153,6 +156,10 @@ export const SERIES_RULES = [
   // --- GMC SUVs -------------------------------------------------------------
   R('GMC', 'Yukon XL',  '2500', [/\bYUKON\b/i, /\bXL\b/i, SERIES.s2500]),
   R('GMC', 'Yukon XL',  '1500', [/\bYUKON\b/i, /\bXL\b/i, SERIES.s1500]),
+  // The short-wheelbase Yukon was never badged with a series -- only the XL
+  // was. EPA still files it as "Yukon 1500", so the rule exists purely to let
+  // the single-series collapse resolve it back to the name GM actually used.
+  R('GMC', 'Yukon',     '1500', [/\bYUKON\b/i, SERIES.s1500]),
   R('GMC', 'Suburban',  '2500', [/\bSUBURBAN\b/i, SERIES.s2500]),
   R('GMC', 'Suburban',  '1500', [/\bSUBURBAN\b/i, SERIES.s1500]),
 
