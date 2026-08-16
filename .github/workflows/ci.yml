@@ -51,10 +51,20 @@ jobs:
             const { DatabaseSync } = require('node:sqlite');
             const db = new DatabaseSync('dist/allcars.sqlite', { readOnly: true });
             const q = (s) => db.prepare(s).get();
-            console.log('vehicle-years: ' + q('SELECT COUNT(*) n FROM Year_Make_Model').n);
+            const n = (t) => q('SELECT COUNT(*) n FROM ' + t).n;
+            console.log('vehicle-years: ' + n('Year_Make_Model'));
             console.log('makes:         ' + q('SELECT COUNT(DISTINCT Make) n FROM Year_Make_Model').n);
-            console.log('engines:       ' + q('SELECT COUNT(*) n FROM Engine_Specs').n);
-            console.log('pairings:      ' + q('SELECT COUNT(*) n FROM YMM_Engines').n);
-            console.log('searchable:    ' + q('SELECT COUNT(*) n FROM Search_View').n);
+            console.log('powertrains:   ' + n('Powertrains'));
+            console.log('engines:       ' + n('Engine_Specs'));
+            console.log('motors:        ' + n('Electric_Motors'));
+            console.log('batteries:     ' + n('Batteries'));
+            console.log('pairings:      ' + n('YMM_Powertrains'));
+            console.log('transmissions: ' + n('Transmissions'));
+            console.log('drivetrains:   ' + n('Drivetrains'));
+            console.log('suspensions:   ' + n('Suspensions'));
+            console.log('body configs:  ' + n('Body_Configs'));
+            console.log('trims:         ' + n('Trims'));
+            console.log('builds:        ' + n('Builds'));
+            console.log('searchable:    ' + n('Search_View'));
           " >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

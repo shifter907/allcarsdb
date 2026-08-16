@@ -17,7 +17,13 @@
  *      because silently treating unknown as zero is how users lose trust.
  *
  * Queries run against `Search_View`, the flattened join of Year_Make_Model,
- * Engine_Specs and YMM_Engines. One row is one vehicle-year-plus-engine.
+ * Powertrains and their engines and batteries. One row is one vehicle-year
+ * plus one powertrain.
+ *
+ * Fields whose columns live elsewhere -- bodies, trims, configurations -- are
+ * reached by a correlated EXISTS instead of being joined in, because each is
+ * one-to-many against a vehicle-year and two of those in one view multiply
+ * against each other. See SOURCES in fields.ts.
  */
 
 import {
