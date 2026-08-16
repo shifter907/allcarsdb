@@ -1,695 +1,38 @@
 Make,Model,Year,Powertrain_Ref
-Mazda,MX-5 Miata,2019,pt-mazda-skyactivg-2.0
-Porsche,911,2020,pt-porsche-9a2evo-3.0tt
-Porsche,911,2018,pt-porsche-9a1-4.0
-Toyota,GR Supra,2021,pt-toyota-b58-3.0t
-Honda,S2000,2000,pt-honda-f20c-2.0
-Subaru,WRX,2018,pt-subaru-fa20dit-2.0t
-Ford,Mustang,2020,pt-ford-coyote-gen3-5.0
-Chevrolet,Corvette,2020,pt-chevrolet-lt2-6.2-early
-Chevrolet,Corvette,2021,pt-chevrolet-lt2-6.2-early
-Chevrolet,Corvette,2022,pt-chevrolet-lt2-6.2-early
-Chevrolet,Corvette,2023,pt-chevrolet-lt2-6.2-early
-Chevrolet,Corvette,2024,pt-chevrolet-lt2-6.2-late
-Chevrolet,Corvette,2025,pt-chevrolet-lt2-6.2-late
-BMW,M3,2022,pt-bmw-s58-3.0tt
-Nissan,GT-R,2020,pt-nissan-vr38dett-3.8tt
-Volkswagen,Golf GTI,2017,pt-vw-ea888gen3-2.0t
-Honda,Civic Type R,2018,pt-honda-k20c1-2.0t
-Toyota,Supra,1994,pt-toyota-2jzgte-3.0tt
-Nissan,Skyline GT-R,1999,pt-nissan-rb26dett-2.6tt
-Mitsubishi,Lancer Evolution,2006,pt-mitsubishi-4g63-2.0t
-Subaru,Impreza WRX STI,2006,pt-subaru-ej257-2.5t
-Dodge,Viper,2013,pt-dodge-viper-8.4-v10
-Dodge,Challenger,2015,pt-dodge-hellcat-6.2sc
-BMW,M3,2003,pt-bmw-s54-3.2
-Audi,R8,2017,pt-audi-r8-5.2fsi-v10
-Ferrari,458 Italia,2011,pt-ferrari-f136-4.5
-Lamborghini,Huracan,2015,pt-lamborghini-huracan-5.2
-McLaren,720S,2018,pt-mclaren-m840t-4.0tt
-Toyota,Corolla GT-S,1985,pt-toyota-4age-1.6
 Acura,NSX,1991,pt-acura-c30a-3.0
-Ford,GT,2017,pt-ford-ecoboost-3.5tt-gt
-Toyota,Camry,2020,pt-toyota-a25afks-2.5
-Honda,Accord,2018,pt-honda-l15b7-1.5t
+Audi,R8,2017,pt-audi-r8-5.2fsi-v10
 Audi,TT RS,2018,pt-audi-2.5tfsi-i5
-Datsun,240Z,1970,pt-datsun-l24-2.4
 BMW,2002,1972,pt-bmw-m10-2.0
-Porsche,356,1955,pt-porsche-356-1.6
-Jaguar,E-Type,1961,pt-jaguar-xk-3.8
-Mercedes-Benz,300SL,1955,pt-mercedes-m198-3.0
-Chevrolet,Bel Air,1955,pt-chevrolet-265-v8
-Pontiac,GTO,1966,pt-pontiac-389-v8
-Buick,Grand National,1987,pt-buick-lc2-3.8t
-Ford,Mustang,1965,pt-ford-289-4.7
 BMW,M3,1988,pt-bmw-s14-2.3
-Mazda,RX-7,1993,pt-mazda-13brew-1.3tt
-Nissan,300ZX,1990,pt-nissan-vg30dett-3.0tt
-Toyota,Celica GT-Four,1990,pt-toyota-3sgte-2.0t
-Honda,Integra Type R,1997,pt-honda-b18c5-1.8
-Lexus,LFA,2011,pt-lexus-1lrgue-4.8
-McLaren,F1,1994,pt-mclaren-s70-2-6.1
-Ferrari,F355,1995,pt-ferrari-f129-3.5
-Ferrari,Testarossa,1986,pt-ferrari-flat12-4.9
-Lamborghini,Countach,1985,pt-lamborghini-v12qv-5.2
-Shelby,Cobra,1965,pt-ford-427-sideoiler
-Porsche,944,1986,pt-porsche-944-2.5
-Porsche,928,1985,pt-porsche-928-4.7
-Volvo,850 T5,1995,pt-volvo-b5234t-2.3t
-Saab,900 Turbo,1985,pt-saab-b202-2.0t
-Mercedes-Benz,190E 2.3-16,1986,pt-mercedes-m102-2.3-16
-Chevrolet,Corvette,1997,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,1998,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,1999,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,2000,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,2001,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,2002,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,2003,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Corvette,2004,pt-chevrolet-ls1-5.7-vette
-Chevrolet,Camaro,1998,pt-chevrolet-ls1-5.7-fbody
-Chevrolet,Camaro,1999,pt-chevrolet-ls1-5.7-fbody
-Chevrolet,Camaro,2000,pt-chevrolet-ls1-5.7-fbody
-Chevrolet,Camaro,2001,pt-chevrolet-ls1-5.7-fbody
-Chevrolet,Camaro,2002,pt-chevrolet-ls1-5.7-fbody
-Pontiac,Firebird,1998,pt-chevrolet-ls1-5.7-fbody
-Pontiac,Firebird,1999,pt-chevrolet-ls1-5.7-fbody
-Pontiac,Firebird,2000,pt-chevrolet-ls1-5.7-fbody
-Pontiac,Firebird,2001,pt-chevrolet-ls1-5.7-fbody
-Pontiac,Firebird,2002,pt-chevrolet-ls1-5.7-fbody
-Chevrolet,Corvette,2001,pt-chevrolet-ls6-5.7
-Chevrolet,Corvette,2002,pt-chevrolet-ls6-5.7
-Chevrolet,Corvette,2003,pt-chevrolet-ls6-5.7
-Chevrolet,Corvette,2004,pt-chevrolet-ls6-5.7
-Chevrolet,Corvette,2005,pt-chevrolet-ls2-6.0
-Chevrolet,Corvette,2006,pt-chevrolet-ls2-6.0
-Chevrolet,Corvette,2007,pt-chevrolet-ls2-6.0
-Pontiac,GTO,2004,pt-chevrolet-ls1-5.7-gto
-Pontiac,GTO,2005,pt-chevrolet-ls2-6.0
-Pontiac,GTO,2006,pt-chevrolet-ls2-6.0
-Chevrolet,Trailblazer,2006,pt-chevrolet-ls2-6.0
-Chevrolet,Trailblazer,2007,pt-chevrolet-ls2-6.0
-Chevrolet,Trailblazer,2008,pt-chevrolet-ls2-6.0
-Chevrolet,Trailblazer,2009,pt-chevrolet-ls2-6.0
-Pontiac,G8,2008,pt-chevrolet-l76-6.0
-Pontiac,G8,2009,pt-chevrolet-l76-6.0
-Chevrolet,Corvette,2008,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Corvette,2009,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Corvette,2010,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Corvette,2011,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Corvette,2012,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Corvette,2013,pt-chevrolet-ls3-6.2-vette
-Chevrolet,Camaro,2010,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2011,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2012,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2013,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2014,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2015,pt-chevrolet-ls3-6.2-camaro
-Chevrolet,Camaro,2010,pt-chevrolet-l99-6.2
-Chevrolet,Camaro,2011,pt-chevrolet-l99-6.2
-Chevrolet,Camaro,2012,pt-chevrolet-l99-6.2
-Chevrolet,Camaro,2013,pt-chevrolet-l99-6.2
-Chevrolet,Camaro,2014,pt-chevrolet-l99-6.2
-Chevrolet,Camaro,2015,pt-chevrolet-l99-6.2
-Chevrolet,Corvette,2006,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2007,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2008,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2009,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2010,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2011,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2012,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2013,pt-chevrolet-ls7-7.0
-Chevrolet,Corvette,2009,pt-chevrolet-ls9-6.2sc
-Chevrolet,Corvette,2010,pt-chevrolet-ls9-6.2sc
-Chevrolet,Corvette,2011,pt-chevrolet-ls9-6.2sc
-Chevrolet,Corvette,2012,pt-chevrolet-ls9-6.2sc
-Chevrolet,Corvette,2013,pt-chevrolet-ls9-6.2sc
+BMW,M3,2003,pt-bmw-s54-3.2
+BMW,M3,2022,pt-bmw-s58-3.0tt
+Buick,Grand National,1987,pt-buick-lc2-3.8t
+Buick,LaCrosse,2008,pt-chevrolet-ls4-5.3
+Buick,LaCrosse,2009,pt-chevrolet-ls4-5.3
+Buick,Rainier,2004,pt-chevrolet-lm4-5.3
+Buick,Rainier,2005,pt-chevrolet-lh6-5.3
+Buick,Rainier,2006,pt-chevrolet-lh6-5.3
+Buick,Rainier,2007,pt-chevrolet-lh6-5.3
 Cadillac,CTS-V,2009,pt-chevrolet-lsa-6.2sc-cts
-Chevrolet,Camaro,2012,pt-chevrolet-lsa-6.2sc-zl1
-Chevrolet,Camaro,2013,pt-chevrolet-lsa-6.2sc-zl1
-Chevrolet,Camaro,2014,pt-chevrolet-lsa-6.2sc-zl1
-Chevrolet,Camaro,2015,pt-chevrolet-lsa-6.2sc-zl1
-Chevrolet,Corvette Stingray,2014,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2014,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2015,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2016,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2017,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2018,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Corvette,2019,pt-chevrolet-lt1-6.2-vette
-Chevrolet,Camaro,2016,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2017,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2018,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2019,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2020,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2021,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2022,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Camaro,2023,pt-chevrolet-lt1-6.2-camaro
-Chevrolet,Corvette,2015,pt-chevrolet-lt4-6.2sc
-Chevrolet,Corvette,2016,pt-chevrolet-lt4-6.2sc
-Chevrolet,Corvette,2017,pt-chevrolet-lt4-6.2sc
-Chevrolet,Corvette,2018,pt-chevrolet-lt4-6.2sc
-Chevrolet,Corvette,2019,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2017,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2018,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2019,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2020,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2021,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2022,pt-chevrolet-lt4-6.2sc
-Chevrolet,Camaro,2023,pt-chevrolet-lt4-6.2sc
-Ford,F-150,2011,pt-ford-ecoboost-3.5-f150
-Ford,F-150,2012,pt-ford-ecoboost-3.5-f150
-Ford,F-150,2013,pt-ford-ecoboost-3.5-f150
-Ford,F-150,2014,pt-ford-ecoboost-3.5-f150
-Ford,F-150,2015,pt-ford-ecoboost-3.5-f150
-Ford,F-150,2016,pt-ford-ecoboost-3.5-f150
-Ford,Taurus,2010,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2011,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2012,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2013,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2014,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2015,pt-ford-ecoboost-3.5-sho
-Ford,Taurus,2016,pt-ford-ecoboost-3.5-sho
-Ford,Explorer,2013,pt-ford-ecoboost-3.5-sho
-Ford,Explorer,2014,pt-ford-ecoboost-3.5-sho
-Ford,Explorer,2015,pt-ford-ecoboost-3.5-sho
-Ford,F-150,2017,pt-ford-ecoboost-3.5-f150gen2
-Ford,F-150,2018,pt-ford-ecoboost-3.5-f150gen2
-Ford,F-150,2019,pt-ford-ecoboost-3.5-f150gen2
-Ford,F-150,2020,pt-ford-ecoboost-3.5-f150gen2
-Ford,F-150,2017,pt-ford-ecoboost-3.5-raptor
-Ford,F-150,2018,pt-ford-ecoboost-3.5-raptor
-Ford,F-150,2019,pt-ford-ecoboost-3.5-raptor
-Ford,F-150,2020,pt-ford-ecoboost-3.5-raptor
-Ford,GT,2018,pt-ford-ecoboost-3.5tt-gt
-Ford,GT,2019,pt-ford-ecoboost-3.5tt-gt
-Ford,GT,2020,pt-ford-ecoboost-3.5tt-gt
-Ford,GT,2021,pt-ford-ecoboost-3.5tt-gt
-Ford,GT,2022,pt-ford-ecoboost-3.5tt-gt
-Ford,F-150,2015,pt-ford-ecoboost-2.7-gen1
-Ford,F-150,2016,pt-ford-ecoboost-2.7-gen1
-Ford,F-150,2017,pt-ford-ecoboost-2.7-gen1
-Ford,F-150,2018,pt-ford-ecoboost-2.7-gen2
-Ford,F-150,2019,pt-ford-ecoboost-2.7-gen2
-Ford,F-150,2020,pt-ford-ecoboost-2.7-gen2
-Ford,Mustang,2015,pt-ford-ecoboost-2.3-mustang
-Ford,Mustang,2016,pt-ford-ecoboost-2.3-mustang
-Ford,Mustang,2017,pt-ford-ecoboost-2.3-mustang
-Ford,Focus ST,2013,pt-ford-ecoboost-2.0-focusst
-Ford,Focus,2014,pt-ford-ecoboost-2.0-focusst
-Ford,Focus,2015,pt-ford-ecoboost-2.0-focusst
-Ford,Focus,2016,pt-ford-ecoboost-2.0-focusst
-Ford,Focus,2017,pt-ford-ecoboost-2.0-focusst
-Ford,Focus,2018,pt-ford-ecoboost-2.0-focusst
-Chevrolet,Silverado,1999,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2000,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2001,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2002,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2003,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2004,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2005,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2006,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,2007,pt-chevrolet-lr4-4.8
-GMC,Sierra,1999,pt-chevrolet-lr4-4.8
-GMC,Sierra,2000,pt-chevrolet-lr4-4.8
-GMC,Sierra,2001,pt-chevrolet-lr4-4.8
-GMC,Sierra,2002,pt-chevrolet-lr4-4.8
-GMC,Sierra,2003,pt-chevrolet-lr4-4.8
-GMC,Sierra,2004,pt-chevrolet-lr4-4.8
-GMC,Sierra,2005,pt-chevrolet-lr4-4.8
-GMC,Sierra,2006,pt-chevrolet-lr4-4.8
-GMC,Sierra,2007,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2000,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2001,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2002,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2003,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2004,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2005,pt-chevrolet-lr4-4.8
-Chevrolet,Tahoe,2006,pt-chevrolet-lr4-4.8
-GMC,Yukon,2000,pt-chevrolet-lr4-4.8
-GMC,Yukon,2001,pt-chevrolet-lr4-4.8
-GMC,Yukon,2002,pt-chevrolet-lr4-4.8
-GMC,Yukon,2003,pt-chevrolet-lr4-4.8
-GMC,Yukon,2004,pt-chevrolet-lr4-4.8
-GMC,Yukon,2005,pt-chevrolet-lr4-4.8
-GMC,Yukon,2006,pt-chevrolet-lr4-4.8
-Chevrolet,Express,2003,pt-chevrolet-lr4-4.8
-Chevrolet,Express,2004,pt-chevrolet-lr4-4.8
-Chevrolet,Express,2005,pt-chevrolet-lr4-4.8
-Chevrolet,Express,2006,pt-chevrolet-lr4-4.8
-Chevrolet,Express,2007,pt-chevrolet-lr4-4.8
-GMC,Savana,2003,pt-chevrolet-lr4-4.8
-GMC,Savana,2004,pt-chevrolet-lr4-4.8
-GMC,Savana,2005,pt-chevrolet-lr4-4.8
-GMC,Savana,2006,pt-chevrolet-lr4-4.8
-GMC,Savana,2007,pt-chevrolet-lr4-4.8
-Chevrolet,Silverado,1999,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2000,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2001,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2002,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2003,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2004,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2006,pt-chevrolet-lm7-5.3
-Chevrolet,Silverado,2007,pt-chevrolet-lm7-5.3
-GMC,Sierra,1999,pt-chevrolet-lm7-5.3
-GMC,Sierra,2000,pt-chevrolet-lm7-5.3
-GMC,Sierra,2001,pt-chevrolet-lm7-5.3
-GMC,Sierra,2002,pt-chevrolet-lm7-5.3
-GMC,Sierra,2003,pt-chevrolet-lm7-5.3
-GMC,Sierra,2004,pt-chevrolet-lm7-5.3
-GMC,Sierra,2005,pt-chevrolet-lm7-5.3
-GMC,Sierra,2006,pt-chevrolet-lm7-5.3
-GMC,Sierra,2007,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2000,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2001,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2002,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2003,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2004,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Suburban,2006,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2000,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2001,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2002,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2003,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2004,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2005,pt-chevrolet-lm7-5.3
-GMC,Yukon XL,2006,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2000,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2001,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2002,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2003,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2004,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2006,pt-chevrolet-lm7-5.3
-GMC,Yukon,2000,pt-chevrolet-lm7-5.3
-GMC,Yukon,2001,pt-chevrolet-lm7-5.3
-GMC,Yukon,2002,pt-chevrolet-lm7-5.3
-GMC,Yukon,2003,pt-chevrolet-lm7-5.3
-GMC,Yukon,2004,pt-chevrolet-lm7-5.3
-GMC,Yukon,2005,pt-chevrolet-lm7-5.3
-GMC,Yukon,2006,pt-chevrolet-lm7-5.3
-Chevrolet,Avalanche,2002,pt-chevrolet-lm7-5.3
-Chevrolet,Avalanche,2003,pt-chevrolet-lm7-5.3
-Chevrolet,Avalanche,2004,pt-chevrolet-lm7-5.3
-Chevrolet,Avalanche,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Avalanche,2006,pt-chevrolet-lm7-5.3
 Cadillac,Escalade,2002,pt-chevrolet-lm7-5.3
-Cadillac,Escalade,2003,pt-chevrolet-lm7-5.3
-Cadillac,Escalade,2004,pt-chevrolet-lm7-5.3
-Cadillac,Escalade,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Express,2003,pt-chevrolet-lm7-5.3
-Chevrolet,Express,2004,pt-chevrolet-lm7-5.3
-Chevrolet,Express,2005,pt-chevrolet-lm7-5.3
-Chevrolet,Express,2006,pt-chevrolet-lm7-5.3
-Chevrolet,Express,2007,pt-chevrolet-lm7-5.3
-GMC,Savana,2003,pt-chevrolet-lm7-5.3
-GMC,Savana,2004,pt-chevrolet-lm7-5.3
-GMC,Savana,2005,pt-chevrolet-lm7-5.3
-GMC,Savana,2006,pt-chevrolet-lm7-5.3
-GMC,Savana,2007,pt-chevrolet-lm7-5.3
-Chevrolet,Tahoe,2002,pt-chevrolet-l59-5.3
-Chevrolet,Tahoe,2003,pt-chevrolet-l59-5.3
-Chevrolet,Tahoe,2004,pt-chevrolet-l59-5.3
-Chevrolet,Tahoe,2005,pt-chevrolet-l59-5.3
-Chevrolet,Tahoe,2006,pt-chevrolet-l59-5.3
-GMC,Yukon,2002,pt-chevrolet-l59-5.3
-GMC,Yukon,2003,pt-chevrolet-l59-5.3
-GMC,Yukon,2004,pt-chevrolet-l59-5.3
-GMC,Yukon,2005,pt-chevrolet-l59-5.3
-GMC,Yukon,2006,pt-chevrolet-l59-5.3
-Chevrolet,Suburban,2002,pt-chevrolet-l59-5.3
-Chevrolet,Suburban,2003,pt-chevrolet-l59-5.3
-Chevrolet,Suburban,2004,pt-chevrolet-l59-5.3
-Chevrolet,Suburban,2005,pt-chevrolet-l59-5.3
-Chevrolet,Suburban,2006,pt-chevrolet-l59-5.3
-GMC,Yukon XL,2002,pt-chevrolet-l59-5.3
-GMC,Yukon XL,2003,pt-chevrolet-l59-5.3
-GMC,Yukon XL,2004,pt-chevrolet-l59-5.3
-GMC,Yukon XL,2005,pt-chevrolet-l59-5.3
-GMC,Yukon XL,2006,pt-chevrolet-l59-5.3
-Chevrolet,Avalanche,2005,pt-chevrolet-l59-5.3
-Chevrolet,Avalanche,2006,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2002,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2003,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2004,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2005,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2006,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,2007,pt-chevrolet-l59-5.3
-GMC,Sierra,2002,pt-chevrolet-l59-5.3
-GMC,Sierra,2003,pt-chevrolet-l59-5.3
-GMC,Sierra,2004,pt-chevrolet-l59-5.3
-GMC,Sierra,2005,pt-chevrolet-l59-5.3
-GMC,Sierra,2006,pt-chevrolet-l59-5.3
-GMC,Sierra,2007,pt-chevrolet-l59-5.3
-Chevrolet,Silverado,1999,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2000,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2001,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2002,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2003,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2004,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2005,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2006,pt-chevrolet-lq4-6.0
-Chevrolet,Silverado,2007,pt-chevrolet-lq4-6.0
-GMC,Sierra,1999,pt-chevrolet-lq4-6.0
-GMC,Sierra,2000,pt-chevrolet-lq4-6.0
-GMC,Sierra,2001,pt-chevrolet-lq4-6.0
-GMC,Sierra,2002,pt-chevrolet-lq4-6.0
-GMC,Sierra,2003,pt-chevrolet-lq4-6.0
-GMC,Sierra,2004,pt-chevrolet-lq4-6.0
-GMC,Sierra,2005,pt-chevrolet-lq4-6.0
-GMC,Sierra,2006,pt-chevrolet-lq4-6.0
-GMC,Sierra,2007,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2000,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2001,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2002,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2003,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2004,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2005,pt-chevrolet-lq4-6.0
-Chevrolet,Suburban,2006,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2000,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2001,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2002,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2003,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2004,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2005,pt-chevrolet-lq4-6.0
-GMC,Yukon XL,2006,pt-chevrolet-lq4-6.0
-Hummer,H2,2003,pt-chevrolet-lq4-6.0
-Hummer,H2,2004,pt-chevrolet-lq4-6.0
-Hummer,H2,2005,pt-chevrolet-lq4-6.0
-Hummer,H2,2006,pt-chevrolet-lq4-6.0
-Hummer,H2,2007,pt-chevrolet-lq4-6.0
-Chevrolet,Express,2003,pt-chevrolet-lq4-6.0
-Chevrolet,Express,2004,pt-chevrolet-lq4-6.0
-Chevrolet,Express,2005,pt-chevrolet-lq4-6.0
-Chevrolet,Express,2006,pt-chevrolet-lq4-6.0
-Chevrolet,Express,2007,pt-chevrolet-lq4-6.0
-GMC,Savana,2003,pt-chevrolet-lq4-6.0
-GMC,Savana,2004,pt-chevrolet-lq4-6.0
-GMC,Savana,2005,pt-chevrolet-lq4-6.0
-GMC,Savana,2006,pt-chevrolet-lq4-6.0
-GMC,Savana,2007,pt-chevrolet-lq4-6.0
 Cadillac,Escalade,2002,pt-chevrolet-lq9-6.0
+Cadillac,Escalade,2003,pt-chevrolet-lm7-5.3
 Cadillac,Escalade,2003,pt-chevrolet-lq9-6.0
+Cadillac,Escalade,2004,pt-chevrolet-lm7-5.3
 Cadillac,Escalade,2004,pt-chevrolet-lq9-6.0
+Cadillac,Escalade,2005,pt-chevrolet-lm7-5.3
 Cadillac,Escalade,2005,pt-chevrolet-lq9-6.0
 Cadillac,Escalade,2006,pt-chevrolet-lq9-6.0
-Chevrolet,Silverado,2003,pt-chevrolet-lq9-6.0
-Chevrolet,Silverado,2004,pt-chevrolet-lq9-6.0
-Chevrolet,Silverado,2005,pt-chevrolet-lq9-6.0
-Chevrolet,Silverado,2006,pt-chevrolet-lq9-6.0
-Chevrolet,Silverado,2007,pt-chevrolet-lq9-6.0
-GMC,Sierra,2005,pt-chevrolet-lq9-6.0
-GMC,Sierra,2006,pt-chevrolet-lq9-6.0
-Chevrolet,Trailblazer,2003,pt-chevrolet-lm4-5.3
-Chevrolet,Trailblazer,2004,pt-chevrolet-lm4-5.3
-Chevrolet,Trailblazer,2005,pt-chevrolet-lm4-5.3
-GMC,Envoy,2003,pt-chevrolet-lm4-5.3
-GMC,Envoy,2004,pt-chevrolet-lm4-5.3
-Chevrolet,SSR,2003,pt-chevrolet-lm4-5.3
-Chevrolet,SSR,2004,pt-chevrolet-lm4-5.3
-Buick,Rainier,2004,pt-chevrolet-lm4-5.3
-Chevrolet,Silverado,2005,pt-chevrolet-l33-5.3
-Chevrolet,Silverado,2006,pt-chevrolet-l33-5.3
-Chevrolet,Silverado,2007,pt-chevrolet-l33-5.3
-GMC,Sierra,2005,pt-chevrolet-l33-5.3
-GMC,Sierra,2006,pt-chevrolet-l33-5.3
-GMC,Sierra,2007,pt-chevrolet-l33-5.3
-Chevrolet,Suburban,2007,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2008,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2009,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2010,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2011,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2012,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2013,pt-chevrolet-ly6-6.0
-GMC,Yukon XL,2007,pt-chevrolet-ly6-6.0
-GMC,Yukon XL,2008,pt-chevrolet-ly6-6.0
-GMC,Yukon XL,2009,pt-chevrolet-ly6-6.0
-GMC,Yukon XL,2010,pt-chevrolet-ly6-6.0
-GMC,Yukon XL,2011,pt-chevrolet-ly6-6.0
-Chevrolet,Express,2008,pt-chevrolet-ly6-6.0
-Chevrolet,Express,2009,pt-chevrolet-ly6-6.0
-GMC,Savana,2008,pt-chevrolet-ly6-6.0
-GMC,Savana,2009,pt-chevrolet-ly6-6.0
-Chevrolet,Suburban,2010,pt-chevrolet-l96-6.0
-Chevrolet,Suburban,2011,pt-chevrolet-l96-6.0
-Chevrolet,Suburban,2012,pt-chevrolet-l96-6.0
-Chevrolet,Suburban,2013,pt-chevrolet-l96-6.0
-GMC,Yukon XL,2010,pt-chevrolet-l96-6.0
-GMC,Yukon XL,2011,pt-chevrolet-l96-6.0
-Chevrolet,Express,2010,pt-chevrolet-l96-6.0
-Chevrolet,Express,2011,pt-chevrolet-l96-6.0
-Chevrolet,Express,2012,pt-chevrolet-l96-6.0
-Chevrolet,Express,2013,pt-chevrolet-l96-6.0
-Chevrolet,Express,2014,pt-chevrolet-l96-6.0
-Chevrolet,Express,2015,pt-chevrolet-l96-6.0
-Chevrolet,Express,2016,pt-chevrolet-l96-6.0
-Chevrolet,Express,2017,pt-chevrolet-l96-6.0
-Chevrolet,Express,2018,pt-chevrolet-l96-6.0
-Chevrolet,Express,2019,pt-chevrolet-l96-6.0
-Chevrolet,Express,2020,pt-chevrolet-l96-6.0
-GMC,Savana,2010,pt-chevrolet-l96-6.0
-GMC,Savana,2011,pt-chevrolet-l96-6.0
-GMC,Savana,2012,pt-chevrolet-l96-6.0
-GMC,Savana,2013,pt-chevrolet-l96-6.0
-GMC,Savana,2014,pt-chevrolet-l96-6.0
-GMC,Savana,2015,pt-chevrolet-l96-6.0
-GMC,Savana,2016,pt-chevrolet-l96-6.0
-GMC,Savana,2017,pt-chevrolet-l96-6.0
-GMC,Savana,2018,pt-chevrolet-l96-6.0
-GMC,Savana,2019,pt-chevrolet-l96-6.0
-GMC,Savana,2020,pt-chevrolet-l96-6.0
-Chevrolet,Tahoe,2008,pt-chevrolet-lfa-6.0hy
-Chevrolet,Tahoe,2009,pt-chevrolet-lfa-6.0hy
-GMC,Yukon,2008,pt-chevrolet-lfa-6.0hy
-GMC,Yukon,2009,pt-chevrolet-lfa-6.0hy
 Cadillac,Escalade,2008,pt-chevrolet-lfa-6.0hy
 Cadillac,Escalade,2009,pt-chevrolet-lfa-6.0hy
-Chevrolet,Silverado,2008,pt-chevrolet-lfa-6.0hy
-Chevrolet,Silverado,2009,pt-chevrolet-lfa-6.0hy
-GMC,Sierra,2008,pt-chevrolet-lfa-6.0hy
-GMC,Sierra,2009,pt-chevrolet-lfa-6.0hy
-Chevrolet,Tahoe,2010,pt-chevrolet-lz1-6.0hy
-Chevrolet,Tahoe,2011,pt-chevrolet-lz1-6.0hy
-Chevrolet,Tahoe,2012,pt-chevrolet-lz1-6.0hy
-Chevrolet,Tahoe,2013,pt-chevrolet-lz1-6.0hy
-GMC,Yukon,2010,pt-chevrolet-lz1-6.0hy
-GMC,Yukon,2011,pt-chevrolet-lz1-6.0hy
-GMC,Yukon,2012,pt-chevrolet-lz1-6.0hy
-GMC,Yukon,2013,pt-chevrolet-lz1-6.0hy
 Cadillac,Escalade,2010,pt-chevrolet-lz1-6.0hy
 Cadillac,Escalade,2011,pt-chevrolet-lz1-6.0hy
 Cadillac,Escalade,2012,pt-chevrolet-lz1-6.0hy
 Cadillac,Escalade,2013,pt-chevrolet-lz1-6.0hy
-Chevrolet,Silverado,2010,pt-chevrolet-lz1-6.0hy
-Chevrolet,Silverado,2011,pt-chevrolet-lz1-6.0hy
-Chevrolet,Silverado,2012,pt-chevrolet-lz1-6.0hy
-Chevrolet,Silverado,2013,pt-chevrolet-lz1-6.0hy
-GMC,Sierra,2010,pt-chevrolet-lz1-6.0hy
-GMC,Sierra,2011,pt-chevrolet-lz1-6.0hy
-GMC,Sierra,2012,pt-chevrolet-lz1-6.0hy
-GMC,Sierra,2013,pt-chevrolet-lz1-6.0hy
-Chevrolet,Express,2008,pt-chevrolet-ly2-4.8
-Chevrolet,Express,2009,pt-chevrolet-ly2-4.8
-GMC,Savana,2008,pt-chevrolet-ly2-4.8
-GMC,Savana,2009,pt-chevrolet-ly2-4.8
-Chevrolet,Silverado,2007,pt-chevrolet-ly2-4.8
-Chevrolet,Silverado,2008,pt-chevrolet-ly2-4.8
-Chevrolet,Silverado,2009,pt-chevrolet-ly2-4.8
-Chevrolet,Tahoe,2007,pt-chevrolet-ly2-4.8
-Chevrolet,Tahoe,2008,pt-chevrolet-ly2-4.8
-Chevrolet,Tahoe,2009,pt-chevrolet-ly2-4.8
-GMC,Sierra,2007,pt-chevrolet-ly2-4.8
-GMC,Sierra,2008,pt-chevrolet-ly2-4.8
-GMC,Sierra,2009,pt-chevrolet-ly2-4.8
-GMC,Yukon,2007,pt-chevrolet-ly2-4.8
-GMC,Yukon,2008,pt-chevrolet-ly2-4.8
-GMC,Yukon,2009,pt-chevrolet-ly2-4.8
-Chevrolet,Express,2010,pt-chevrolet-l20-4.8
-Chevrolet,Express,2011,pt-chevrolet-l20-4.8
-Chevrolet,Express,2012,pt-chevrolet-l20-4.8
-Chevrolet,Express,2013,pt-chevrolet-l20-4.8
-Chevrolet,Express,2014,pt-chevrolet-l20-4.8
-Chevrolet,Express,2015,pt-chevrolet-l20-4.8
-Chevrolet,Express,2016,pt-chevrolet-l20-4.8
-Chevrolet,Express,2017,pt-chevrolet-l20-4.8
-GMC,Savana,2010,pt-chevrolet-l20-4.8
-GMC,Savana,2011,pt-chevrolet-l20-4.8
-GMC,Savana,2012,pt-chevrolet-l20-4.8
-GMC,Savana,2013,pt-chevrolet-l20-4.8
-GMC,Savana,2014,pt-chevrolet-l20-4.8
-GMC,Savana,2015,pt-chevrolet-l20-4.8
-GMC,Savana,2016,pt-chevrolet-l20-4.8
-GMC,Savana,2017,pt-chevrolet-l20-4.8
-Chevrolet,Silverado,2010,pt-chevrolet-l20-4.8
-Chevrolet,Silverado,2011,pt-chevrolet-l20-4.8
-Chevrolet,Silverado,2012,pt-chevrolet-l20-4.8
-Chevrolet,Silverado,2013,pt-chevrolet-l20-4.8
-GMC,Sierra,2010,pt-chevrolet-l20-4.8
-GMC,Sierra,2011,pt-chevrolet-l20-4.8
-GMC,Sierra,2012,pt-chevrolet-l20-4.8
-GMC,Sierra,2013,pt-chevrolet-l20-4.8
-Chevrolet,Trailblazer,2005,pt-chevrolet-lh6-5.3
-Chevrolet,Trailblazer,2006,pt-chevrolet-lh6-5.3
-Chevrolet,Trailblazer,2007,pt-chevrolet-lh6-5.3
-Chevrolet,Trailblazer,2008,pt-chevrolet-lh6-5.3
-Chevrolet,Trailblazer,2009,pt-chevrolet-lh6-5.3
-GMC,Envoy,2005,pt-chevrolet-lh6-5.3
-GMC,Envoy,2006,pt-chevrolet-lh6-5.3
-GMC,Envoy,2007,pt-chevrolet-lh6-5.3
-GMC,Envoy,2008,pt-chevrolet-lh6-5.3
-GMC,Envoy,2009,pt-chevrolet-lh6-5.3
-Buick,Rainier,2005,pt-chevrolet-lh6-5.3
-Buick,Rainier,2006,pt-chevrolet-lh6-5.3
-Buick,Rainier,2007,pt-chevrolet-lh6-5.3
-Saab,9-7X,2005,pt-chevrolet-lh6-5.3
-Saab,9-7X,2006,pt-chevrolet-lh6-5.3
-Saab,9-7X,2007,pt-chevrolet-lh6-5.3
-Saab,9-7X,2008,pt-chevrolet-lh6-5.3
-Saab,9-7X,2009,pt-chevrolet-lh6-5.3
-Isuzu,Ascender,2005,pt-chevrolet-lh6-5.3
-Isuzu,Ascender,2006,pt-chevrolet-lh6-5.3
-Isuzu,Ascender,2007,pt-chevrolet-lh6-5.3
-Chevrolet,Silverado,2007,pt-chevrolet-lh6-5.3
-Chevrolet,Silverado,2008,pt-chevrolet-lh6-5.3
-Chevrolet,Silverado,2009,pt-chevrolet-lh6-5.3
-GMC,Sierra,2007,pt-chevrolet-lh6-5.3
-GMC,Sierra,2008,pt-chevrolet-lh6-5.3
-GMC,Sierra,2009,pt-chevrolet-lh6-5.3
-Pontiac,Grand Prix,2005,pt-chevrolet-ls4-5.3
-Pontiac,Grand Prix,2006,pt-chevrolet-ls4-5.3
-Pontiac,Grand Prix,2007,pt-chevrolet-ls4-5.3
-Pontiac,Grand Prix,2008,pt-chevrolet-ls4-5.3
-Chevrolet,Impala,2006,pt-chevrolet-ls4-5.3
-Chevrolet,Impala,2007,pt-chevrolet-ls4-5.3
-Chevrolet,Impala,2008,pt-chevrolet-ls4-5.3
-Chevrolet,Impala,2009,pt-chevrolet-ls4-5.3
-Chevrolet,Monte Carlo,2006,pt-chevrolet-ls4-5.3
-Chevrolet,Monte Carlo,2007,pt-chevrolet-ls4-5.3
-Buick,LaCrosse,2008,pt-chevrolet-ls4-5.3
-Buick,LaCrosse,2009,pt-chevrolet-ls4-5.3
-Chevrolet,Avalanche,2007,pt-chevrolet-ly5-5.3
-Chevrolet,Avalanche,2008,pt-chevrolet-ly5-5.3
-Chevrolet,Avalanche,2009,pt-chevrolet-ly5-5.3
-Chevrolet,Silverado,2007,pt-chevrolet-ly5-5.3
-Chevrolet,Silverado,2008,pt-chevrolet-ly5-5.3
-Chevrolet,Silverado,2009,pt-chevrolet-ly5-5.3
-Chevrolet,Suburban,2007,pt-chevrolet-ly5-5.3
-Chevrolet,Suburban,2008,pt-chevrolet-ly5-5.3
-Chevrolet,Suburban,2009,pt-chevrolet-ly5-5.3
-Chevrolet,Tahoe,2007,pt-chevrolet-ly5-5.3
-Chevrolet,Tahoe,2008,pt-chevrolet-ly5-5.3
-Chevrolet,Tahoe,2009,pt-chevrolet-ly5-5.3
-GMC,Sierra,2007,pt-chevrolet-ly5-5.3
-GMC,Sierra,2008,pt-chevrolet-ly5-5.3
-GMC,Sierra,2009,pt-chevrolet-ly5-5.3
-GMC,Yukon,2007,pt-chevrolet-ly5-5.3
-GMC,Yukon,2008,pt-chevrolet-ly5-5.3
-GMC,Yukon,2009,pt-chevrolet-ly5-5.3
-GMC,Yukon XL,2007,pt-chevrolet-ly5-5.3
-GMC,Yukon XL,2008,pt-chevrolet-ly5-5.3
-GMC,Yukon XL,2009,pt-chevrolet-ly5-5.3
-Chevrolet,Avalanche,2010,pt-chevrolet-lc9-5.3
-Chevrolet,Avalanche,2011,pt-chevrolet-lc9-5.3
-Chevrolet,Avalanche,2012,pt-chevrolet-lc9-5.3
-Chevrolet,Avalanche,2013,pt-chevrolet-lc9-5.3
-Chevrolet,Silverado,2010,pt-chevrolet-lc9-5.3
-Chevrolet,Silverado,2011,pt-chevrolet-lc9-5.3
-Chevrolet,Silverado,2012,pt-chevrolet-lc9-5.3
-Chevrolet,Silverado,2013,pt-chevrolet-lc9-5.3
-GMC,Sierra,2010,pt-chevrolet-lc9-5.3
-GMC,Sierra,2011,pt-chevrolet-lc9-5.3
-GMC,Sierra,2012,pt-chevrolet-lc9-5.3
-GMC,Sierra,2013,pt-chevrolet-lc9-5.3
-Chevrolet,Suburban,2010,pt-chevrolet-lmg-5.3
-Chevrolet,Suburban,2011,pt-chevrolet-lmg-5.3
-Chevrolet,Suburban,2012,pt-chevrolet-lmg-5.3
-Chevrolet,Suburban,2013,pt-chevrolet-lmg-5.3
-Chevrolet,Suburban,2014,pt-chevrolet-lmg-5.3
-Chevrolet,Tahoe,2010,pt-chevrolet-lmg-5.3
-Chevrolet,Tahoe,2011,pt-chevrolet-lmg-5.3
-Chevrolet,Tahoe,2012,pt-chevrolet-lmg-5.3
-Chevrolet,Tahoe,2013,pt-chevrolet-lmg-5.3
-Chevrolet,Tahoe,2014,pt-chevrolet-lmg-5.3
-GMC,Yukon,2010,pt-chevrolet-lmg-5.3
-GMC,Yukon,2011,pt-chevrolet-lmg-5.3
-GMC,Yukon,2012,pt-chevrolet-lmg-5.3
-GMC,Yukon,2013,pt-chevrolet-lmg-5.3
-GMC,Yukon,2014,pt-chevrolet-lmg-5.3
-GMC,Yukon XL,2010,pt-chevrolet-lmg-5.3
-GMC,Yukon XL,2011,pt-chevrolet-lmg-5.3
-Chevrolet,Silverado,2014,pt-chevrolet-l86-6.2
-Chevrolet,Silverado,2015,pt-chevrolet-l86-6.2
-Chevrolet,Silverado,2016,pt-chevrolet-l86-6.2
-Chevrolet,Silverado,2017,pt-chevrolet-l86-6.2
-Chevrolet,Silverado,2018,pt-chevrolet-l86-6.2
-GMC,Sierra,2014,pt-chevrolet-l86-6.2
-GMC,Sierra,2015,pt-chevrolet-l86-6.2
-GMC,Sierra,2016,pt-chevrolet-l86-6.2
-GMC,Sierra,2017,pt-chevrolet-l86-6.2
-GMC,Sierra,2018,pt-chevrolet-l86-6.2
-Chevrolet,Suburban,2015,pt-chevrolet-l86-6.2
-Chevrolet,Suburban,2016,pt-chevrolet-l86-6.2
-Chevrolet,Suburban,2017,pt-chevrolet-l86-6.2
-Chevrolet,Suburban,2018,pt-chevrolet-l86-6.2
-Chevrolet,Tahoe,2015,pt-chevrolet-l86-6.2
-Chevrolet,Tahoe,2016,pt-chevrolet-l86-6.2
-Chevrolet,Tahoe,2017,pt-chevrolet-l86-6.2
-Chevrolet,Tahoe,2018,pt-chevrolet-l86-6.2
-GMC,Yukon,2015,pt-chevrolet-l86-6.2
-GMC,Yukon,2016,pt-chevrolet-l86-6.2
-GMC,Yukon,2017,pt-chevrolet-l86-6.2
-GMC,Yukon,2018,pt-chevrolet-l86-6.2
-GMC,Yukon XL,2015,pt-chevrolet-l86-6.2
-GMC,Yukon XL,2016,pt-chevrolet-l86-6.2
-GMC,Yukon XL,2017,pt-chevrolet-l86-6.2
-GMC,Yukon XL,2018,pt-chevrolet-l86-6.2
 Cadillac,Escalade,2015,pt-chevrolet-l86-6.2
 Cadillac,Escalade,2016,pt-chevrolet-l86-6.2
 Cadillac,Escalade,2017,pt-chevrolet-l86-6.2
 Cadillac,Escalade,2018,pt-chevrolet-l86-6.2
-Cadillac,Escalade ESV,2017,pt-chevrolet-l86-6.2
-Cadillac,Escalade ESV,2018,pt-chevrolet-l86-6.2
-Chevrolet,Silverado,2019,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2020,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2021,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2022,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2023,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2024,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2025,pt-chevrolet-l87-6.2
-GMC,Sierra,2019,pt-chevrolet-l87-6.2
-GMC,Sierra,2020,pt-chevrolet-l87-6.2
-GMC,Sierra,2021,pt-chevrolet-l87-6.2
-GMC,Sierra,2022,pt-chevrolet-l87-6.2
-GMC,Sierra,2023,pt-chevrolet-l87-6.2
-GMC,Sierra,2024,pt-chevrolet-l87-6.2
-GMC,Sierra,2025,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2019,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2020,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2021,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2022,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2023,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2024,pt-chevrolet-l87-6.2
-Chevrolet,Suburban,2025,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2019,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2020,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2021,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2022,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2023,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2024,pt-chevrolet-l87-6.2
-Chevrolet,Tahoe,2025,pt-chevrolet-l87-6.2
-GMC,Yukon,2019,pt-chevrolet-l87-6.2
-GMC,Yukon,2020,pt-chevrolet-l87-6.2
-GMC,Yukon,2021,pt-chevrolet-l87-6.2
-GMC,Yukon,2022,pt-chevrolet-l87-6.2
-GMC,Yukon,2023,pt-chevrolet-l87-6.2
-GMC,Yukon,2024,pt-chevrolet-l87-6.2
-GMC,Yukon,2025,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2019,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2020,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2021,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2022,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2023,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2024,pt-chevrolet-l87-6.2
-GMC,Yukon XL,2025,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2019,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2020,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2021,pt-chevrolet-l87-6.2
@@ -697,6 +40,8 @@ Cadillac,Escalade,2022,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2023,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2024,pt-chevrolet-l87-6.2
 Cadillac,Escalade,2025,pt-chevrolet-l87-6.2
+Cadillac,Escalade ESV,2017,pt-chevrolet-l86-6.2
+Cadillac,Escalade ESV,2018,pt-chevrolet-l86-6.2
 Cadillac,Escalade ESV,2019,pt-chevrolet-l87-6.2
 Cadillac,Escalade ESV,2020,pt-chevrolet-l87-6.2
 Cadillac,Escalade ESV,2021,pt-chevrolet-l87-6.2
@@ -704,251 +49,57 @@ Cadillac,Escalade ESV,2022,pt-chevrolet-l87-6.2
 Cadillac,Escalade ESV,2023,pt-chevrolet-l87-6.2
 Cadillac,Escalade ESV,2024,pt-chevrolet-l87-6.2
 Cadillac,Escalade ESV,2025,pt-chevrolet-l87-6.2
-Chevrolet,Silverado,2014,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2015,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2016,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2017,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2018,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2019,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2020,pt-chevrolet-l83-5.3
-GMC,Sierra,2014,pt-chevrolet-l83-5.3
-GMC,Sierra,2015,pt-chevrolet-l83-5.3
-GMC,Sierra,2016,pt-chevrolet-l83-5.3
-GMC,Sierra,2017,pt-chevrolet-l83-5.3
-GMC,Sierra,2018,pt-chevrolet-l83-5.3
-GMC,Sierra,2019,pt-chevrolet-l83-5.3
-GMC,Sierra,2020,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2015,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2016,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2017,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2018,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2019,pt-chevrolet-l83-5.3
-Chevrolet,Suburban,2020,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2015,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2016,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2017,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2018,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2019,pt-chevrolet-l83-5.3
-Chevrolet,Tahoe,2020,pt-chevrolet-l83-5.3
-GMC,Yukon,2015,pt-chevrolet-l83-5.3
-GMC,Yukon,2016,pt-chevrolet-l83-5.3
-GMC,Yukon,2017,pt-chevrolet-l83-5.3
-GMC,Yukon,2018,pt-chevrolet-l83-5.3
-GMC,Yukon,2019,pt-chevrolet-l83-5.3
-GMC,Yukon,2020,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2015,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2016,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2017,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2018,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2019,pt-chevrolet-l83-5.3
-GMC,Yukon XL,2020,pt-chevrolet-l83-5.3
-Chevrolet,Silverado,2016,pt-chevrolet-l8b-5.3
-Chevrolet,Silverado,2017,pt-chevrolet-l8b-5.3
-Chevrolet,Silverado,2018,pt-chevrolet-l8b-5.3
-GMC,Sierra,2016,pt-chevrolet-l8b-5.3
-GMC,Sierra,2017,pt-chevrolet-l8b-5.3
-GMC,Sierra,2018,pt-chevrolet-l8b-5.3
-Chevrolet,Silverado,2019,pt-chevrolet-l82-5.3
-Chevrolet,Silverado,2020,pt-chevrolet-l82-5.3
-Chevrolet,Silverado,2021,pt-chevrolet-l82-5.3
-GMC,Sierra,2019,pt-chevrolet-l82-5.3
-GMC,Sierra,2020,pt-chevrolet-l82-5.3
-GMC,Sierra,2021,pt-chevrolet-l82-5.3
-Chevrolet,Suburban,2019,pt-chevrolet-l82-5.3
-Chevrolet,Suburban,2020,pt-chevrolet-l82-5.3
-Chevrolet,Suburban,2021,pt-chevrolet-l82-5.3
-Chevrolet,Tahoe,2019,pt-chevrolet-l82-5.3
-Chevrolet,Tahoe,2020,pt-chevrolet-l82-5.3
-Chevrolet,Tahoe,2021,pt-chevrolet-l82-5.3
-GMC,Yukon,2019,pt-chevrolet-l82-5.3
-GMC,Yukon,2020,pt-chevrolet-l82-5.3
-GMC,Yukon,2021,pt-chevrolet-l82-5.3
-GMC,Yukon XL,2019,pt-chevrolet-l82-5.3
-GMC,Yukon XL,2020,pt-chevrolet-l82-5.3
-GMC,Yukon XL,2021,pt-chevrolet-l82-5.3
-Chevrolet,Silverado,2022,pt-chevrolet-l84-5.3
-Chevrolet,Silverado,2023,pt-chevrolet-l84-5.3
-Chevrolet,Silverado,2024,pt-chevrolet-l84-5.3
-Chevrolet,Silverado,2025,pt-chevrolet-l84-5.3
-GMC,Sierra,2022,pt-chevrolet-l84-5.3
-GMC,Sierra,2023,pt-chevrolet-l84-5.3
-GMC,Sierra,2024,pt-chevrolet-l84-5.3
-GMC,Sierra,2025,pt-chevrolet-l84-5.3
-Chevrolet,Suburban,2022,pt-chevrolet-l84-5.3
-Chevrolet,Suburban,2023,pt-chevrolet-l84-5.3
-Chevrolet,Suburban,2024,pt-chevrolet-l84-5.3
-Chevrolet,Suburban,2025,pt-chevrolet-l84-5.3
-Chevrolet,Tahoe,2022,pt-chevrolet-l84-5.3
-Chevrolet,Tahoe,2023,pt-chevrolet-l84-5.3
-Chevrolet,Tahoe,2024,pt-chevrolet-l84-5.3
-Chevrolet,Tahoe,2025,pt-chevrolet-l84-5.3
-GMC,Yukon,2022,pt-chevrolet-l84-5.3
-GMC,Yukon,2023,pt-chevrolet-l84-5.3
-GMC,Yukon,2024,pt-chevrolet-l84-5.3
-GMC,Yukon,2025,pt-chevrolet-l84-5.3
-GMC,Yukon XL,2022,pt-chevrolet-l84-5.3
-GMC,Yukon XL,2023,pt-chevrolet-l84-5.3
-GMC,Yukon XL,2024,pt-chevrolet-l84-5.3
-GMC,Yukon XL,2025,pt-chevrolet-l84-5.3
-Chevrolet,Corvette,2019,pt-chevrolet-lt5-6.2sc
-Chevrolet,Silverado,2014,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2015,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2016,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2017,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2018,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2019,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2020,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2021,pt-chevrolet-lv3-4.3
-GMC,Sierra,2014,pt-chevrolet-lv3-4.3
-GMC,Sierra,2015,pt-chevrolet-lv3-4.3
-GMC,Sierra,2016,pt-chevrolet-lv3-4.3
-GMC,Sierra,2017,pt-chevrolet-lv3-4.3
-GMC,Sierra,2018,pt-chevrolet-lv3-4.3
-GMC,Sierra,2019,pt-chevrolet-lv3-4.3
-GMC,Sierra,2020,pt-chevrolet-lv3-4.3
-GMC,Sierra,2021,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2015,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2016,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2017,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2018,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2019,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2020,pt-chevrolet-lv3-4.3
-Chevrolet,Colorado,2021,pt-chevrolet-lv3-4.3
-GMC,Canyon,2015,pt-chevrolet-lv3-4.3
-GMC,Canyon,2016,pt-chevrolet-lv3-4.3
-GMC,Canyon,2017,pt-chevrolet-lv3-4.3
-GMC,Canyon,2018,pt-chevrolet-lv3-4.3
-GMC,Canyon,2019,pt-chevrolet-lv3-4.3
-GMC,Canyon,2020,pt-chevrolet-lv3-4.3
-GMC,Canyon,2021,pt-chevrolet-lv3-4.3
-Chevrolet,Silverado,2019,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2020,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2021,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2022,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2023,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2024,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado,2025,pt-chevrolet-lv1-4.3
-GMC,Sierra,2019,pt-chevrolet-lv1-4.3
-GMC,Sierra,2020,pt-chevrolet-lv1-4.3
-GMC,Sierra,2021,pt-chevrolet-lv1-4.3
-GMC,Sierra,2022,pt-chevrolet-lv1-4.3
-GMC,Sierra,2023,pt-chevrolet-lv1-4.3
-GMC,Sierra,2024,pt-chevrolet-lv1-4.3
-GMC,Sierra,2025,pt-chevrolet-lv1-4.3
-Chevrolet,Colorado,2022,pt-chevrolet-lv1-4.3
-Chevrolet,Colorado,2023,pt-chevrolet-lv1-4.3
-Chevrolet,Colorado,2024,pt-chevrolet-lv1-4.3
-Chevrolet,Colorado,2025,pt-chevrolet-lv1-4.3
-GMC,Canyon,2022,pt-chevrolet-lv1-4.3
-GMC,Canyon,2023,pt-chevrolet-lv1-4.3
-GMC,Canyon,2024,pt-chevrolet-lv1-4.3
-GMC,Canyon,2025,pt-chevrolet-lv1-4.3
-Chevrolet,Silverado HD,2022,pt-chevrolet-l8t-6.6
-Chevrolet,Silverado HD,2023,pt-chevrolet-l8t-6.6
-Chevrolet,Silverado HD,2024,pt-chevrolet-l8t-6.6
-Chevrolet,Silverado HD,2025,pt-chevrolet-l8t-6.6
-GMC,Sierra HD,2022,pt-chevrolet-l8t-6.6
-GMC,Sierra HD,2023,pt-chevrolet-l8t-6.6
-GMC,Sierra HD,2024,pt-chevrolet-l8t-6.6
-GMC,Sierra HD,2025,pt-chevrolet-l8t-6.6
-Holden,VT Commodore,1999,pt-chevrolet-ls1-5.7-holden
-Holden,VT Commodore,2000,pt-chevrolet-ls1-5.7-holden
-Holden,VX Commodore,2000,pt-chevrolet-ls1-5.7-holden
-Holden,VX Commodore,2001,pt-chevrolet-ls1-5.7-holden
-Holden,VX Commodore,2002,pt-chevrolet-ls1-5.7-holden
-Holden,VX Commodore,2003,pt-chevrolet-ls1-5.7-holden
-Holden,VU Ute,2000,pt-chevrolet-ls1-5.7-holden
-Holden,VU Ute,2001,pt-chevrolet-ls1-5.7-holden
-Holden,VU Ute,2002,pt-chevrolet-ls1-5.7-holden
-Holden,VU Ute,2003,pt-chevrolet-ls1-5.7-holden
-Holden,VY Commodore,2002,pt-chevrolet-ls1-5.7-holden
-Holden,VY Commodore,2003,pt-chevrolet-ls1-5.7-holden
-Holden,VY Commodore,2004,pt-chevrolet-ls1-5.7-holden
-Holden,VZ Commodore,2004,pt-chevrolet-ls1-5.7-holden
-Holden,VZ Commodore,2005,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,1999,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2000,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2001,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2002,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2003,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2004,pt-chevrolet-ls1-5.7-holden
-Holden,Statesman,2005,pt-chevrolet-ls1-5.7-holden
-Holden,Monaro,2001,pt-chevrolet-ls1-5.7-holden
-Holden,Monaro,2002,pt-chevrolet-ls1-5.7-holden
-Holden,Monaro,2003,pt-chevrolet-ls1-5.7-holden
-Holden,Monaro,2004,pt-chevrolet-ls1-5.7-holden
-Holden,Monaro,2005,pt-chevrolet-ls1-5.7-holden
-HSV,VX/VU,2000,pt-chevrolet-ls1-5.7-hsv
-HSV,VX/VU,2001,pt-chevrolet-ls1-5.7-hsv
-HSV,VX/VU,2002,pt-chevrolet-ls1-5.7-hsv
-HSV,VX/VU,2003,pt-chevrolet-ls1-5.7-hsv
-HSV,GTO,2001,pt-chevrolet-ls1-5.7-hsv
-HSV,GTO,2002,pt-chevrolet-ls1-5.7-hsv
-HSV,GTO,2003,pt-chevrolet-ls1-5.7-hsv
-HSV,GTO,2004,pt-chevrolet-ls1-5.7-hsv
-HSV,Y Series,2002,pt-chevrolet-ls1-5.7-hsv
-HSV,Y Series,2003,pt-chevrolet-ls1-5.7-hsv
-HSV,Y Series,2004,pt-chevrolet-ls1-5.7-hsv
-HSV,Z Series Avalanche,2005,pt-chevrolet-ls1-5.7-hsv
-Holden,VZ Commodore,2006,pt-chevrolet-l76-6.0
-Holden,WL Statesman,2006,pt-chevrolet-l76-6.0
-Holden,VE Commodore,2008,pt-chevrolet-l76-6.0
-Holden,VE Commodore,2009,pt-chevrolet-l76-6.0
-Holden,VE Commodore,2010,pt-chevrolet-l76-6.0
-Holden,VE Ute,2008,pt-chevrolet-l76-6.0
-Holden,VE Ute,2009,pt-chevrolet-l76-6.0
-Holden,VE Ute,2010,pt-chevrolet-l76-6.0
-Holden,WM Statesman,2008,pt-chevrolet-l76-6.0
-Holden,WM Caprice,2008,pt-chevrolet-l76-6.0
-Holden,WM Caprice,2009,pt-chevrolet-l76-6.0
-Holden,WM Caprice,2010,pt-chevrolet-l76-6.0
-Holden,VZ Ute,2006,pt-chevrolet-l98-6.0
-Holden,VZ Ute,2007,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2006,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2007,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2008,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2009,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2010,pt-chevrolet-l98-6.0
-Holden,VE Calais,2006,pt-chevrolet-l98-6.0
-Holden,VE Calais,2007,pt-chevrolet-l98-6.0
-Holden,VE Calais,2008,pt-chevrolet-l98-6.0
-Holden,VE Calais,2009,pt-chevrolet-l98-6.0
-Holden,VE Ute,2006,pt-chevrolet-l98-6.0
-Holden,VE Ute,2007,pt-chevrolet-l98-6.0
-Holden,VE Ute,2008,pt-chevrolet-l98-6.0
-Holden,VE Ute,2009,pt-chevrolet-l98-6.0
-Holden,VE Ute,2010,pt-chevrolet-l98-6.0
-Holden,WM Statesman,2006,pt-chevrolet-l98-6.0
-Holden,WM Statesman,2007,pt-chevrolet-l98-6.0
-Holden,WM Statesman,2008,pt-chevrolet-l98-6.0
-Holden,VE Commodore,2010,pt-chevrolet-l77-6.0-manual
-Holden,VE Commodore,2011,pt-chevrolet-l77-6.0-manual
-Holden,VE Commodore,2012,pt-chevrolet-l77-6.0-manual
-Holden,VE Commodore,2013,pt-chevrolet-l77-6.0-manual
-Holden,VF Commodore,2013,pt-chevrolet-l77-6.0-manual
-Holden,VF Commodore,2014,pt-chevrolet-l77-6.0-manual
-Holden,VF Commodore,2015,pt-chevrolet-l77-6.0-manual
-Holden,VE Ute,2010,pt-chevrolet-l77-6.0-manual
-Holden,VE Ute,2011,pt-chevrolet-l77-6.0-manual
-Holden,VE Ute,2012,pt-chevrolet-l77-6.0-manual
-Holden,VE Ute,2013,pt-chevrolet-l77-6.0-manual
-Holden,VF Ute,2013,pt-chevrolet-l77-6.0-manual
-Holden,VF Ute,2014,pt-chevrolet-l77-6.0-manual
-Holden,VF Ute,2015,pt-chevrolet-l77-6.0-manual
-Holden,VE Commodore,2010,pt-chevrolet-l77-6.0-auto
-Holden,VE Commodore,2011,pt-chevrolet-l77-6.0-auto
-Holden,VE Commodore,2012,pt-chevrolet-l77-6.0-auto
-Holden,VE Commodore,2013,pt-chevrolet-l77-6.0-auto
-Holden,VF Commodore,2013,pt-chevrolet-l77-6.0-auto
-Holden,VF Commodore,2014,pt-chevrolet-l77-6.0-auto
-Holden,VF Commodore,2015,pt-chevrolet-l77-6.0-auto
-Holden,WM Caprice,2010,pt-chevrolet-l77-6.0-auto
-Holden,WM Caprice,2011,pt-chevrolet-l77-6.0-auto
-Holden,WM Caprice,2012,pt-chevrolet-l77-6.0-auto
-Holden,WM Caprice,2013,pt-chevrolet-l77-6.0-auto
-Holden,WN Caprice,2013,pt-chevrolet-l77-6.0-auto
-Holden,WN Caprice,2014,pt-chevrolet-l77-6.0-auto
-Holden,WN Caprice,2015,pt-chevrolet-l77-6.0-auto
+Chevrolet,Avalanche,2002,pt-chevrolet-lm7-5.3
+Chevrolet,Avalanche,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Avalanche,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Avalanche,2005,pt-chevrolet-l59-5.3
+Chevrolet,Avalanche,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Avalanche,2006,pt-chevrolet-l59-5.3
+Chevrolet,Avalanche,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Avalanche,2007,pt-chevrolet-ly5-5.3
+Chevrolet,Avalanche,2008,pt-chevrolet-ly5-5.3
+Chevrolet,Avalanche,2009,pt-chevrolet-ly5-5.3
+Chevrolet,Avalanche,2010,pt-chevrolet-lc9-5.3
+Chevrolet,Avalanche,2011,pt-chevrolet-lc9-5.3
+Chevrolet,Avalanche,2012,pt-chevrolet-lc9-5.3
+Chevrolet,Avalanche,2013,pt-chevrolet-lc9-5.3
+Chevrolet,Bel Air,1955,pt-chevrolet-265-v8
+Chevrolet,Camaro,1998,pt-chevrolet-ls1-5.7-fbody
+Chevrolet,Camaro,1999,pt-chevrolet-ls1-5.7-fbody
+Chevrolet,Camaro,2000,pt-chevrolet-ls1-5.7-fbody
+Chevrolet,Camaro,2001,pt-chevrolet-ls1-5.7-fbody
+Chevrolet,Camaro,2002,pt-chevrolet-ls1-5.7-fbody
+Chevrolet,Camaro,2010,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2010,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2011,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2011,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2012,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2012,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2012,pt-chevrolet-lsa-6.2sc-zl1
+Chevrolet,Camaro,2013,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2013,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2013,pt-chevrolet-lsa-6.2sc-zl1
+Chevrolet,Camaro,2014,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2014,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2014,pt-chevrolet-lsa-6.2sc-zl1
+Chevrolet,Camaro,2015,pt-chevrolet-l99-6.2
+Chevrolet,Camaro,2015,pt-chevrolet-ls3-6.2-camaro
+Chevrolet,Camaro,2015,pt-chevrolet-lsa-6.2sc-zl1
+Chevrolet,Camaro,2016,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2017,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2017,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2018,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2018,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2019,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2019,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2020,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2020,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2021,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2021,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2022,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2022,pt-chevrolet-lt4-6.2sc
+Chevrolet,Camaro,2023,pt-chevrolet-lt1-6.2-camaro
+Chevrolet,Camaro,2023,pt-chevrolet-lt4-6.2sc
 Chevrolet,Caprice Police Vehicle,2011,pt-chevrolet-l77-6.0-auto
 Chevrolet,Caprice Police Vehicle,2012,pt-chevrolet-l77-6.0-auto
 Chevrolet,Caprice Police Vehicle,2013,pt-chevrolet-l77-6.0-auto
@@ -956,3 +107,974 @@ Chevrolet,Caprice Police Vehicle,2014,pt-chevrolet-l77-6.0-auto
 Chevrolet,Caprice Police Vehicle,2015,pt-chevrolet-l77-6.0-auto
 Chevrolet,Caprice Police Vehicle,2016,pt-chevrolet-l77-6.0-auto
 Chevrolet,Caprice Police Vehicle,2017,pt-chevrolet-l77-6.0-auto
+Chevrolet,Colorado,2015,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2016,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2017,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2018,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2019,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2020,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2021,pt-chevrolet-lv3-4.3
+Chevrolet,Colorado,2022,pt-chevrolet-lv1-4.3
+Chevrolet,Colorado,2023,pt-chevrolet-lv1-4.3
+Chevrolet,Colorado,2024,pt-chevrolet-lv1-4.3
+Chevrolet,Colorado,2025,pt-chevrolet-lv1-4.3
+Chevrolet,Corvette,1997,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,1998,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,1999,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2000,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2001,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2001,pt-chevrolet-ls6-5.7
+Chevrolet,Corvette,2002,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2002,pt-chevrolet-ls6-5.7
+Chevrolet,Corvette,2003,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2003,pt-chevrolet-ls6-5.7
+Chevrolet,Corvette,2004,pt-chevrolet-ls1-5.7-vette
+Chevrolet,Corvette,2004,pt-chevrolet-ls6-5.7
+Chevrolet,Corvette,2005,pt-chevrolet-ls2-6.0
+Chevrolet,Corvette,2006,pt-chevrolet-ls2-6.0
+Chevrolet,Corvette,2006,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2007,pt-chevrolet-ls2-6.0
+Chevrolet,Corvette,2007,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2008,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2008,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2009,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2009,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2009,pt-chevrolet-ls9-6.2sc
+Chevrolet,Corvette,2010,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2010,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2010,pt-chevrolet-ls9-6.2sc
+Chevrolet,Corvette,2011,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2011,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2011,pt-chevrolet-ls9-6.2sc
+Chevrolet,Corvette,2012,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2012,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2012,pt-chevrolet-ls9-6.2sc
+Chevrolet,Corvette,2013,pt-chevrolet-ls3-6.2-vette
+Chevrolet,Corvette,2013,pt-chevrolet-ls7-7.0
+Chevrolet,Corvette,2013,pt-chevrolet-ls9-6.2sc
+Chevrolet,Corvette,2014,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2015,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2015,pt-chevrolet-lt4-6.2sc
+Chevrolet,Corvette,2016,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2016,pt-chevrolet-lt4-6.2sc
+Chevrolet,Corvette,2017,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2017,pt-chevrolet-lt4-6.2sc
+Chevrolet,Corvette,2018,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2018,pt-chevrolet-lt4-6.2sc
+Chevrolet,Corvette,2019,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Corvette,2019,pt-chevrolet-lt4-6.2sc
+Chevrolet,Corvette,2019,pt-chevrolet-lt5-6.2sc
+Chevrolet,Corvette,2020,pt-chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2021,pt-chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2022,pt-chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2023,pt-chevrolet-lt2-6.2-early
+Chevrolet,Corvette,2024,pt-chevrolet-lt2-6.2-late
+Chevrolet,Corvette,2025,pt-chevrolet-lt2-6.2-late
+Chevrolet,Corvette Stingray,2014,pt-chevrolet-lt1-6.2-vette
+Chevrolet,Express 1500,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Express 1500,2003,pt-chevrolet-lr4-4.8
+Chevrolet,Express 1500,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Express 1500,2004,pt-chevrolet-lr4-4.8
+Chevrolet,Express 1500,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Express 1500,2005,pt-chevrolet-lr4-4.8
+Chevrolet,Express 1500,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Express 1500,2006,pt-chevrolet-lr4-4.8
+Chevrolet,Express 1500,2007,pt-chevrolet-lm7-5.3
+Chevrolet,Express 1500,2007,pt-chevrolet-lr4-4.8
+Chevrolet,Express 1500,2008,pt-chevrolet-ly2-4.8
+Chevrolet,Express 1500,2009,pt-chevrolet-ly2-4.8
+Chevrolet,Express 1500,2010,pt-chevrolet-l20-4.8
+Chevrolet,Express 1500,2011,pt-chevrolet-l20-4.8
+Chevrolet,Express 1500,2012,pt-chevrolet-l20-4.8
+Chevrolet,Express 1500,2013,pt-chevrolet-l20-4.8
+Chevrolet,Express 1500,2014,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Express 2500,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Express 2500,2003,pt-chevrolet-lr4-4.8
+Chevrolet,Express 2500,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Express 2500,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Express 2500,2004,pt-chevrolet-lr4-4.8
+Chevrolet,Express 2500,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Express 2500,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Express 2500,2005,pt-chevrolet-lr4-4.8
+Chevrolet,Express 2500,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Express 2500,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Express 2500,2006,pt-chevrolet-lr4-4.8
+Chevrolet,Express 2500,2007,pt-chevrolet-lm7-5.3
+Chevrolet,Express 2500,2007,pt-chevrolet-lq4-6.0
+Chevrolet,Express 2500,2007,pt-chevrolet-lr4-4.8
+Chevrolet,Express 2500,2008,pt-chevrolet-ly2-4.8
+Chevrolet,Express 2500,2008,pt-chevrolet-ly6-6.0
+Chevrolet,Express 2500,2009,pt-chevrolet-ly2-4.8
+Chevrolet,Express 2500,2009,pt-chevrolet-ly6-6.0
+Chevrolet,Express 2500,2010,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2010,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2011,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2011,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2012,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2012,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2013,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2013,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2014,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2014,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2015,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2015,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2016,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2016,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2017,pt-chevrolet-l20-4.8
+Chevrolet,Express 2500,2017,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2018,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2019,pt-chevrolet-l96-6.0
+Chevrolet,Express 2500,2020,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Express 3500,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Express 3500,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Express 3500,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Express 3500,2007,pt-chevrolet-lq4-6.0
+Chevrolet,Express 3500,2008,pt-chevrolet-ly6-6.0
+Chevrolet,Express 3500,2009,pt-chevrolet-ly6-6.0
+Chevrolet,Express 3500,2010,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2011,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2012,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2013,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2014,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2015,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2016,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2017,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2018,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2019,pt-chevrolet-l96-6.0
+Chevrolet,Express 3500,2020,pt-chevrolet-l96-6.0
+Chevrolet,Impala,2006,pt-chevrolet-ls4-5.3
+Chevrolet,Impala,2007,pt-chevrolet-ls4-5.3
+Chevrolet,Impala,2008,pt-chevrolet-ls4-5.3
+Chevrolet,Impala,2009,pt-chevrolet-ls4-5.3
+Chevrolet,Monte Carlo,2006,pt-chevrolet-ls4-5.3
+Chevrolet,Monte Carlo,2007,pt-chevrolet-ls4-5.3
+Chevrolet,Silverado 1500,1999,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,1999,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2000,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2000,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2001,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2001,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2002,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2002,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2002,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2003,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2003,pt-chevrolet-lq9-6.0
+Chevrolet,Silverado 1500,2003,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2004,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2004,pt-chevrolet-lq9-6.0
+Chevrolet,Silverado 1500,2004,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2005,pt-chevrolet-l33-5.3
+Chevrolet,Silverado 1500,2005,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2005,pt-chevrolet-lq9-6.0
+Chevrolet,Silverado 1500,2005,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2006,pt-chevrolet-l33-5.3
+Chevrolet,Silverado 1500,2006,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2006,pt-chevrolet-lq9-6.0
+Chevrolet,Silverado 1500,2006,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2007,pt-chevrolet-l33-5.3
+Chevrolet,Silverado 1500,2007,pt-chevrolet-l59-5.3
+Chevrolet,Silverado 1500,2007,pt-chevrolet-lh6-5.3
+Chevrolet,Silverado 1500,2007,pt-chevrolet-lm7-5.3
+Chevrolet,Silverado 1500,2007,pt-chevrolet-lq9-6.0
+Chevrolet,Silverado 1500,2007,pt-chevrolet-lr4-4.8
+Chevrolet,Silverado 1500,2007,pt-chevrolet-ly2-4.8
+Chevrolet,Silverado 1500,2007,pt-chevrolet-ly5-5.3
+Chevrolet,Silverado 1500,2008,pt-chevrolet-lfa-6.0hy
+Chevrolet,Silverado 1500,2008,pt-chevrolet-lh6-5.3
+Chevrolet,Silverado 1500,2008,pt-chevrolet-ly2-4.8
+Chevrolet,Silverado 1500,2008,pt-chevrolet-ly5-5.3
+Chevrolet,Silverado 1500,2009,pt-chevrolet-lfa-6.0hy
+Chevrolet,Silverado 1500,2009,pt-chevrolet-lh6-5.3
+Chevrolet,Silverado 1500,2009,pt-chevrolet-ly2-4.8
+Chevrolet,Silverado 1500,2009,pt-chevrolet-ly5-5.3
+Chevrolet,Silverado 1500,2010,pt-chevrolet-l20-4.8
+Chevrolet,Silverado 1500,2010,pt-chevrolet-lc9-5.3
+Chevrolet,Silverado 1500,2010,pt-chevrolet-lz1-6.0hy
+Chevrolet,Silverado 1500,2011,pt-chevrolet-l20-4.8
+Chevrolet,Silverado 1500,2011,pt-chevrolet-lc9-5.3
+Chevrolet,Silverado 1500,2011,pt-chevrolet-lz1-6.0hy
+Chevrolet,Silverado 1500,2012,pt-chevrolet-l20-4.8
+Chevrolet,Silverado 1500,2012,pt-chevrolet-lc9-5.3
+Chevrolet,Silverado 1500,2012,pt-chevrolet-lz1-6.0hy
+Chevrolet,Silverado 1500,2013,pt-chevrolet-l20-4.8
+Chevrolet,Silverado 1500,2013,pt-chevrolet-lc9-5.3
+Chevrolet,Silverado 1500,2013,pt-chevrolet-lz1-6.0hy
+Chevrolet,Silverado 1500,2014,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2014,pt-chevrolet-l86-6.2
+Chevrolet,Silverado 1500,2014,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2015,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2015,pt-chevrolet-l86-6.2
+Chevrolet,Silverado 1500,2015,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2016,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2016,pt-chevrolet-l86-6.2
+Chevrolet,Silverado 1500,2016,pt-chevrolet-l8b-5.3
+Chevrolet,Silverado 1500,2016,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2017,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2017,pt-chevrolet-l86-6.2
+Chevrolet,Silverado 1500,2017,pt-chevrolet-l8b-5.3
+Chevrolet,Silverado 1500,2017,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2018,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2018,pt-chevrolet-l86-6.2
+Chevrolet,Silverado 1500,2018,pt-chevrolet-l8b-5.3
+Chevrolet,Silverado 1500,2018,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2019,pt-chevrolet-l82-5.3
+Chevrolet,Silverado 1500,2019,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2019,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2019,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2019,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2020,pt-chevrolet-l82-5.3
+Chevrolet,Silverado 1500,2020,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500,2020,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2020,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2020,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2021,pt-chevrolet-l82-5.3
+Chevrolet,Silverado 1500,2021,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2021,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2021,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500,2022,pt-chevrolet-l84-5.3
+Chevrolet,Silverado 1500,2022,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2022,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2023,pt-chevrolet-l84-5.3
+Chevrolet,Silverado 1500,2023,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2023,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2024,pt-chevrolet-l84-5.3
+Chevrolet,Silverado 1500,2024,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2024,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500,2025,pt-chevrolet-l84-5.3
+Chevrolet,Silverado 1500,2025,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500,2025,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500 LD,2019,pt-chevrolet-l82-5.3
+Chevrolet,Silverado 1500 LD,2019,pt-chevrolet-l83-5.3
+Chevrolet,Silverado 1500 LD,2019,pt-chevrolet-l87-6.2
+Chevrolet,Silverado 1500 LD,2019,pt-chevrolet-lv1-4.3
+Chevrolet,Silverado 1500 LD,2019,pt-chevrolet-lv3-4.3
+Chevrolet,Silverado 1500HD,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 1500HD,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 1500HD,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 1500HD,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,1999,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2000,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2001,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2002,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2001,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2002,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2007,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 2500HD,2022,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 2500HD,2023,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 2500HD,2024,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 2500HD,2025,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 3500,2001,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2002,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500,2007,pt-chevrolet-lq4-6.0
+Chevrolet,Silverado 3500HD,2022,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 3500HD,2023,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 3500HD,2024,pt-chevrolet-l8t-6.6
+Chevrolet,Silverado 3500HD,2025,pt-chevrolet-l8t-6.6
+Chevrolet,SSR,2003,pt-chevrolet-lm4-5.3
+Chevrolet,SSR,2004,pt-chevrolet-lm4-5.3
+Chevrolet,Suburban,2014,pt-chevrolet-lmg-5.3
+Chevrolet,Suburban,2015,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2015,pt-chevrolet-l86-6.2
+Chevrolet,Suburban,2016,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2016,pt-chevrolet-l86-6.2
+Chevrolet,Suburban,2017,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2017,pt-chevrolet-l86-6.2
+Chevrolet,Suburban,2018,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2018,pt-chevrolet-l86-6.2
+Chevrolet,Suburban,2019,pt-chevrolet-l82-5.3
+Chevrolet,Suburban,2019,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2019,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2020,pt-chevrolet-l82-5.3
+Chevrolet,Suburban,2020,pt-chevrolet-l83-5.3
+Chevrolet,Suburban,2020,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2021,pt-chevrolet-l82-5.3
+Chevrolet,Suburban,2021,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2022,pt-chevrolet-l84-5.3
+Chevrolet,Suburban,2022,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2023,pt-chevrolet-l84-5.3
+Chevrolet,Suburban,2023,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2024,pt-chevrolet-l84-5.3
+Chevrolet,Suburban,2024,pt-chevrolet-l87-6.2
+Chevrolet,Suburban,2025,pt-chevrolet-l84-5.3
+Chevrolet,Suburban,2025,pt-chevrolet-l87-6.2
+Chevrolet,Suburban 1500,2000,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2001,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2002,pt-chevrolet-l59-5.3
+Chevrolet,Suburban 1500,2002,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2003,pt-chevrolet-l59-5.3
+Chevrolet,Suburban 1500,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2004,pt-chevrolet-l59-5.3
+Chevrolet,Suburban 1500,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2005,pt-chevrolet-l59-5.3
+Chevrolet,Suburban 1500,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2006,pt-chevrolet-l59-5.3
+Chevrolet,Suburban 1500,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Suburban 1500,2007,pt-chevrolet-ly5-5.3
+Chevrolet,Suburban 1500,2008,pt-chevrolet-ly5-5.3
+Chevrolet,Suburban 1500,2009,pt-chevrolet-ly5-5.3
+Chevrolet,Suburban 1500,2010,pt-chevrolet-lmg-5.3
+Chevrolet,Suburban 1500,2011,pt-chevrolet-lmg-5.3
+Chevrolet,Suburban 1500,2012,pt-chevrolet-lmg-5.3
+Chevrolet,Suburban 1500,2013,pt-chevrolet-lmg-5.3
+Chevrolet,Suburban 2500,2000,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2001,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2002,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2003,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2004,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2005,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2006,pt-chevrolet-lq4-6.0
+Chevrolet,Suburban 2500,2007,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2008,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2009,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2010,pt-chevrolet-l96-6.0
+Chevrolet,Suburban 2500,2010,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2011,pt-chevrolet-l96-6.0
+Chevrolet,Suburban 2500,2011,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2012,pt-chevrolet-l96-6.0
+Chevrolet,Suburban 2500,2012,pt-chevrolet-ly6-6.0
+Chevrolet,Suburban 2500,2013,pt-chevrolet-l96-6.0
+Chevrolet,Suburban 2500,2013,pt-chevrolet-ly6-6.0
+Chevrolet,Tahoe,2000,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2000,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2001,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2001,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2002,pt-chevrolet-l59-5.3
+Chevrolet,Tahoe,2002,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2002,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2003,pt-chevrolet-l59-5.3
+Chevrolet,Tahoe,2003,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2003,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2004,pt-chevrolet-l59-5.3
+Chevrolet,Tahoe,2004,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2004,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2005,pt-chevrolet-l59-5.3
+Chevrolet,Tahoe,2005,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2005,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2006,pt-chevrolet-l59-5.3
+Chevrolet,Tahoe,2006,pt-chevrolet-lm7-5.3
+Chevrolet,Tahoe,2006,pt-chevrolet-lr4-4.8
+Chevrolet,Tahoe,2007,pt-chevrolet-ly2-4.8
+Chevrolet,Tahoe,2007,pt-chevrolet-ly5-5.3
+Chevrolet,Tahoe,2008,pt-chevrolet-lfa-6.0hy
+Chevrolet,Tahoe,2008,pt-chevrolet-ly2-4.8
+Chevrolet,Tahoe,2008,pt-chevrolet-ly5-5.3
+Chevrolet,Tahoe,2009,pt-chevrolet-lfa-6.0hy
+Chevrolet,Tahoe,2009,pt-chevrolet-ly2-4.8
+Chevrolet,Tahoe,2009,pt-chevrolet-ly5-5.3
+Chevrolet,Tahoe,2010,pt-chevrolet-lmg-5.3
+Chevrolet,Tahoe,2010,pt-chevrolet-lz1-6.0hy
+Chevrolet,Tahoe,2011,pt-chevrolet-lmg-5.3
+Chevrolet,Tahoe,2011,pt-chevrolet-lz1-6.0hy
+Chevrolet,Tahoe,2012,pt-chevrolet-lmg-5.3
+Chevrolet,Tahoe,2012,pt-chevrolet-lz1-6.0hy
+Chevrolet,Tahoe,2013,pt-chevrolet-lmg-5.3
+Chevrolet,Tahoe,2013,pt-chevrolet-lz1-6.0hy
+Chevrolet,Tahoe,2014,pt-chevrolet-lmg-5.3
+Chevrolet,Tahoe,2015,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2015,pt-chevrolet-l86-6.2
+Chevrolet,Tahoe,2016,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2016,pt-chevrolet-l86-6.2
+Chevrolet,Tahoe,2017,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2017,pt-chevrolet-l86-6.2
+Chevrolet,Tahoe,2018,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2018,pt-chevrolet-l86-6.2
+Chevrolet,Tahoe,2019,pt-chevrolet-l82-5.3
+Chevrolet,Tahoe,2019,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2019,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2020,pt-chevrolet-l82-5.3
+Chevrolet,Tahoe,2020,pt-chevrolet-l83-5.3
+Chevrolet,Tahoe,2020,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2021,pt-chevrolet-l82-5.3
+Chevrolet,Tahoe,2021,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2022,pt-chevrolet-l84-5.3
+Chevrolet,Tahoe,2022,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2023,pt-chevrolet-l84-5.3
+Chevrolet,Tahoe,2023,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2024,pt-chevrolet-l84-5.3
+Chevrolet,Tahoe,2024,pt-chevrolet-l87-6.2
+Chevrolet,Tahoe,2025,pt-chevrolet-l84-5.3
+Chevrolet,Tahoe,2025,pt-chevrolet-l87-6.2
+Chevrolet,Trailblazer,2003,pt-chevrolet-lm4-5.3
+Chevrolet,Trailblazer,2004,pt-chevrolet-lm4-5.3
+Chevrolet,Trailblazer,2005,pt-chevrolet-lh6-5.3
+Chevrolet,Trailblazer,2005,pt-chevrolet-lm4-5.3
+Chevrolet,Trailblazer,2006,pt-chevrolet-lh6-5.3
+Chevrolet,Trailblazer,2006,pt-chevrolet-ls2-6.0
+Chevrolet,Trailblazer,2007,pt-chevrolet-lh6-5.3
+Chevrolet,Trailblazer,2007,pt-chevrolet-ls2-6.0
+Chevrolet,Trailblazer,2008,pt-chevrolet-lh6-5.3
+Chevrolet,Trailblazer,2008,pt-chevrolet-ls2-6.0
+Chevrolet,Trailblazer,2009,pt-chevrolet-lh6-5.3
+Chevrolet,Trailblazer,2009,pt-chevrolet-ls2-6.0
+Datsun,240Z,1970,pt-datsun-l24-2.4
+Dodge,Challenger,2015,pt-dodge-hellcat-6.2sc
+Dodge,Viper,2013,pt-dodge-viper-8.4-v10
+Ferrari,458 Italia,2011,pt-ferrari-f136-4.5
+Ferrari,F355,1995,pt-ferrari-f129-3.5
+Ferrari,Testarossa,1986,pt-ferrari-flat12-4.9
+Ford,Explorer,2013,pt-ford-ecoboost-3.5-sho
+Ford,Explorer,2014,pt-ford-ecoboost-3.5-sho
+Ford,Explorer,2015,pt-ford-ecoboost-3.5-sho
+Ford,F-150,2011,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2012,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2013,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2014,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2015,pt-ford-ecoboost-2.7-gen1
+Ford,F-150,2015,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2016,pt-ford-ecoboost-2.7-gen1
+Ford,F-150,2016,pt-ford-ecoboost-3.5-f150
+Ford,F-150,2017,pt-ford-ecoboost-2.7-gen1
+Ford,F-150,2017,pt-ford-ecoboost-3.5-f150gen2
+Ford,F-150,2017,pt-ford-ecoboost-3.5-raptor
+Ford,F-150,2018,pt-ford-ecoboost-2.7-gen2
+Ford,F-150,2018,pt-ford-ecoboost-3.5-f150gen2
+Ford,F-150,2018,pt-ford-ecoboost-3.5-raptor
+Ford,F-150,2019,pt-ford-ecoboost-2.7-gen2
+Ford,F-150,2019,pt-ford-ecoboost-3.5-f150gen2
+Ford,F-150,2019,pt-ford-ecoboost-3.5-raptor
+Ford,F-150,2020,pt-ford-ecoboost-2.7-gen2
+Ford,F-150,2020,pt-ford-ecoboost-3.5-f150gen2
+Ford,F-150,2020,pt-ford-ecoboost-3.5-raptor
+Ford,Focus,2014,pt-ford-ecoboost-2.0-focusst
+Ford,Focus,2015,pt-ford-ecoboost-2.0-focusst
+Ford,Focus,2016,pt-ford-ecoboost-2.0-focusst
+Ford,Focus,2017,pt-ford-ecoboost-2.0-focusst
+Ford,Focus,2018,pt-ford-ecoboost-2.0-focusst
+Ford,Focus ST,2013,pt-ford-ecoboost-2.0-focusst
+Ford,GT,2017,pt-ford-ecoboost-3.5tt-gt
+Ford,GT,2018,pt-ford-ecoboost-3.5tt-gt
+Ford,GT,2019,pt-ford-ecoboost-3.5tt-gt
+Ford,GT,2020,pt-ford-ecoboost-3.5tt-gt
+Ford,GT,2021,pt-ford-ecoboost-3.5tt-gt
+Ford,GT,2022,pt-ford-ecoboost-3.5tt-gt
+Ford,Mustang,1965,pt-ford-289-4.7
+Ford,Mustang,2015,pt-ford-ecoboost-2.3-mustang
+Ford,Mustang,2016,pt-ford-ecoboost-2.3-mustang
+Ford,Mustang,2017,pt-ford-ecoboost-2.3-mustang
+Ford,Mustang,2020,pt-ford-coyote-gen3-5.0
+Ford,Taurus,2010,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2011,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2012,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2013,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2014,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2015,pt-ford-ecoboost-3.5-sho
+Ford,Taurus,2016,pt-ford-ecoboost-3.5-sho
+GMC,Canyon,2015,pt-chevrolet-lv3-4.3
+GMC,Canyon,2016,pt-chevrolet-lv3-4.3
+GMC,Canyon,2017,pt-chevrolet-lv3-4.3
+GMC,Canyon,2018,pt-chevrolet-lv3-4.3
+GMC,Canyon,2019,pt-chevrolet-lv3-4.3
+GMC,Canyon,2020,pt-chevrolet-lv3-4.3
+GMC,Canyon,2021,pt-chevrolet-lv3-4.3
+GMC,Canyon,2022,pt-chevrolet-lv1-4.3
+GMC,Canyon,2023,pt-chevrolet-lv1-4.3
+GMC,Canyon,2024,pt-chevrolet-lv1-4.3
+GMC,Canyon,2025,pt-chevrolet-lv1-4.3
+GMC,Envoy,2003,pt-chevrolet-lm4-5.3
+GMC,Envoy,2004,pt-chevrolet-lm4-5.3
+GMC,Envoy,2005,pt-chevrolet-lh6-5.3
+GMC,Envoy,2006,pt-chevrolet-lh6-5.3
+GMC,Envoy,2007,pt-chevrolet-lh6-5.3
+GMC,Envoy,2008,pt-chevrolet-lh6-5.3
+GMC,Envoy,2009,pt-chevrolet-lh6-5.3
+GMC,Savana 1500,2003,pt-chevrolet-lm7-5.3
+GMC,Savana 1500,2003,pt-chevrolet-lr4-4.8
+GMC,Savana 1500,2004,pt-chevrolet-lm7-5.3
+GMC,Savana 1500,2004,pt-chevrolet-lr4-4.8
+GMC,Savana 1500,2005,pt-chevrolet-lm7-5.3
+GMC,Savana 1500,2005,pt-chevrolet-lr4-4.8
+GMC,Savana 1500,2006,pt-chevrolet-lm7-5.3
+GMC,Savana 1500,2006,pt-chevrolet-lr4-4.8
+GMC,Savana 1500,2007,pt-chevrolet-lm7-5.3
+GMC,Savana 1500,2007,pt-chevrolet-lr4-4.8
+GMC,Savana 1500,2008,pt-chevrolet-ly2-4.8
+GMC,Savana 1500,2009,pt-chevrolet-ly2-4.8
+GMC,Savana 1500,2010,pt-chevrolet-l20-4.8
+GMC,Savana 1500,2011,pt-chevrolet-l20-4.8
+GMC,Savana 1500,2012,pt-chevrolet-l20-4.8
+GMC,Savana 1500,2013,pt-chevrolet-l20-4.8
+GMC,Savana 1500,2014,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2003,pt-chevrolet-lm7-5.3
+GMC,Savana 2500,2003,pt-chevrolet-lq4-6.0
+GMC,Savana 2500,2003,pt-chevrolet-lr4-4.8
+GMC,Savana 2500,2004,pt-chevrolet-lm7-5.3
+GMC,Savana 2500,2004,pt-chevrolet-lq4-6.0
+GMC,Savana 2500,2004,pt-chevrolet-lr4-4.8
+GMC,Savana 2500,2005,pt-chevrolet-lm7-5.3
+GMC,Savana 2500,2005,pt-chevrolet-lq4-6.0
+GMC,Savana 2500,2005,pt-chevrolet-lr4-4.8
+GMC,Savana 2500,2006,pt-chevrolet-lm7-5.3
+GMC,Savana 2500,2006,pt-chevrolet-lq4-6.0
+GMC,Savana 2500,2006,pt-chevrolet-lr4-4.8
+GMC,Savana 2500,2007,pt-chevrolet-lm7-5.3
+GMC,Savana 2500,2007,pt-chevrolet-lq4-6.0
+GMC,Savana 2500,2007,pt-chevrolet-lr4-4.8
+GMC,Savana 2500,2008,pt-chevrolet-ly2-4.8
+GMC,Savana 2500,2008,pt-chevrolet-ly6-6.0
+GMC,Savana 2500,2009,pt-chevrolet-ly2-4.8
+GMC,Savana 2500,2009,pt-chevrolet-ly6-6.0
+GMC,Savana 2500,2010,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2010,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2011,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2011,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2012,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2012,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2013,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2013,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2014,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2014,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2015,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2015,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2016,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2016,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2017,pt-chevrolet-l20-4.8
+GMC,Savana 2500,2017,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2018,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2019,pt-chevrolet-l96-6.0
+GMC,Savana 2500,2020,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2003,pt-chevrolet-lq4-6.0
+GMC,Savana 3500,2004,pt-chevrolet-lq4-6.0
+GMC,Savana 3500,2005,pt-chevrolet-lq4-6.0
+GMC,Savana 3500,2006,pt-chevrolet-lq4-6.0
+GMC,Savana 3500,2007,pt-chevrolet-lq4-6.0
+GMC,Savana 3500,2008,pt-chevrolet-ly6-6.0
+GMC,Savana 3500,2009,pt-chevrolet-ly6-6.0
+GMC,Savana 3500,2010,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2011,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2012,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2013,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2014,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2015,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2016,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2017,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2018,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2019,pt-chevrolet-l96-6.0
+GMC,Savana 3500,2020,pt-chevrolet-l96-6.0
+GMC,Sierra 1500,1999,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,1999,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2000,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2000,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2001,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2001,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2002,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2002,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2002,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2003,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2003,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2003,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2004,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2004,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2004,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2005,pt-chevrolet-l33-5.3
+GMC,Sierra 1500,2005,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2005,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2005,pt-chevrolet-lq9-6.0
+GMC,Sierra 1500,2005,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2006,pt-chevrolet-l33-5.3
+GMC,Sierra 1500,2006,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2006,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2006,pt-chevrolet-lq9-6.0
+GMC,Sierra 1500,2006,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2007,pt-chevrolet-l33-5.3
+GMC,Sierra 1500,2007,pt-chevrolet-l59-5.3
+GMC,Sierra 1500,2007,pt-chevrolet-lh6-5.3
+GMC,Sierra 1500,2007,pt-chevrolet-lm7-5.3
+GMC,Sierra 1500,2007,pt-chevrolet-lr4-4.8
+GMC,Sierra 1500,2007,pt-chevrolet-ly2-4.8
+GMC,Sierra 1500,2007,pt-chevrolet-ly5-5.3
+GMC,Sierra 1500,2008,pt-chevrolet-lfa-6.0hy
+GMC,Sierra 1500,2008,pt-chevrolet-lh6-5.3
+GMC,Sierra 1500,2008,pt-chevrolet-ly2-4.8
+GMC,Sierra 1500,2008,pt-chevrolet-ly5-5.3
+GMC,Sierra 1500,2009,pt-chevrolet-lfa-6.0hy
+GMC,Sierra 1500,2009,pt-chevrolet-lh6-5.3
+GMC,Sierra 1500,2009,pt-chevrolet-ly2-4.8
+GMC,Sierra 1500,2009,pt-chevrolet-ly5-5.3
+GMC,Sierra 1500,2010,pt-chevrolet-l20-4.8
+GMC,Sierra 1500,2010,pt-chevrolet-lc9-5.3
+GMC,Sierra 1500,2010,pt-chevrolet-lz1-6.0hy
+GMC,Sierra 1500,2011,pt-chevrolet-l20-4.8
+GMC,Sierra 1500,2011,pt-chevrolet-lc9-5.3
+GMC,Sierra 1500,2011,pt-chevrolet-lz1-6.0hy
+GMC,Sierra 1500,2012,pt-chevrolet-l20-4.8
+GMC,Sierra 1500,2012,pt-chevrolet-lc9-5.3
+GMC,Sierra 1500,2012,pt-chevrolet-lz1-6.0hy
+GMC,Sierra 1500,2013,pt-chevrolet-l20-4.8
+GMC,Sierra 1500,2013,pt-chevrolet-lc9-5.3
+GMC,Sierra 1500,2013,pt-chevrolet-lz1-6.0hy
+GMC,Sierra 1500,2014,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2014,pt-chevrolet-l86-6.2
+GMC,Sierra 1500,2014,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2015,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2015,pt-chevrolet-l86-6.2
+GMC,Sierra 1500,2015,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2016,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2016,pt-chevrolet-l86-6.2
+GMC,Sierra 1500,2016,pt-chevrolet-l8b-5.3
+GMC,Sierra 1500,2016,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2017,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2017,pt-chevrolet-l86-6.2
+GMC,Sierra 1500,2017,pt-chevrolet-l8b-5.3
+GMC,Sierra 1500,2017,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2018,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2018,pt-chevrolet-l86-6.2
+GMC,Sierra 1500,2018,pt-chevrolet-l8b-5.3
+GMC,Sierra 1500,2018,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2019,pt-chevrolet-l82-5.3
+GMC,Sierra 1500,2019,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2019,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2019,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2019,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2020,pt-chevrolet-l82-5.3
+GMC,Sierra 1500,2020,pt-chevrolet-l83-5.3
+GMC,Sierra 1500,2020,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2020,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2020,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2021,pt-chevrolet-l82-5.3
+GMC,Sierra 1500,2021,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2021,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2021,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500,2022,pt-chevrolet-l84-5.3
+GMC,Sierra 1500,2022,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2022,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2023,pt-chevrolet-l84-5.3
+GMC,Sierra 1500,2023,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2023,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2024,pt-chevrolet-l84-5.3
+GMC,Sierra 1500,2024,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2024,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500,2025,pt-chevrolet-l84-5.3
+GMC,Sierra 1500,2025,pt-chevrolet-l87-6.2
+GMC,Sierra 1500,2025,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500 Limited,2019,pt-chevrolet-l82-5.3
+GMC,Sierra 1500 Limited,2019,pt-chevrolet-l83-5.3
+GMC,Sierra 1500 Limited,2019,pt-chevrolet-l87-6.2
+GMC,Sierra 1500 Limited,2019,pt-chevrolet-lv1-4.3
+GMC,Sierra 1500 Limited,2019,pt-chevrolet-lv3-4.3
+GMC,Sierra 1500HD,2003,pt-chevrolet-lq4-6.0
+GMC,Sierra 1500HD,2004,pt-chevrolet-lq4-6.0
+GMC,Sierra 1500HD,2005,pt-chevrolet-lq4-6.0
+GMC,Sierra 1500HD,2006,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,1999,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2000,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2001,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2002,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2003,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2004,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500,2005,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2001,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2002,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2003,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2004,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2005,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2006,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2007,pt-chevrolet-lq4-6.0
+GMC,Sierra 2500HD,2022,pt-chevrolet-l8t-6.6
+GMC,Sierra 2500HD,2023,pt-chevrolet-l8t-6.6
+GMC,Sierra 2500HD,2024,pt-chevrolet-l8t-6.6
+GMC,Sierra 2500HD,2025,pt-chevrolet-l8t-6.6
+GMC,Sierra 3500,1999,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2000,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2001,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2002,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2003,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2004,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2005,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2006,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500,2007,pt-chevrolet-lq4-6.0
+GMC,Sierra 3500HD,2022,pt-chevrolet-l8t-6.6
+GMC,Sierra 3500HD,2023,pt-chevrolet-l8t-6.6
+GMC,Sierra 3500HD,2024,pt-chevrolet-l8t-6.6
+GMC,Sierra 3500HD,2025,pt-chevrolet-l8t-6.6
+GMC,Yukon,2000,pt-chevrolet-lm7-5.3
+GMC,Yukon,2000,pt-chevrolet-lr4-4.8
+GMC,Yukon,2001,pt-chevrolet-lm7-5.3
+GMC,Yukon,2001,pt-chevrolet-lr4-4.8
+GMC,Yukon,2002,pt-chevrolet-l59-5.3
+GMC,Yukon,2002,pt-chevrolet-lm7-5.3
+GMC,Yukon,2002,pt-chevrolet-lr4-4.8
+GMC,Yukon,2003,pt-chevrolet-l59-5.3
+GMC,Yukon,2003,pt-chevrolet-lm7-5.3
+GMC,Yukon,2003,pt-chevrolet-lr4-4.8
+GMC,Yukon,2004,pt-chevrolet-l59-5.3
+GMC,Yukon,2004,pt-chevrolet-lm7-5.3
+GMC,Yukon,2004,pt-chevrolet-lr4-4.8
+GMC,Yukon,2005,pt-chevrolet-l59-5.3
+GMC,Yukon,2005,pt-chevrolet-lm7-5.3
+GMC,Yukon,2005,pt-chevrolet-lr4-4.8
+GMC,Yukon,2006,pt-chevrolet-l59-5.3
+GMC,Yukon,2006,pt-chevrolet-lm7-5.3
+GMC,Yukon,2006,pt-chevrolet-lr4-4.8
+GMC,Yukon,2007,pt-chevrolet-ly2-4.8
+GMC,Yukon,2007,pt-chevrolet-ly5-5.3
+GMC,Yukon,2008,pt-chevrolet-lfa-6.0hy
+GMC,Yukon,2008,pt-chevrolet-ly2-4.8
+GMC,Yukon,2008,pt-chevrolet-ly5-5.3
+GMC,Yukon,2009,pt-chevrolet-lfa-6.0hy
+GMC,Yukon,2009,pt-chevrolet-ly2-4.8
+GMC,Yukon,2009,pt-chevrolet-ly5-5.3
+GMC,Yukon,2010,pt-chevrolet-lmg-5.3
+GMC,Yukon,2010,pt-chevrolet-lz1-6.0hy
+GMC,Yukon,2011,pt-chevrolet-lmg-5.3
+GMC,Yukon,2011,pt-chevrolet-lz1-6.0hy
+GMC,Yukon,2012,pt-chevrolet-lmg-5.3
+GMC,Yukon,2012,pt-chevrolet-lz1-6.0hy
+GMC,Yukon,2013,pt-chevrolet-lmg-5.3
+GMC,Yukon,2013,pt-chevrolet-lz1-6.0hy
+GMC,Yukon,2014,pt-chevrolet-lmg-5.3
+GMC,Yukon,2015,pt-chevrolet-l83-5.3
+GMC,Yukon,2015,pt-chevrolet-l86-6.2
+GMC,Yukon,2016,pt-chevrolet-l83-5.3
+GMC,Yukon,2016,pt-chevrolet-l86-6.2
+GMC,Yukon,2017,pt-chevrolet-l83-5.3
+GMC,Yukon,2017,pt-chevrolet-l86-6.2
+GMC,Yukon,2018,pt-chevrolet-l83-5.3
+GMC,Yukon,2018,pt-chevrolet-l86-6.2
+GMC,Yukon,2019,pt-chevrolet-l82-5.3
+GMC,Yukon,2019,pt-chevrolet-l83-5.3
+GMC,Yukon,2019,pt-chevrolet-l87-6.2
+GMC,Yukon,2020,pt-chevrolet-l82-5.3
+GMC,Yukon,2020,pt-chevrolet-l83-5.3
+GMC,Yukon,2020,pt-chevrolet-l87-6.2
+GMC,Yukon,2021,pt-chevrolet-l82-5.3
+GMC,Yukon,2021,pt-chevrolet-l87-6.2
+GMC,Yukon,2022,pt-chevrolet-l84-5.3
+GMC,Yukon,2022,pt-chevrolet-l87-6.2
+GMC,Yukon,2023,pt-chevrolet-l84-5.3
+GMC,Yukon,2023,pt-chevrolet-l87-6.2
+GMC,Yukon,2024,pt-chevrolet-l84-5.3
+GMC,Yukon,2024,pt-chevrolet-l87-6.2
+GMC,Yukon,2025,pt-chevrolet-l84-5.3
+GMC,Yukon,2025,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2015,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2015,pt-chevrolet-l86-6.2
+GMC,Yukon XL,2016,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2016,pt-chevrolet-l86-6.2
+GMC,Yukon XL,2017,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2017,pt-chevrolet-l86-6.2
+GMC,Yukon XL,2018,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2018,pt-chevrolet-l86-6.2
+GMC,Yukon XL,2019,pt-chevrolet-l82-5.3
+GMC,Yukon XL,2019,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2019,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2020,pt-chevrolet-l82-5.3
+GMC,Yukon XL,2020,pt-chevrolet-l83-5.3
+GMC,Yukon XL,2020,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2021,pt-chevrolet-l82-5.3
+GMC,Yukon XL,2021,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2022,pt-chevrolet-l84-5.3
+GMC,Yukon XL,2022,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2023,pt-chevrolet-l84-5.3
+GMC,Yukon XL,2023,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2024,pt-chevrolet-l84-5.3
+GMC,Yukon XL,2024,pt-chevrolet-l87-6.2
+GMC,Yukon XL,2025,pt-chevrolet-l84-5.3
+GMC,Yukon XL,2025,pt-chevrolet-l87-6.2
+GMC,Yukon XL 1500,2000,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2001,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2002,pt-chevrolet-l59-5.3
+GMC,Yukon XL 1500,2002,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2003,pt-chevrolet-l59-5.3
+GMC,Yukon XL 1500,2003,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2004,pt-chevrolet-l59-5.3
+GMC,Yukon XL 1500,2004,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2005,pt-chevrolet-l59-5.3
+GMC,Yukon XL 1500,2005,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2006,pt-chevrolet-l59-5.3
+GMC,Yukon XL 1500,2006,pt-chevrolet-lm7-5.3
+GMC,Yukon XL 1500,2007,pt-chevrolet-ly5-5.3
+GMC,Yukon XL 1500,2008,pt-chevrolet-ly5-5.3
+GMC,Yukon XL 1500,2009,pt-chevrolet-ly5-5.3
+GMC,Yukon XL 1500,2010,pt-chevrolet-lmg-5.3
+GMC,Yukon XL 1500,2011,pt-chevrolet-lmg-5.3
+GMC,Yukon XL 2500,2000,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2001,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2002,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2003,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2004,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2005,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2006,pt-chevrolet-lq4-6.0
+GMC,Yukon XL 2500,2007,pt-chevrolet-ly6-6.0
+GMC,Yukon XL 2500,2008,pt-chevrolet-ly6-6.0
+GMC,Yukon XL 2500,2009,pt-chevrolet-ly6-6.0
+GMC,Yukon XL 2500,2010,pt-chevrolet-l96-6.0
+GMC,Yukon XL 2500,2010,pt-chevrolet-ly6-6.0
+GMC,Yukon XL 2500,2011,pt-chevrolet-l96-6.0
+GMC,Yukon XL 2500,2011,pt-chevrolet-ly6-6.0
+Holden,Monaro,2001,pt-chevrolet-ls1-5.7-holden
+Holden,Monaro,2002,pt-chevrolet-ls1-5.7-holden
+Holden,Monaro,2003,pt-chevrolet-ls1-5.7-holden
+Holden,Monaro,2004,pt-chevrolet-ls1-5.7-holden
+Holden,Monaro,2005,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,1999,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2000,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2001,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2002,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2003,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2004,pt-chevrolet-ls1-5.7-holden
+Holden,Statesman,2005,pt-chevrolet-ls1-5.7-holden
+Holden,VE Calais,2006,pt-chevrolet-l98-6.0
+Holden,VE Calais,2007,pt-chevrolet-l98-6.0
+Holden,VE Calais,2008,pt-chevrolet-l98-6.0
+Holden,VE Calais,2009,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2006,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2007,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2008,pt-chevrolet-l76-6.0
+Holden,VE Commodore,2008,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2009,pt-chevrolet-l76-6.0
+Holden,VE Commodore,2009,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2010,pt-chevrolet-l76-6.0
+Holden,VE Commodore,2010,pt-chevrolet-l77-6.0-auto
+Holden,VE Commodore,2010,pt-chevrolet-l77-6.0-manual
+Holden,VE Commodore,2010,pt-chevrolet-l98-6.0
+Holden,VE Commodore,2011,pt-chevrolet-l77-6.0-auto
+Holden,VE Commodore,2011,pt-chevrolet-l77-6.0-manual
+Holden,VE Commodore,2012,pt-chevrolet-l77-6.0-auto
+Holden,VE Commodore,2012,pt-chevrolet-l77-6.0-manual
+Holden,VE Commodore,2013,pt-chevrolet-l77-6.0-auto
+Holden,VE Commodore,2013,pt-chevrolet-l77-6.0-manual
+Holden,VE Ute,2006,pt-chevrolet-l98-6.0
+Holden,VE Ute,2007,pt-chevrolet-l98-6.0
+Holden,VE Ute,2008,pt-chevrolet-l76-6.0
+Holden,VE Ute,2008,pt-chevrolet-l98-6.0
+Holden,VE Ute,2009,pt-chevrolet-l76-6.0
+Holden,VE Ute,2009,pt-chevrolet-l98-6.0
+Holden,VE Ute,2010,pt-chevrolet-l76-6.0
+Holden,VE Ute,2010,pt-chevrolet-l77-6.0-manual
+Holden,VE Ute,2010,pt-chevrolet-l98-6.0
+Holden,VE Ute,2011,pt-chevrolet-l77-6.0-manual
+Holden,VE Ute,2012,pt-chevrolet-l77-6.0-manual
+Holden,VE Ute,2013,pt-chevrolet-l77-6.0-manual
+Holden,VF Commodore,2013,pt-chevrolet-l77-6.0-auto
+Holden,VF Commodore,2013,pt-chevrolet-l77-6.0-manual
+Holden,VF Commodore,2014,pt-chevrolet-l77-6.0-auto
+Holden,VF Commodore,2014,pt-chevrolet-l77-6.0-manual
+Holden,VF Commodore,2015,pt-chevrolet-l77-6.0-auto
+Holden,VF Commodore,2015,pt-chevrolet-l77-6.0-manual
+Holden,VF Ute,2013,pt-chevrolet-l77-6.0-manual
+Holden,VF Ute,2014,pt-chevrolet-l77-6.0-manual
+Holden,VF Ute,2015,pt-chevrolet-l77-6.0-manual
+Holden,VT Commodore,1999,pt-chevrolet-ls1-5.7-holden
+Holden,VT Commodore,2000,pt-chevrolet-ls1-5.7-holden
+Holden,VU Ute,2000,pt-chevrolet-ls1-5.7-holden
+Holden,VU Ute,2001,pt-chevrolet-ls1-5.7-holden
+Holden,VU Ute,2002,pt-chevrolet-ls1-5.7-holden
+Holden,VU Ute,2003,pt-chevrolet-ls1-5.7-holden
+Holden,VX Commodore,2000,pt-chevrolet-ls1-5.7-holden
+Holden,VX Commodore,2001,pt-chevrolet-ls1-5.7-holden
+Holden,VX Commodore,2002,pt-chevrolet-ls1-5.7-holden
+Holden,VX Commodore,2003,pt-chevrolet-ls1-5.7-holden
+Holden,VY Commodore,2002,pt-chevrolet-ls1-5.7-holden
+Holden,VY Commodore,2003,pt-chevrolet-ls1-5.7-holden
+Holden,VY Commodore,2004,pt-chevrolet-ls1-5.7-holden
+Holden,VZ Commodore,2004,pt-chevrolet-ls1-5.7-holden
+Holden,VZ Commodore,2005,pt-chevrolet-ls1-5.7-holden
+Holden,VZ Commodore,2006,pt-chevrolet-l76-6.0
+Holden,VZ Ute,2006,pt-chevrolet-l98-6.0
+Holden,VZ Ute,2007,pt-chevrolet-l98-6.0
+Holden,WL Statesman,2006,pt-chevrolet-l76-6.0
+Holden,WM Caprice,2008,pt-chevrolet-l76-6.0
+Holden,WM Caprice,2009,pt-chevrolet-l76-6.0
+Holden,WM Caprice,2010,pt-chevrolet-l76-6.0
+Holden,WM Caprice,2010,pt-chevrolet-l77-6.0-auto
+Holden,WM Caprice,2011,pt-chevrolet-l77-6.0-auto
+Holden,WM Caprice,2012,pt-chevrolet-l77-6.0-auto
+Holden,WM Caprice,2013,pt-chevrolet-l77-6.0-auto
+Holden,WM Statesman,2006,pt-chevrolet-l98-6.0
+Holden,WM Statesman,2007,pt-chevrolet-l98-6.0
+Holden,WM Statesman,2008,pt-chevrolet-l76-6.0
+Holden,WM Statesman,2008,pt-chevrolet-l98-6.0
+Holden,WN Caprice,2013,pt-chevrolet-l77-6.0-auto
+Holden,WN Caprice,2014,pt-chevrolet-l77-6.0-auto
+Holden,WN Caprice,2015,pt-chevrolet-l77-6.0-auto
+Honda,Accord,2018,pt-honda-l15b7-1.5t
+Honda,Civic Type R,2018,pt-honda-k20c1-2.0t
+Honda,Integra Type R,1997,pt-honda-b18c5-1.8
+Honda,S2000,2000,pt-honda-f20c-2.0
+HSV,GTO,2001,pt-chevrolet-ls1-5.7-hsv
+HSV,GTO,2002,pt-chevrolet-ls1-5.7-hsv
+HSV,GTO,2003,pt-chevrolet-ls1-5.7-hsv
+HSV,GTO,2004,pt-chevrolet-ls1-5.7-hsv
+HSV,VX/VU,2000,pt-chevrolet-ls1-5.7-hsv
+HSV,VX/VU,2001,pt-chevrolet-ls1-5.7-hsv
+HSV,VX/VU,2002,pt-chevrolet-ls1-5.7-hsv
+HSV,VX/VU,2003,pt-chevrolet-ls1-5.7-hsv
+HSV,Y Series,2002,pt-chevrolet-ls1-5.7-hsv
+HSV,Y Series,2003,pt-chevrolet-ls1-5.7-hsv
+HSV,Y Series,2004,pt-chevrolet-ls1-5.7-hsv
+HSV,Z Series Avalanche,2005,pt-chevrolet-ls1-5.7-hsv
+Hummer,H2,2003,pt-chevrolet-lq4-6.0
+Hummer,H2,2004,pt-chevrolet-lq4-6.0
+Hummer,H2,2005,pt-chevrolet-lq4-6.0
+Hummer,H2,2006,pt-chevrolet-lq4-6.0
+Hummer,H2,2007,pt-chevrolet-lq4-6.0
+Isuzu,Ascender,2005,pt-chevrolet-lh6-5.3
+Isuzu,Ascender,2006,pt-chevrolet-lh6-5.3
+Isuzu,Ascender,2007,pt-chevrolet-lh6-5.3
+Jaguar,E-Type,1961,pt-jaguar-xk-3.8
+Lamborghini,Countach,1985,pt-lamborghini-v12qv-5.2
+Lamborghini,Huracan,2015,pt-lamborghini-huracan-5.2
+Lexus,LFA,2011,pt-lexus-1lrgue-4.8
+Mazda,MX-5 Miata,2019,pt-mazda-skyactivg-2.0
+Mazda,RX-7,1993,pt-mazda-13brew-1.3tt
+McLaren,720S,2018,pt-mclaren-m840t-4.0tt
+McLaren,F1,1994,pt-mclaren-s70-2-6.1
+Mercedes-Benz,190E 2.3-16,1986,pt-mercedes-m102-2.3-16
+Mercedes-Benz,300SL,1955,pt-mercedes-m198-3.0
+Mitsubishi,Lancer Evolution,2006,pt-mitsubishi-4g63-2.0t
+Nissan,300ZX,1990,pt-nissan-vg30dett-3.0tt
+Nissan,GT-R,2020,pt-nissan-vr38dett-3.8tt
+Nissan,Skyline GT-R,1999,pt-nissan-rb26dett-2.6tt
+Pontiac,Firebird,1998,pt-chevrolet-ls1-5.7-fbody
+Pontiac,Firebird,1999,pt-chevrolet-ls1-5.7-fbody
+Pontiac,Firebird,2000,pt-chevrolet-ls1-5.7-fbody
+Pontiac,Firebird,2001,pt-chevrolet-ls1-5.7-fbody
+Pontiac,Firebird,2002,pt-chevrolet-ls1-5.7-fbody
+Pontiac,G8,2008,pt-chevrolet-l76-6.0
+Pontiac,G8,2009,pt-chevrolet-l76-6.0
+Pontiac,Grand Prix,2005,pt-chevrolet-ls4-5.3
+Pontiac,Grand Prix,2006,pt-chevrolet-ls4-5.3
+Pontiac,Grand Prix,2007,pt-chevrolet-ls4-5.3
+Pontiac,Grand Prix,2008,pt-chevrolet-ls4-5.3
+Pontiac,GTO,1966,pt-pontiac-389-v8
+Pontiac,GTO,2004,pt-chevrolet-ls1-5.7-gto
+Pontiac,GTO,2005,pt-chevrolet-ls2-6.0
+Pontiac,GTO,2006,pt-chevrolet-ls2-6.0
+Porsche,356,1955,pt-porsche-356-1.6
+Porsche,911,2018,pt-porsche-9a1-4.0
+Porsche,911,2020,pt-porsche-9a2evo-3.0tt
+Porsche,928,1985,pt-porsche-928-4.7
+Porsche,944,1986,pt-porsche-944-2.5
+Saab,9-7X,2005,pt-chevrolet-lh6-5.3
+Saab,9-7X,2006,pt-chevrolet-lh6-5.3
+Saab,9-7X,2007,pt-chevrolet-lh6-5.3
+Saab,9-7X,2008,pt-chevrolet-lh6-5.3
+Saab,9-7X,2009,pt-chevrolet-lh6-5.3
+Saab,900 Turbo,1985,pt-saab-b202-2.0t
+Shelby,Cobra,1965,pt-ford-427-sideoiler
+Subaru,Impreza WRX STI,2006,pt-subaru-ej257-2.5t
+Subaru,WRX,2018,pt-subaru-fa20dit-2.0t
+Toyota,Camry,2020,pt-toyota-a25afks-2.5
+Toyota,Celica GT-Four,1990,pt-toyota-3sgte-2.0t
+Toyota,Corolla GT-S,1985,pt-toyota-4age-1.6
+Toyota,GR Supra,2021,pt-toyota-b58-3.0t
+Toyota,Supra,1994,pt-toyota-2jzgte-3.0tt
+Volkswagen,Golf GTI,2017,pt-vw-ea888gen3-2.0t
+Volvo,850 T5,1995,pt-volvo-b5234t-2.3t
