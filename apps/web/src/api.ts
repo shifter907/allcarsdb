@@ -209,6 +209,57 @@ export async function loadStats(): Promise<Record<string, unknown>> {
 }
 
 // ---------------------------------------------------------------------------
+// Table browsing
+// ---------------------------------------------------------------------------
+
+export interface TableColumn {
+  name: string;
+  type: 'text' | 'integer';
+  description: string;
+  key?: 'pk' | 'fk';
+  references?: string;
+}
+
+export interface TableSummary {
+  name: string;
+  label: string;
+  group: 'source' | 'derived';
+  role: string;
+  description: string;
+  csv?: string;
+  column_count: number;
+  row_count: number;
+}
+
+export interface TablePage {
+  table: Omit<TableSummary, 'column_count' | 'row_count'> & { columns: TableColumn[] };
+  total: number;
+  limit: number;
+  offset: number;
+  rows: Record<string, unknown>[];
+}
+
+export async function loadTables(): Promise<TableSummary[]> {
+  const res = await fetch(`${BASE}/v1/tables`);
+  if (!res.ok) throw new Error('Could not load the table list');
+  const body = (await res.json()) as { tables: TableSummary[] };
+  return body.tables;
+}
+
+export async function loadTable(
+  name: string,
+  offset = 0,
+  limit = 50,
+): Promise<TablePage> {
+  const res = await fetch(`${BASE}/v1/table/${encodeURIComponent(name)}?limit=${limit}&offset=${offset}`);
+  if (!res.ok) {
+    const body = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(body.error ?? `Could not load ${name}`);
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
 // Display
 // ---------------------------------------------------------------------------
 

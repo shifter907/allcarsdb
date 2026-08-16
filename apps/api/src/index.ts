@@ -16,7 +16,9 @@ import {
   compile,
   QueryError,
   getField,
+  getTable,
   FIELDS,
+  TABLES,
   type SearchRequest,
 } from '@allcarsdb/query';
 
@@ -348,6 +350,88 @@ app.get('/v1/makes', async (c) => {
       ORDER BY Make`,
   ).all();
   return c.json({ makes: results }, 200, { 'Cache-Control': CACHE });
+});
+
+// ---------------------------------------------------------------------------
+// Table browsing
+//
+// Every table name and every column name below comes from the registry in
+// packages/query/src/tables.ts, never from the request. A request names a table
+// by key; an unknown key is rejected before any SQL is built. That is the same
+// injection-safety-by-construction argument the field registry makes for
+// search, applied to the one other place identifiers reach SQL.
+// ---------------------------------------------------------------------------
+
+app.get('/v1/tables', async (c) => {
+  // Row counts come from one batched pass rather than a query per table.
+  const counts = await c.env.DB.batch<{ n: number }>(
+    TABLES.map((t) => c.env.DB.prepare(`SELECT COUNT(*) AS n FROM \`${t.name}\``)),
+  );
+
+  return c.json(
+    {
+      tables: TABLES.map((t, i) => ({
+        name: t.name,
+        label: t.label,
+        group: t.group,
+        role: t.role,
+        description: t.description,
+        csv: t.csv,
+        column_count: t.columns.length,
+        row_count: counts[i]?.results?.[0]?.n ?? 0,
+      })),
+    },
+    200,
+    { 'Cache-Control': CACHE },
+  );
+});
+
+app.get('/v1/table/:name', async (c) => {
+  let table;
+  try {
+    table = getTable(c.req.param('name'));
+  } catch {
+    return c.json({ error: `Unknown table: ${c.req.param('name')}` }, 404);
+  }
+
+  const url = new URL(c.req.url);
+  const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 50) || 50, 1), 200);
+  const offset = Math.max(Number(url.searchParams.get('offset') ?? 0) || 0, 0);
+
+  const cols = table.columns.map((col) => `\`${col.name}\``).join(', ');
+
+  const [countRes, rowsRes] = await c.env.DB.batch<Record<string, unknown>>([
+    c.env.DB.prepare(`SELECT COUNT(*) AS n FROM \`${table.name}\``),
+    c.env.DB
+      .prepare(
+        `SELECT ${cols} FROM \`${table.name}\`
+          ORDER BY \`${table.orderBy}\`
+          LIMIT ? OFFSET ?`,
+      )
+      .bind(limit, offset),
+  ]);
+
+  const total = (countRes?.results?.[0] as { n: number } | undefined)?.n ?? 0;
+
+  return c.json(
+    {
+      table: {
+        name: table.name,
+        label: table.label,
+        group: table.group,
+        role: table.role,
+        description: table.description,
+        csv: table.csv,
+        columns: table.columns,
+      },
+      total,
+      limit,
+      offset,
+      rows: rowsRes?.results ?? [],
+    },
+    200,
+    { 'Cache-Control': CACHE },
+  );
 });
 
 // ---------------------------------------------------------------------------

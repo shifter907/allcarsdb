@@ -18,6 +18,8 @@ import {
   type SearchState,
   type UnitSystem,
 } from './api';
+import { useRoute, linkProps } from './router';
+import { TablesIndex, TableDetail } from './Tables';
 
 /**
  * Starting points, phrased as questions rather than filter syntax. A blank
@@ -35,7 +37,91 @@ const EXAMPLES: { label: string; params: string }[] = [
   { label: 'Diesels', params: 'fuel_type=Diesel' },
 ];
 
+/**
+ * Display names for the filter sections. Falls back to the raw group key, so a
+ * group added to the field registry shows up with a usable heading before
+ * anyone gets around to naming it here.
+ */
+const GROUP_LABELS: Record<string, string> = {
+  vehicle: 'Vehicle',
+  engine: 'Engine',
+};
+
+const groupLabel = (key: string) =>
+  GROUP_LABELS[key] ?? key.replace(/[_-]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
 export default function App() {
+  const route = useRoute();
+  const [stats, setStats] = useState<Record<string, unknown> | null>(null);
+  const [units, setUnits] = useState<UnitSystem>(
+    () => (localStorage.getItem('units') as UnitSystem) ?? 'imperial',
+  );
+
+  useEffect(() => { loadStats().then(setStats).catch(() => {}); }, []);
+  useEffect(() => localStorage.setItem('units', units), [units]);
+
+  return (
+    <>
+      {/* Outside .layout so the sticky bar and its border span the full width
+          rather than stopping at the content column. */}
+      <header className="header">
+        <div className="header-inner">
+          <div className="brand">
+            <a className="brand-link" {...linkProps('/')}>
+              <strong>AllCarsDB</strong>
+            </a>{' '}
+            <span className="muted">The most comprehensive vehicle spec database ever created. Free Forever.</span>
+          </div>
+          <div className="header-actions">
+            <a className="link-btn" {...linkProps('/tables')}>Data model</a>
+            {route.name === 'search' && (
+              <div className="unit-toggle">
+                <button
+                  className={units === 'imperial' ? 'pill active' : 'pill'}
+                  onClick={() => setUnits('imperial')}
+                >
+                  Imperial
+                </button>
+                <button
+                  className={units === 'metric' ? 'pill active' : 'pill'}
+                  onClick={() => setUnits('metric')}
+                >
+                  Metric
+                </button>
+              </div>
+            )}
+            <a className="link-btn" href="https://github.com/shifter907/allcarsdb">
+              Contribute
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div className="layout">
+        {route.name === 'search' && <SearchPage units={units} />}
+        {route.name === 'tables' && <TablesIndex />}
+        {route.name === 'table' && <TableDetail name={route.table} />}
+
+        <footer className="footer">
+          {stats && (
+            <span className="muted">
+              {Number(stats.vehicle_years ?? 0).toLocaleString()} vehicle-years ·{' '}
+              {Number(stats.engines ?? 0).toLocaleString()} engines ·{' '}
+              {Number(stats.makes ?? 0).toLocaleString()} makes
+            </span>
+          )}
+          <span className="muted">
+            Open data, CC BY-SA 4.0 ·{' '}
+            <a {...linkProps('/tables')}>data model</a> ·{' '}
+            <a href="https://github.com/shifter907/allcarsdb">source &amp; contributing</a>
+          </span>
+        </footer>
+      </div>
+    </>
+  );
+}
+
+function SearchPage({ units }: { units: UnitSystem }) {
   const [fields, setFields] = useState<FieldDef[]>([]);
   const [choices, setChoices] = useState<Record<string, Choice[]>>({});
   const [state, setState] = useState<SearchState>(() =>
@@ -44,11 +130,7 @@ export default function App() {
   const [data, setData] = useState<SearchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState<Record<string, unknown> | null>(null);
-  const [units, setUnits] = useState<UnitSystem>(
-    () => (localStorage.getItem('units') as UnitSystem) ?? 'imperial',
-  );
-  const [showAll, setShowAll] = useState(false);
+  const [openGroups, setOpenGroups] = useState<Set<string> | null>(null);
 
   const inFlight = useRef<AbortController | null>(null);
   // The first search (right after metadata loads) fires immediately -- there
@@ -61,10 +143,7 @@ export default function App() {
     loadMetadata()
       .then((m) => { setFields(m.fields); setChoices(m.choices); })
       .catch((e) => setError(e.message));
-    loadStats().then(setStats).catch(() => {});
   }, []);
-
-  useEffect(() => localStorage.setItem('units', units), [units]);
 
   // The URL is the state. Every change rewrites it, and the popstate handler
   // reads it back, so Back genuinely undoes a filter instead of leaving the
@@ -193,9 +272,51 @@ export default function App() {
   // panel with nothing to offer.
   const codeActive = state.filters.some((f) => f.field === 'code' && f.value !== '');
   const visibleFields = useMemo(
-    () => fields.filter((f) => (showAll || f.common) && (f.name !== 'named_variant' || codeActive)),
-    [fields, showAll, codeActive],
+    () => fields.filter((f) => f.name !== 'named_variant' || codeActive),
+    [fields, codeActive],
   );
+
+  /**
+   * Filters are grouped into collapsible sections rather than one flat grid.
+   * With seventeen fields a grid was merely busy; the data model this is
+   * heading toward has well over a hundred, at which point a single wall of
+   * dropdowns stops being usable at all. Grouping is the thing that scales.
+   */
+  const groups = useMemo(() => {
+    const byGroup = new Map<string, FieldDef[]>();
+    for (const f of visibleFields) {
+      const list = byGroup.get(f.group);
+      if (list) list.push(f);
+      else byGroup.set(f.group, [f]);
+    }
+    return [...byGroup.entries()].map(([key, groupFields]) => ({
+      key,
+      label: groupLabel(key),
+      fields: groupFields,
+      // A section holding at least one "common" field is one most people want
+      // open on arrival. As the registry grows, the specialised sections
+      // (interior dimensions, drivetrain internals) have no common fields and
+      // so stay collapsed until someone goes looking for them.
+      defaultOpen: groupFields.some((f) => f.common),
+    }));
+  }, [visibleFields]);
+
+  // Null until the field registry arrives, then seeded once from the defaults.
+  // After that it is whatever the user has opened or closed.
+  useEffect(() => {
+    if (openGroups === null && groups.length > 0) {
+      setOpenGroups(new Set(groups.filter((g) => g.defaultOpen).map((g) => g.key)));
+    }
+  }, [groups, openGroups]);
+
+  const toggleGroup = useCallback((key: string) => {
+    setOpenGroups((prev) => {
+      const next = new Set(prev ?? []);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
 
   const applyExample = (params: string) => setState(paramsToState(new URLSearchParams(params)));
 
@@ -203,37 +324,6 @@ export default function App() {
 
   return (
     <>
-      {/* Outside .layout so the sticky bar and its border span the full width
-          rather than stopping at the content column. */}
-      <header className="header">
-        <div className="header-inner">
-          <div className="brand">
-            <strong>AllCarsDB</strong>{' '}
-            <span className="muted">The most comprehensive vehicle spec database ever created. Free Forever.</span>
-          </div>
-          <div className="header-actions">
-            <div className="unit-toggle">
-              <button
-                className={units === 'imperial' ? 'pill active' : 'pill'}
-                onClick={() => setUnits('imperial')}
-              >
-                Imperial
-              </button>
-              <button
-                className={units === 'metric' ? 'pill active' : 'pill'}
-                onClick={() => setUnits('metric')}
-              >
-                Metric
-              </button>
-            </div>
-            <a className="link-btn" href="https://github.com/shifter907/allcarsdb">
-              Contribute
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <div className="layout">
       <main className="panel">
         <div className="text-search">
           <input
@@ -258,24 +348,44 @@ export default function App() {
           ))}
         </div>
 
-        <div className="filter-grid">
-          {visibleFields.map((f) => (
-            <FilterControl
-              key={f.name}
-              field={f}
-              choices={choices[f.name] ?? []}
-              active={filterFor(f.name)}
-              units={units}
-              onChange={setFilter}
-            />
-          ))}
-        </div>
+        <div className="filter-sections">
+          {groups.map((group) => {
+            const open = openGroups?.has(group.key) ?? group.defaultOpen;
+            const activeInGroup = group.fields.filter((f) => filterFor(f.name)).length;
+            return (
+              <section className="filter-section" key={group.key}>
+                <button
+                  type="button"
+                  className="filter-section-head"
+                  aria-expanded={open}
+                  onClick={() => toggleGroup(group.key)}
+                >
+                  <span className={open ? 'caret open' : 'caret'} aria-hidden="true">▸</span>
+                  <span className="filter-section-title">{group.label}</span>
+                  {/* Shown even when collapsed, so a section can never hide an
+                      active filter that is silently narrowing the results. */}
+                  {activeInGroup > 0 && <span className="badge">{activeInGroup}</span>}
+                  <span className="filter-section-count muted">{group.fields.length}</span>
+                </button>
 
-        {fields.length > 0 && (
-          <button className="ghost-btn" onClick={() => setShowAll((v) => !v)}>
-            {showAll ? 'Fewer filters' : 'More filters'}
-          </button>
-        )}
+                {open && (
+                  <div className="filter-grid">
+                    {group.fields.map((f) => (
+                      <FilterControl
+                        key={f.name}
+                        field={f}
+                        choices={choices[f.name] ?? []}
+                        active={filterFor(f.name)}
+                        units={units}
+                        onChange={setFilter}
+                      />
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
       </main>
 
       <section className="results-head">
@@ -352,13 +462,6 @@ export default function App() {
         })}
       </div>
 
-      {/* There used to be a "narrow it down" panel here, listing the top
-          values of a curated few fields as clickable buttons. It is gone now
-          because every dropdown above does the same job for every field, not
-          a curated four -- and does it better: it stays in sync with what is
-          still actually choosable given the rest of the filters, instead of
-          offering a value that would zero out the results. */}
-
       {data && data.total > data.limit && (
         <div className="pager">
           <button
@@ -381,21 +484,6 @@ export default function App() {
           </button>
         </div>
       )}
-
-      <footer className="footer">
-        {stats && (
-          <span className="muted">
-            {Number(stats.vehicle_years ?? 0).toLocaleString()} vehicle-years ·{' '}
-            {Number(stats.engines ?? 0).toLocaleString()} engines ·{' '}
-            {Number(stats.makes ?? 0).toLocaleString()} makes
-          </span>
-        )}
-        <span className="muted">
-          Open data, CC BY-SA 4.0 ·{' '}
-          <a href="https://github.com/shifter907/allcarsdb">source &amp; contributing</a>
-        </span>
-      </footer>
-      </div>
     </>
   );
 }
@@ -483,13 +571,17 @@ function FilterControl({
     return String(v);
   };
 
+  // Choices carry a count from the server, but it is deliberately not rendered.
+  // "Ford (1,898)" invites the number to be read as a fact about Ford when it
+  // is really a fact about how much data has been entered so far -- and it
+  // makes every option in a long dropdown harder to scan.
   const options = (
     <>
       <option value="">Any</option>
       {unlisted && <option value={value}>{value} (no longer in the data)</option>}
       {choices.map((c) => (
         <option key={String(c.value)} value={String(c.value)}>
-          {label(c.value)} ({c.n})
+          {label(c.value)}
         </option>
       ))}
     </>

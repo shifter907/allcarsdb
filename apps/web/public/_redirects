@@ -1,0 +1,7 @@
+# Cloudflare Pages SPA fallback.
+#
+# /tables and /tables/<name> are client-side routes with no file behind them.
+# Without this, a deep link or a refresh on one of those paths 404s before the
+# app ever loads. The 200 (rather than a redirect) keeps the URL intact so the
+# router still sees the path it needs to parse.
+/*  /index.html  200
