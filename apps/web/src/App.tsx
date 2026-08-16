@@ -333,13 +333,17 @@ function SearchPage({ units }: { units: UnitSystem }) {
       // configuration rather than the car -- which is what makes the
       // same-configuration question meaningful here.
       hasBuildFields: groupFields.some((f) => f.grain === 'build'),
+      // A section where nothing has any values yet renders as a column of
+      // dropdowns that all say "Any", which reads as broken rather than as
+      // empty. Knowing the difference lets it say so instead.
+      hasAnyChoices: groupFields.some((f) => (choices[f.name]?.length ?? 0) > 0),
       // A section holding at least one "common" field is one most people want
       // open on arrival. As the registry grows, the specialised sections
       // (interior dimensions, drivetrain internals) have no common fields and
       // so stay collapsed until someone goes looking for them.
       defaultOpen: groupFields.some((f) => f.common),
     }));
-  }, [visibleFields]);
+  }, [visibleFields, choices]);
 
   // Null until the field registry arrives, then seeded once from the defaults.
   // After that it is whatever the user has opened or closed.
@@ -407,6 +411,14 @@ function SearchPage({ units }: { units: UnitSystem }) {
                   {activeInGroup > 0 && <span className="badge">{activeInGroup}</span>}
                   <span className="filter-section-count muted">{group.fields.length}</span>
                 </button>
+
+                {open && !group.hasAnyChoices && (
+                  <p className="section-empty">
+                    Nothing recorded here yet — these filters come alive as
+                    contributors add the data.{' '}
+                    <a {...linkProps('/tables')}>See what they hold</a>.
+                  </p>
+                )}
 
                 {open && (
                   <div className="filter-grid">

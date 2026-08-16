@@ -669,3 +669,13 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   cursor: pointer;
 }
 .same-build input { margin-top: 2px; flex-shrink: 0; }
+
+/* Shown when every filter in a section has no values behind it yet -- a
+   column of dropdowns all reading "Any" otherwise looks like a failure
+   rather than an empty shelf. */
+.section-empty {
+  margin: 0;
+  padding: 2px 12px 12px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
