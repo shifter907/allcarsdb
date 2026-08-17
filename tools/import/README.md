@@ -100,3 +100,35 @@ reason.
 
 Body configs and builds are **generated**, not migrated — re-run their importers
 after any rename and they resolve correctly on their own.
+
+## Reviewing the names EPA import drops
+
+Roughly 21,000 EPA rows carry a model name the importer can't match, across
+4,300 distinct names. Most need a human to say whether two spellings are the
+same vehicle.
+
+```bash
+node tools/import/epa-candidates.mjs && node tools/import/build-review.mjs
+```
+
+That writes `cache/epa-review.html` — a self-contained page with the data
+embedded, so it opens offline and can be published as an artifact. Decisions are
+kept in the browser's `localStorage` and exported as CSV, because a page has no
+way to write back into the repo.
+
+Names are ordered by how many dropped rows each decision unblocks, so working
+top-down is working highest-impact-first. Keyboard: `J`/`K` to move, `1`–`3` to
+pick a candidate, `X` to reject, `M` to flag as missing from the catalogue.
+
+The two outputs answer different questions, which is the point of separating
+them:
+
+- **Aliases** → paste into `data/epa_model_aliases.csv`. These are names we
+  hold under a different spelling.
+- **Missing from catalogue** → these have no similar name at all, which almost
+  always means the model isn't in `year_make_model.csv` in any year. That's a
+  backfill job, not an alias decision, and no alias will ever fix it.
+
+Note that the suggestions rank on name and year overlap only. They are evidence,
+not answers — the scorer once proposed `S15 Pickup` for `S15 Jimmy`, which is a
+truck standing in for an SUV. Check the alternates before confirming.

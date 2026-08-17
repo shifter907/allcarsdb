@@ -1,0 +1,502 @@
+<title>EPA Name Reconciliation</title>
+<style>
+  /* Light is the base palette; both dark paths only redefine tokens. */
+  :root {
+    --ground:#eef1f4; --surface:#ffffff; --surface-2:#f7f9fb;
+    --ink:#151a20; --muted:#5c6a78; --faint:#8a97a4;
+    --rule:#dbe2e9; --rule-strong:#c3ccd6;
+    --accent:#0a6a6a; --accent-ink:#ffffff; --accent-soft:#dff0ef;
+    --ok:#1c7a3e; --ok-soft:#dcefe2;
+    --no:#a3302a; --no-soft:#f6e0de;
+    --gap:#9a6206; --gap-soft:#f7ead2;
+    --shadow:0 1px 2px rgba(20,30,40,.06), 0 4px 14px rgba(20,30,40,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0f1319; --surface:#161c24; --surface-2:#1b222b;
+      --ink:#e4ebf2; --muted:#95a2b0; --faint:#6f7d8b;
+      --rule:#252d38; --rule-strong:#33404e;
+      --accent:#37b3a6; --accent-ink:#06201f; --accent-soft:#12312f;
+      --ok:#4cc47b; --ok-soft:#12301f;
+      --no:#e8756b; --no-soft:#331a18;
+      --gap:#e0a548; --gap-soft:#2f2415;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0f1319; --surface:#161c24; --surface-2:#1b222b;
+    --ink:#e4ebf2; --muted:#95a2b0; --faint:#6f7d8b;
+    --rule:#252d38; --rule-strong:#33404e;
+    --accent:#37b3a6; --accent-ink:#06201f; --accent-soft:#12312f;
+    --ok:#4cc47b; --ok-soft:#12301f;
+    --no:#e8756b; --no-soft:#331a18;
+    --gap:#e0a548; --gap-soft:#2f2415;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+  }
+
+  /* Mono carries the data itself: these decisions turn on character-level
+     differences ("F150" against "F-150"), which a proportional face blurs. */
+  :root {
+    --ui: ui-sans-serif, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --data: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--ui); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 20px 140px; }
+
+  /* ---- header ---- */
+  header {
+    position:sticky; top:0; z-index:20; background:var(--ground);
+    border-bottom:1px solid var(--rule); padding:18px 0 0;
+  }
+  .hrow { max-width:1180px; margin:0 auto; padding:0 20px;
+          display:flex; flex-wrap:wrap; gap:16px; align-items:baseline; }
+  h1 { font-size:19px; letter-spacing:-.015em; margin:0; font-weight:650; }
+  h1 span { color:var(--muted); font-weight:400; }
+  .spacer { flex:1 1 auto; }
+
+  .meter { max-width:1180px; margin:12px auto 0; padding:0 20px; }
+  .bar { height:7px; border-radius:4px; background:var(--rule); overflow:hidden; display:flex; }
+  .bar i { display:block; height:100%; }
+  .bar .b-ok { background:var(--ok); }
+  .bar .b-no { background:var(--no); }
+  .bar .b-gap { background:var(--gap); }
+  .legend { display:flex; flex-wrap:wrap; gap:18px; margin:9px 0 0;
+            font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .legend b { color:var(--ink); font-weight:600; font-family:var(--data); }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
+
+  /* ---- toolbar ---- */
+  .tools { max-width:1180px; margin:0 auto; padding:14px 20px 16px;
+           display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  input[type=search], select {
+    font:inherit; font-size:13.5px; color:var(--ink); background:var(--surface);
+    border:1px solid var(--rule-strong); border-radius:7px; padding:7px 10px;
+  }
+  input[type=search] { min-width:230px; font-family:var(--data); }
+  .seg { display:flex; border:1px solid var(--rule-strong); border-radius:7px; overflow:hidden; }
+  .seg button {
+    font:inherit; font-size:13px; padding:7px 12px; border:0; cursor:pointer;
+    background:var(--surface); color:var(--muted); border-right:1px solid var(--rule);
+  }
+  .seg button:last-child { border-right:0; }
+  .seg button[aria-pressed="true"] { background:var(--accent); color:var(--accent-ink); font-weight:600; }
+  .toggle { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:7px; cursor:pointer; }
+
+  /* ---- cards ---- */
+  .note {
+    background:var(--surface-2); border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:8px; padding:13px 16px; margin:18px 0 4px; font-size:13.5px; color:var(--muted);
+  }
+  .note b { color:var(--ink); }
+  ul.list { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  li.card {
+    background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+    padding:13px 15px; box-shadow:var(--shadow); scroll-margin:150px;
+  }
+  li.card[data-focus="1"] { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft), var(--shadow); }
+  li.card[data-state="alias"] { border-left:3px solid var(--ok); }
+  li.card[data-state="no"] { border-left:3px solid var(--no); opacity:.62; }
+  li.card[data-state="missing"] { border-left:3px solid var(--gap); }
+
+  .head { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:baseline; }
+  .epa { font-family:var(--data); font-size:15.5px; font-weight:600; letter-spacing:-.01em; }
+  .make { font-size:12px; text-transform:uppercase; letter-spacing:.07em; color:var(--faint); font-weight:600; }
+  .meta { font-size:12.5px; color:var(--muted); font-family:var(--data); font-variant-numeric:tabular-nums; }
+  .impact {
+    font-size:11.5px; font-weight:700; font-family:var(--data);
+    background:var(--accent-soft); color:var(--accent); padding:2px 7px; border-radius:20px;
+  }
+
+  .cands { display:flex; flex-wrap:wrap; gap:7px; margin-top:11px; align-items:stretch; }
+  button.cand {
+    font:inherit; text-align:left; cursor:pointer; border-radius:8px; padding:7px 11px;
+    background:var(--surface-2); border:1px solid var(--rule-strong); color:var(--ink);
+    display:flex; flex-direction:column; gap:2px; min-width:0;
+  }
+  button.cand:hover { border-color:var(--accent); }
+  button.cand[aria-pressed="true"] { background:var(--ok-soft); border-color:var(--ok); }
+  .cand .nm { font-family:var(--data); font-size:13.5px; font-weight:600; }
+  .cand .ev { font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .key {
+    font-family:var(--data); font-size:10px; border:1px solid var(--rule-strong);
+    border-radius:4px; padding:0 4px; color:var(--faint); margin-right:5px;
+  }
+  button.act {
+    font:inherit; font-size:13px; cursor:pointer; border-radius:8px; padding:7px 11px;
+    background:transparent; border:1px dashed var(--rule-strong); color:var(--muted);
+  }
+  button.act:hover { border-style:solid; border-color:var(--no); color:var(--no); }
+  button.act.gapish:hover { border-color:var(--gap); color:var(--gap); }
+  button.act[aria-pressed="true"] { background:var(--no-soft); border-style:solid; border-color:var(--no); color:var(--no); font-weight:600; }
+  button.act.gapish[aria-pressed="true"] { background:var(--gap-soft); border-color:var(--gap); color:var(--gap); }
+  .manual {
+    font:inherit; font-family:var(--data); font-size:13px; padding:7px 10px;
+    border:1px solid var(--rule-strong); border-radius:8px; background:var(--surface);
+    color:var(--ink); min-width:160px;
+  }
+  .empty { text-align:center; color:var(--muted); padding:60px 20px; }
+  .more { text-align:center; padding:22px; color:var(--faint); font-size:13px; }
+
+  /* ---- export ---- */
+  .dock {
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    background:var(--surface); border-top:1px solid var(--rule-strong); box-shadow:0 -6px 24px rgba(0,0,0,.08);
+  }
+  .dockin { max-width:1180px; margin:0 auto; padding:11px 20px;
+            display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .dockin .spacer { flex:1 1 auto; }
+  button.primary {
+    font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; border:0;
+    border-radius:8px; padding:9px 15px; background:var(--accent); color:var(--accent-ink);
+  }
+  button.ghost {
+    font:inherit; font-size:13.5px; cursor:pointer; border-radius:8px; padding:9px 13px;
+    background:transparent; border:1px solid var(--rule-strong); color:var(--muted);
+  }
+  .panel { border-top:1px solid var(--rule); background:var(--surface-2); }
+  .panelin { max-width:1180px; margin:0 auto; padding:16px 20px 20px; }
+  .panel h2 { font-size:13px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin:0 0 8px; }
+  textarea {
+    width:100%; height:190px; font-family:var(--data); font-size:12.5px; line-height:1.55;
+    color:var(--ink); background:var(--surface); border:1px solid var(--rule-strong);
+    border-radius:8px; padding:11px; resize:vertical;
+  }
+  .tabs { display:flex; gap:6px; margin-bottom:10px; }
+  .tabs button {
+    font:inherit; font-size:12.5px; cursor:pointer; border-radius:6px; padding:5px 10px;
+    background:transparent; border:1px solid var(--rule-strong); color:var(--muted);
+  }
+  .tabs button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+  @media (max-width:640px) {
+    .epa { font-size:14px; }
+    button.cand { flex:1 1 100%; }
+  }
+</style>
+
+<header>
+  <div class="hrow">
+    <h1>EPA Name Reconciliation <span id="scope"></span></h1>
+    <div class="spacer"></div>
+    <div class="seg" role="group" aria-label="Theme">
+      <button type="button" data-theme-set="light">Light</button>
+      <button type="button" data-theme-set="dark">Dark</button>
+    </div>
+  </div>
+  <div class="meter">
+    <div class="bar" id="bar" role="img" aria-label="Review progress"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Filter by name…" aria-label="Filter by name">
+    <select id="make" aria-label="Make"><option value="">All makes</option></select>
+    <div class="seg" role="group" aria-label="Confidence band">
+      <button type="button" data-band="all" aria-pressed="true">All</button>
+      <button type="button" data-band="strong">Strong</button>
+      <button type="button" data-band="weak">Weak</button>
+      <button type="button" data-band="none">No candidate</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="hide" checked> Hide decided</label>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="note">
+    Each row is one distinct EPA model name, not one car — deciding it applies to every
+    row carrying it. <b>Confirming</b> claims the two names are the same vehicle; it does
+    <b>not</b> claim we hold every year EPA does, since the importer still checks each year
+    separately. Leaving a row undecided keeps its data out, which is the safe default.
+    Suggestions are ranked by name and year overlap only — <b>the top one is sometimes
+    wrong</b>, so check the alternates.
+  </div>
+  <ul class="list" id="list"></ul>
+  <div class="more" id="more"></div>
+</div>
+
+<div class="dock">
+  <div class="panel" id="panel" hidden>
+    <div class="panelin">
+      <div class="tabs">
+        <button type="button" data-tab="alias" aria-pressed="true">Aliases</button>
+        <button type="button" data-tab="missing">Missing from catalogue</button>
+      </div>
+      <h2 id="panelHead"></h2>
+      <textarea id="out" readonly spellcheck="false"></textarea>
+    </div>
+  </div>
+  <div class="dockin">
+    <strong id="tally" style="font-family:var(--data);font-size:13.5px"></strong>
+    <span class="spacer"></span>
+    <button type="button" class="ghost" id="reset">Reset</button>
+    <button type="button" class="ghost" id="toggleOut">Show output</button>
+    <button type="button" class="primary" id="copy">Copy CSV</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const DATA = JSON.parse(document.getElementById('payload').textContent);
+  const STORE = 'allcarsdb.epa.review.v1';
+  const TOTAL_ROWS = DATA.reduce((s, o) => s + o.r, 0);
+
+  // key -> { t:'alias'|'no'|'missing', v:model|null }
+  let decided = {};
+  try { decided = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch {}
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(decided)); } catch {} };
+  const keyOf = (o) => o.m + '|' + o.e;
+
+  const band = (o) => !o.c.length ? 'none' : (o.c[0][1] >= 60 ? 'strong' : 'weak');
+
+  const state = { q:'', make:'', band:'all', hide:true, shown:60, focus:0, tab:'alias' };
+  const $ = (id) => document.getElementById(id);
+
+  // ---- theme -------------------------------------------------------------
+  const THEME = 'allcarsdb.theme';
+  const applyTheme = (t) => {
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    else document.documentElement.removeAttribute('data-theme');
+    document.querySelectorAll('[data-theme-set]').forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === t)));
+  };
+  applyTheme(localStorage.getItem(THEME) || null);
+  document.querySelectorAll('[data-theme-set]').forEach((b) => b.onclick = () => {
+    const t = b.dataset.themeSet;
+    const next = localStorage.getItem(THEME) === t ? null : t;
+    if (next) localStorage.setItem(THEME, next); else localStorage.removeItem(THEME);
+    applyTheme(next);
+  });
+
+  // ---- filtering ---------------------------------------------------------
+  function filtered() {
+    const q = state.q.trim().toLowerCase();
+    return DATA.filter((o) => {
+      if (state.make && o.m !== state.make) return false;
+      if (state.band !== 'all' && band(o) !== state.band) return false;
+      if (state.hide && decided[keyOf(o)]) return false;
+      if (q && !(o.e.toLowerCase().includes(q) || o.m.toLowerCase().includes(q)
+                 || o.c.some((c) => c[0].toLowerCase().includes(q)))) return false;
+      return true;
+    });
+  }
+
+  // ---- rendering ---------------------------------------------------------
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
+    ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+
+  function cardHtml(o, i) {
+    const k = keyOf(o), d = decided[k], b = band(o);
+    const pct = ((o.r / TOTAL_ROWS) * 100).toFixed(1);
+    const cands = o.c.map((c, n) => `
+      <button type="button" class="cand" data-pick="${esc(c[0])}"
+              aria-pressed="${!!(d && d.t === 'alias' && d.v === c[0])}">
+        <span class="nm"><span class="key">${n + 1}</span>${esc(c[0])}</span>
+        <span class="ev">${c[1]}% · name ${c[3]}% · years ${c[2]}% · we hold ${esc(c[4] || '—')}</span>
+      </button>`).join('');
+
+    const gapNote = b === 'none'
+      ? `<div class="ev" style="margin-top:9px;color:var(--gap)">No similar name in the catalogue —
+         usually means the model is missing entirely rather than spelled differently.</div>` : '';
+
+    return `<li class="card" data-i="${i}" data-key="${esc(k)}"
+                data-state="${d ? d.t : ''}" data-focus="${i === state.focus ? 1 : 0}">
+      <div class="head">
+        <span class="make">${esc(o.m)}</span>
+        <span class="epa">${esc(o.e)}</span>
+        <span class="meta">${o.r} rows · ${esc(o.y)}</span>
+        <span class="spacer"></span>
+        <span class="impact">${pct}%</span>
+      </div>
+      ${gapNote}
+      <div class="cands">
+        ${cands}
+        <input class="manual" placeholder="or type a model…" data-manual
+               value="${d && d.t === 'alias' && !o.c.some((c) => c[0] === d.v) ? esc(d.v) : ''}">
+        <button type="button" class="act" data-no
+                aria-pressed="${!!(d && d.t === 'no')}"><span class="key">X</span>Not a match</button>
+        <button type="button" class="act gapish" data-missing
+                aria-pressed="${!!(d && d.t === 'missing')}"><span class="key">M</span>Missing model</button>
+      </div>
+    </li>`;
+  }
+
+  function render() {
+    const rows = filtered();
+    if (state.focus >= rows.length) state.focus = Math.max(0, rows.length - 1);
+    const slice = rows.slice(0, state.shown);
+    $('list').innerHTML = slice.length
+      ? slice.map(cardHtml).join('')
+      : '<div class="empty">Nothing matches these filters.</div>';
+    $('more').textContent = rows.length > state.shown
+      ? `${rows.length - state.shown} more — scroll to load` : '';
+    $('scope').textContent = `· ${rows.length} of ${DATA.length} names`;
+    renderMeter();
+    renderOut();
+  }
+
+  function counts() {
+    let a = 0, n = 0, g = 0, ar = 0, nr = 0, gr = 0;
+    for (const o of DATA) {
+      const d = decided[keyOf(o)];
+      if (!d) continue;
+      if (d.t === 'alias') { a++; ar += o.r; }
+      else if (d.t === 'no') { n++; nr += o.r; }
+      else { g++; gr += o.r; }
+    }
+    return { a, n, g, ar, nr, gr };
+  }
+
+  function renderMeter() {
+    const c = counts();
+    const p = (v) => (v / TOTAL_ROWS) * 100;
+    $('bar').innerHTML =
+      `<i class="b-ok" style="width:${p(c.ar)}%"></i>` +
+      `<i class="b-no" style="width:${p(c.nr)}%"></i>` +
+      `<i class="b-gap" style="width:${p(c.gr)}%"></i>`;
+    const item = (col, label, n, rows) =>
+      `<span><span class="dot" style="background:${col}"></span>${label} <b>${n}</b>
+       <span style="color:var(--faint)">(${rows.toLocaleString()} rows)</span></span>`;
+    $('legend').innerHTML =
+      item('var(--ok)', 'Confirmed', c.a, c.ar) +
+      item('var(--no)', 'Rejected', c.n, c.nr) +
+      item('var(--gap)', 'Missing model', c.g, c.gr) +
+      `<span style="color:var(--faint)">undecided <b>${DATA.length - c.a - c.n - c.g}</b>
+       (${(TOTAL_ROWS - c.ar - c.nr - c.gr).toLocaleString()} rows)</span>`;
+    $('tally').textContent =
+      `${((c.ar / TOTAL_ROWS) * 100).toFixed(1)}% of dropped rows recovered · ${c.a} aliases`;
+  }
+
+  const csvCell = (s) => /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+
+  function renderOut() {
+    const alias = [], missing = [];
+    for (const o of DATA) {
+      const d = decided[keyOf(o)];
+      if (!d) continue;
+      if (d.t === 'alias' && d.v) alias.push([o.m, o.e, d.v]);
+      if (d.t === 'missing') missing.push([o.m, o.e, o.y, o.r]);
+    }
+    alias.sort((x, y) => x[0].localeCompare(y[0]) || x[1].localeCompare(y[1]));
+    missing.sort((x, y) => y[3] - x[3]);
+
+    const out = state.tab === 'alias'
+      ? ['Make,EPA_Model,Our_Model', ...alias.map((r) => r.map(csvCell).join(','))].join('\n')
+      : ['Make,EPA_Model,EPA_Years,EPA_Rows', ...missing.map((r) => r.map(csvCell).join(','))].join('\n');
+    $('out').value = out;
+    $('panelHead').textContent = state.tab === 'alias'
+      ? `data/epa_model_aliases.csv — ${alias.length} confirmed`
+      : `Models to add to year_make_model.csv — ${missing.length} flagged`;
+  }
+
+  // ---- decisions ---------------------------------------------------------
+  function set(key, val) {
+    if (!val) delete decided[key]; else decided[key] = val;
+    save();
+    const rows = filtered();
+    // Re-rendering the whole list on every keystroke-speed decision is fine at
+    // this size and keeps the "hide decided" filter honest.
+    render();
+    if (state.hide && state.focus < rows.length) scrollToFocus();
+  }
+
+  function onCard(e) {
+    const card = e.target.closest('li.card');
+    if (!card) return;
+    const key = card.dataset.key;
+    const cur = decided[key];
+    const pick = e.target.closest('[data-pick]');
+    if (pick) {
+      const v = pick.dataset.pick;
+      return set(key, cur && cur.t === 'alias' && cur.v === v ? null : { t:'alias', v });
+    }
+    if (e.target.closest('[data-no]')) return set(key, cur && cur.t === 'no' ? null : { t:'no' });
+    if (e.target.closest('[data-missing]')) return set(key, cur && cur.t === 'missing' ? null : { t:'missing' });
+  }
+  $('list').addEventListener('click', onCard);
+  $('list').addEventListener('change', (e) => {
+    const inp = e.target.closest('[data-manual]');
+    if (!inp) return;
+    const key = e.target.closest('li.card').dataset.key;
+    const v = inp.value.trim();
+    set(key, v ? { t:'alias', v } : null);
+  });
+
+  // ---- keyboard ----------------------------------------------------------
+  function scrollToFocus() {
+    const el = document.querySelector('li.card[data-focus="1"]');
+    if (el) el.scrollIntoView({ block:'center', behavior:'smooth' });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const rows = filtered();
+    if (!rows.length) return;
+    const o = rows[state.focus];
+    if (!o) return;
+    const k = keyOf(o), cur = decided[k];
+    const move = (d) => {
+      state.focus = Math.max(0, Math.min(rows.length - 1, state.focus + d));
+      if (state.focus >= state.shown) { state.shown = state.focus + 30; }
+      render(); scrollToFocus();
+    };
+    if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); return move(1); }
+    if (e.key === 'k' || e.key === 'ArrowUp')   { e.preventDefault(); return move(-1); }
+    if (e.key >= '1' && e.key <= '3') {
+      const c = o.c[+e.key - 1]; if (!c) return;
+      e.preventDefault();
+      return set(k, cur && cur.t === 'alias' && cur.v === c[0] ? null : { t:'alias', v:c[0] });
+    }
+    if (e.key === 'x' || e.key === 'X') { e.preventDefault(); return set(k, cur && cur.t === 'no' ? null : { t:'no' }); }
+    if (e.key === 'm' || e.key === 'M') { e.preventDefault(); return set(k, cur && cur.t === 'missing' ? null : { t:'missing' }); }
+  });
+
+  // ---- controls ----------------------------------------------------------
+  $('q').oninput = (e) => { state.q = e.target.value; state.shown = 60; state.focus = 0; render(); };
+  $('make').onchange = (e) => { state.make = e.target.value; state.shown = 60; state.focus = 0; render(); };
+  $('hide').onchange = (e) => { state.hide = e.target.checked; render(); };
+  document.querySelectorAll('[data-band]').forEach((b) => b.onclick = () => {
+    state.band = b.dataset.band; state.shown = 60; state.focus = 0;
+    document.querySelectorAll('[data-band]').forEach((x) =>
+      x.setAttribute('aria-pressed', String(x === b)));
+    render();
+  });
+  document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => {
+    state.tab = b.dataset.tab;
+    document.querySelectorAll('[data-tab]').forEach((x) =>
+      x.setAttribute('aria-pressed', String(x === b)));
+    renderOut();
+  });
+  $('toggleOut').onclick = () => {
+    const p = $('panel'); p.hidden = !p.hidden;
+    $('toggleOut').textContent = p.hidden ? 'Show output' : 'Hide output';
+  };
+  $('copy').onclick = async () => {
+    $('panel').hidden = false; $('toggleOut').textContent = 'Hide output';
+    const t = $('out'); t.select();
+    try { await navigator.clipboard.writeText(t.value); $('copy').textContent = 'Copied'; }
+    catch { document.execCommand('copy'); $('copy').textContent = 'Copied'; }
+    setTimeout(() => $('copy').textContent = 'Copy CSV', 1400);
+  };
+  $('reset').onclick = () => {
+    if (!confirm('Discard every decision on this device?')) return;
+    decided = {}; save(); render();
+  };
+
+  // Infinite scroll rather than pagination: the list is ordered by impact, so
+  // reading down it is the intended workflow.
+  new IntersectionObserver((ents) => {
+    if (ents[0].isIntersecting && $('more').textContent) { state.shown += 60; render(); }
+  }, { rootMargin:'400px' }).observe($('more'));
+
+  const makes = [...new Set(DATA.map((o) => o.m))].sort();
+  $('make').insertAdjacentHTML('beforeend',
+    makes.map((m) => `<option value="${esc(m)}">${esc(m)}</option>`).join(''));
+
+  render();
+})();
+</script>
